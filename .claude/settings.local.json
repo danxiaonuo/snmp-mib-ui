@@ -17,7 +17,9 @@
       "Bash(./deploy-simple.sh:*)",
       "Bash(./deploy-enhanced.sh)",
       "Bash(rm:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(sudo apt:*)",
+      "Bash(sudo apt install:*)"
     ],
     "deny": []
   }
