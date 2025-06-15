@@ -221,24 +221,30 @@ docker-compose -f docker-compose.monitoring.yml up -d
 
 ## 📖 文档
 
-### 📚 用户文档
-- [📖 **完整部署指南**](DEPLOYMENT_GUIDE.md) - 详细的部署和配置说明
-- [☸️ **Kubernetes 部署**](k8s/README.md) - 企业级 K8s 部署方案
-- [🇨🇳 **中国大陆部署**](#-中国大陆一键部署推荐) - 国内网络优化部署
-- [🔧 **配置说明**](docs/configuration.md) - 详细配置参数说明
-- [🛠️ **故障排除**](docs/troubleshooting.md) - 常见问题解决方案
+### 🚀 快速开始
+- [📖 **项目概述**](README.md) - 项目介绍和快速开始
+- [🚀 **完整部署指南**](DEPLOYMENT-GUIDE.md) - 详细的部署和配置说明
+- [🇨🇳 **中国大陆部署**](CHINA-DEPLOYMENT-GUIDE.md) - 国内网络优化部署
+- [💻 **ARM64 部署**](ARM64-DEPLOYMENT-GUIDE.md) - ARM64 架构部署指南
 
-### 🔧 开发文档
-- [🏗️ **系统架构**](docs/system-architecture.md) - 系统设计和架构说明
-- [📡 **API 文档**](docs/API.md) - RESTful API 接口说明
-- [🧪 **开发指南**](docs/DEVELOPMENT.md) - 本地开发环境搭建
-- [📊 **性能基准**](docs/performance-benchmarks.md) - 性能测试和优化
-
-### 📋 项目文档
-- [📊 **完成报告**](COMPLETION_REPORT.md) - 功能完成度和技术细节
+### 📊 功能报告
+- [📊 **监控平台对接报告**](MONITORING_PLATFORM_INTEGRATION_REPORT.md) - 监控平台功能完整性检查
+- [📈 **监控组件统计报告**](MONITORING_COMPONENTS_REPORT.md) - 前端可查看的监控组件详情
+- [📋 **项目完成报告**](COMPLETION_REPORT.md) - 功能完成度和技术细节
 - [📝 **项目总结**](PROJECT_SUMMARY.md) - 项目功能和技术栈总览
+
+### 🔧 技术文档
+- [☸️ **Kubernetes 部署**](k8s/README.md) - 企业级 K8s 部署方案
+- [📡 **API 文档**](docs/API.md) - RESTful API 接口说明
+- [🏗️ **系统架构**](docs/system-architecture.md) - 系统设计和架构说明
+- [🛠️ **故障排除**](docs/troubleshooting.md) - 常见问题解决方案
+- [🧪 **开发指南**](docs/DEVELOPMENT.md) - 本地开发环境搭建
+
+### 📋 项目管理
 - [📅 **更新日志**](CHANGELOG.md) - 版本历史和更新内容
 - [🤝 **贡献指南**](CONTRIBUTING.md) - 如何参与项目贡献
+- [🔧 **构建说明**](BUILD-README.md) - 项目构建和编译指南
+- [📚 **文档优化计划**](DOCUMENTATION_OPTIMIZATION_PLAN.md) - 文档结构优化方案
 
 ---
 

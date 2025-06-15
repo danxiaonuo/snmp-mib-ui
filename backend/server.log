@@ -1,5 +1,5 @@
-2025/06/15 01:35:35 No .env file found
+2025/06/15 06:57:19 No .env file found
 
-2025/06/15 01:35:35 [35m/workspace/snmp-mib-ui/backend/database/database.go:15
+2025/06/15 06:57:19 [35m/workspace/snmp-mib-ui/backend/database/database.go:15
 [0m[31m[error] [0mfailed to initialize database, got error failed to connect to `host=localhost user=netmon_user database=network_monitor`: dial error (dial tcp [::1]:5432: connect: cannot assign requested address)
-2025/06/15 01:35:35 Failed to connect to database:failed to connect to `host=localhost user=netmon_user database=network_monitor`: dial error (dial tcp [::1]:5432: connect: cannot assign requested address)
+2025/06/15 06:57:19 Failed to connect to database:failed to connect to `host=localhost user=netmon_user database=network_monitor`: dial error (dial tcp [::1]:5432: connect: cannot assign requested address)
