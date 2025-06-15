@@ -1,0 +1,283 @@
+{
+  "navigation": {
+    "dashboard": "Dashboard",
+    "devices": "Devices",
+    "alerts": "Alerts",
+    "topology": "Network Topology",
+    "assets": "Asset Management",
+    "reports": "Analytics & Reports",
+    "automation": "Automation Tools",
+    "apiManagement": "API Management",
+    "settings": "System Settings",
+    "deployment": "Deployment",
+    "userManagement": "User Management",
+    "aiAnalytics": "AI Analytics",
+    "intelligentAnalysis": "Intelligent Analysis"
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "create": "Create",
+    "update": "Update",
+    "refresh": "Refresh",
+    "export": "Export",
+    "import": "Import",
+    "search": "Search",
+    "filter": "Filter",
+    "reset": "Reset",
+    "submit": "Submit",
+    "close": "Close",
+    "confirm": "Confirm"
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive",
+    "online": "Online",
+    "offline": "Offline",
+    "pending": "Pending",
+    "completed": "Completed",
+    "failed": "Failed",
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Info",
+    "healthy": "Healthy",
+    "critical": "Critical",
+    "unknown": "Unknown"
+  },
+  "language": {
+    "english": "English",
+    "chinese": "中文",
+    "switchLanguage": "Switch Language"
+  },
+  "loading": "Loading...",
+  "noData": "No data available",
+  "error": "An error occurred",
+  "success": "Operation successful",
+  "monitoringDashboard": {
+    "header": {
+      "title": "Monitoring Dashboard",
+      "subtitle": "Overall status and key metrics of monitoring components"
+    },
+    "controls": {
+      "autoRefreshLabel": "Auto Refresh",
+      "interval": {
+        "seconds10": "10 Seconds",
+        "seconds30": "30 Seconds",
+        "minute1": "1 Minute",
+        "minutes5": "5 Minutes"
+      }
+    },
+    "overview": {
+      "systemHealth": {
+        "title": "System Health",
+        "componentsHealthy": "Components Healthy"
+      },
+      "activeAlerts": {
+        "title": "Active Alerts",
+        "totalAlerts": "Total {count} alerts"
+      },
+      "dataIngestionRate": {
+        "title": "Data Ingestion Rate"
+      },
+      "queryRate": {
+        "title": "Query Rate"
+      },
+      "systemUptime": {
+        "title": "System Uptime"
+      }
+    },
+    "storage": {
+      "title": "Storage Usage"
+    },
+    "network": {
+      "traffic": {
+        "title": "Network Traffic"
+      }
+    },
+    "componentStatus": {
+      "header": {
+        "title": "Component Status",
+        "description": "Real-time status and key metrics of monitoring components"
+      },
+      "card": {
+        "uptimeLabel": "Uptime:",
+        "alertsLabel": "Alerts:"
+      }
+    },
+    "activeAlertsTabs": {
+      "header": {
+        "title": "Active Alerts",
+        "description": "Alert information requiring attention"
+      },
+      "noAlerts": "No active alerts"
+    },
+    "performanceTrends": {
+      "header": {
+        "title": "Performance Trends",
+        "description": "Trends of key metrics"
+      },
+      "cpuUsage": {
+        "title": "CPU Usage"
+      },
+      "memoryUsage": {
+        "title": "Memory Usage"
+      },
+      "requestCount": {
+        "title": "Request Count"
+      },
+      "errorRate": {
+        "title": "Error Rate"
+      },
+      "averageLabel": "Average: {value}"
+    },
+    "quickActions": {
+      "header": {
+        "title": "Quick Actions",
+        "description": "Common administrative operations"
+      },
+      "buttons": {
+        "configManagement": "Config Management",
+        "deploymentManagement": "Deployment Management",
+        "logViewing": "Log Viewing",
+        "externalLinks": "External Links"
+      }
+    }
+  },
+  "metrics": {
+    "cpu": "CPU",
+    "memory": "Memory",
+    "requests": "Requests",
+    "errors": "Errors"
+  },
+  "units": {
+    "perMinute": "/min",
+    "megabytesPerSecond": "MB/s"
+  },
+  "categories": {
+    "collector": "Data Collector",
+    "storage": "Data Storage",
+    "visualization": "Data Visualization",
+    "alerting": "Alert Management"
+  },
+  "componentDetails": {
+    "tabs": {
+      "overview": "Overview",
+      "versions": "Versions",
+      "config": "Configuration",
+      "docs": "Documentation"
+    },
+    "portLabel": "Port:",
+    "notFound": "Component information not found",
+    "overview": {
+      "mainFeatures": "Main Features",
+      "defaultPort": "Default Port",
+      "dependencies": "Dependencies",
+      "systemRequirements": "System Requirements",
+      "cpuLabel": "CPU:",
+      "memoryLabel": "Memory:",
+      "diskLabel": "Disk:"
+    },
+    "versions": {
+      "latestBadge": "Latest",
+      "selectedButton": "Selected",
+      "selectButton": "Select",
+      "releaseDateLabel": "Release Date:",
+      "changelogLabel": "Changelog:"
+    },
+    "config": {
+      "defaultSettingsSufficient": "This component does not require additional configuration and can use default settings."
+    },
+    "docs": {
+      "officialDocsTitle": "Official Documentation",
+      "visitOfficialDocsDescription": "Visit the official {componentName} documentation for detailed installation and configuration guides.",
+      "accessDocsButton": "Access Documentation"
+    }
+  },
+  "componentSettings": {
+    "noSettingsAvailable": "This component has no configurable settings.",
+    "nodeExporter": {
+      "enableHostMetrics": { "label": "Enable Host Metrics Collection" },
+      "listenPort": { "label": "Listen Port" },
+      "enabledCollectors": { "label": "Enabled Collectors" }
+    },
+    "categraf": {
+      "interval": { "label": "Collection Interval (seconds)" },
+      "hostname": { "label": "Hostname" },
+      "enabledPlugins": { "label": "Enabled Plugins" }
+    },
+    "victoriametrics": {
+      "retentionPeriod": { "label": "Data Retention Period (days)" },
+      "httpListenPort": { "label": "HTTP Listen Port" },
+      "storagePath": { "label": "Storage Path" },
+      "enableDeduplication": { "label": "Enable Data Deduplication" },
+      "enableRemoteWrite": { "label": "Enable Remote Write" }
+    },
+    "vmstorage": {
+        "retentionPeriod": {"label": "Data Retention Period (days)"},
+        "httpListenPort": {"label": "HTTP Listen Port"},
+        "storagePath": {"label": "Storage Path"},
+        "replicas": {"label": "Storage Node Replicas"},
+        "enableDeduplication": {"label": "Enable Data Deduplication"},
+        "enableAutoScale": {"label": "Enable Auto Scaling"}
+    },
+    "vminsert": {
+        "httpListenPort": {"label": "HTTP Listen Port"},
+        "storageNodes": {"label": "Storage Node Addresses", "placeholder": "Storage node addresses, comma-separated"},
+        "replicas": {"label": "Insert Node Replicas"},
+        "enableAutoScale": {"label": "Enable Auto Scaling"}
+    },
+    "vmselect": {
+        "httpListenPort": {"label": "HTTP Listen Port"},
+        "storageNodes": {"label": "Storage Node Addresses", "placeholder": "Storage node addresses, comma-separated"},
+        "replicas": {"label": "Query Node Replicas"},
+        "cacheSizeMB": {"label": "Query Cache Size (MB)"},
+        "enableAutoScale": {"label": "Enable Auto Scaling"}
+    },
+    "vmalert": {
+        "httpListenPort": {"label": "HTTP Listen Port"},
+        "datasourceUrl": {"label": "Datasource URL"},
+        "notifierUrl": {"label": "Notifier URL"},
+        "evaluationInterval": {"label": "Evaluation Interval (seconds)"},
+        "enableExternalLabels": {"label": "Enable External Labels"}
+    },
+    "vmagent": {
+      "remoteWriteUrl": { "label": "Remote Storage URL" },
+      "scrapeInterval": { "label": "Scrape Interval (seconds)" },
+      "enableServiceDiscovery": { "label": "Enable Service Discovery" }
+    },
+    "grafana": {
+      "httpPort": { "label": "HTTP Port" },
+      "adminUser": { "label": "Admin Username" },
+      "adminPassword": { "label": "Admin Password" },
+      "autoConfigDataSource": { "label": "Auto-configure Data Source" },
+      "vmDataSource": { "label": "VictoriaMetrics" }
+    },
+    "alertmanager": {
+      "httpPort": { "label": "HTTP Port" },
+      "clusterPeers": { "label": "Cluster Peers", "placeholder": "One peer address per line, e.g., alertmanager-peer:9094" },
+      "notificationChannel": { "label": "Notification Channel" },
+      "notifiers": {
+        "email": "Email",
+        "webhook": "Webhook",
+        "slack": "Slack",
+        "wechat": "WeChat",
+        "dingtalk": "DingTalk"
+      }
+    },
+    "snmpExporter": {
+      "httpPort": { "label": "HTTP Port" },
+      "snmpVersion": { "label": "SNMP Version" },
+      "versions": {
+        "v1": "SNMP v1",
+        "v2c": "SNMP v2c",
+        "v3": "SNMP v3"
+      },
+      "communityString": { "label": "Community String" },
+      "targetDevices": { "label": "Target Devices", "placeholder": "One IP address per line, e.g., 192.168.1.1" }
+    }
+  }
+}

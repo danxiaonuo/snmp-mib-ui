@@ -1,0 +1,40 @@
+[Unit]
+Description=MIB Web Monitoring Platform
+Documentation=https://github.com/your-org/mibweb-ui
+Requires=docker.service
+After=docker.service
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/opt/mibweb
+ExecStart=/opt/mibweb/start.sh
+ExecStop=/opt/mibweb/stop.sh
+ExecReload=/opt/mibweb/restart.sh
+TimeoutStartSec=300
+TimeoutStopSec=60
+User=root
+Group=root
+Restart=no
+
+# 环境变量
+Environment=COMPOSE_PROJECT_NAME=mibweb
+Environment=COMPOSE_FILE=/opt/mibweb/docker-compose.yml
+
+# 安全设置
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/mibweb
+ReadWritePaths=/var/lib/docker
+ReadWritePaths=/var/run/docker.sock
+
+# 资源限制
+LimitNOFILE=65536
+LimitNPROC=4096
+
+[Install]
+WantedBy=multi-user.target

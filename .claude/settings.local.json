@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./deploy-china.sh)",
+      "Bash(docker:*)",
+      "Bash(chmod:*)",
+      "Bash(./deploy-china-improved.sh:*)",
+      "Bash(sudo systemctl status:*)",
+      "Bash(sudo cat:*)",
+      "Bash(echo:*)",
+      "Bash(sudo journalctl:*)",
+      "Bash(sudo systemctl restart docker)",
+      "Bash(sudo docker:*)",
+      "Bash(curl:*)",
+      "Bash(ls:*)",
+      "Bash(./deploy-optimized.sh:*)",
+      "Bash(./deploy-simple.sh:*)",
+      "Bash(./deploy-enhanced.sh)",
+      "Bash(rm:*)",
+      "Bash(find:*)"
+    ],
+    "deny": []
+  }
+}

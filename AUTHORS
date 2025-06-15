@@ -1,0 +1,29 @@
+# Authors
+
+This file lists the authors and contributors to the SNMP MIB Platform project.
+
+## Project Creator and Lead Developer
+
+**Evan** <evan@example.com>
+- GitHub: https://github.com/evan7434
+- Role: Project Creator, Lead Developer, Maintainer
+- Contributions: Full-stack development, architecture design, documentation
+
+## Project Information
+
+- **Project Name**: SNMP MIB Platform
+- **Repository**: https://github.com/evan7434/snmp-mib-ui
+- **License**: MIT License
+- **Created**: 2024
+- **Language**: TypeScript, Go, JavaScript
+
+## Acknowledgments
+
+This project was created by Evan to provide a modern, user-friendly interface for SNMP MIB management and network monitoring. The platform integrates multiple technologies to deliver a comprehensive monitoring solution.
+
+## Contact
+
+For questions, suggestions, or contributions, please contact:
+- Email: evan@example.com
+- GitHub Issues: https://github.com/evan7434/snmp-mib-ui/issues
+- GitHub Discussions: https://github.com/evan7434/snmp-mib-ui/discussions

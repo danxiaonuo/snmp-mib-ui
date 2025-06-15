@@ -1,0 +1,81 @@
+# Grafana 数据源配置
+# 自动配置 VictoriaMetrics 作为主要数据源
+
+apiVersion: 1
+
+datasources:
+  # VictoriaMetrics 主数据源
+  - name: VictoriaMetrics
+    type: prometheus
+    access: proxy
+    url: http://victoriametrics:8428
+    isDefault: true
+    editable: true
+    jsonData:
+      httpMethod: POST
+      timeInterval: 15s
+      queryTimeout: 60s
+      # VictoriaMetrics 特有配置
+      customQueryParameters: 'extra_label=grafana'
+      # 启用 Exemplars 支持
+      exemplarTraceIdDestinations:
+        - name: trace_id
+          datasourceUid: jaeger
+    secureJsonData: {}
+    version: 1
+
+  # VMSelect 数据源（集群模式）
+  - name: VMSelect
+    type: prometheus
+    access: proxy
+    url: http://vmselect:8481/select/0/prometheus
+    isDefault: false
+    editable: true
+    jsonData:
+      httpMethod: POST
+      timeInterval: 15s
+      queryTimeout: 60s
+      customQueryParameters: 'extra_label=grafana'
+    secureJsonData: {}
+    version: 1
+
+  # Alertmanager 数据源
+  - name: Alertmanager
+    type: alertmanager
+    access: proxy
+    url: http://alertmanager:9093
+    isDefault: false
+    editable: true
+    jsonData:
+      implementation: prometheus
+    version: 1
+
+  # Loki 日志数据源（可选）
+  - name: Loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
+    isDefault: false
+    editable: true
+    jsonData:
+      maxLines: 1000
+      timeout: 60s
+    version: 1
+
+  # Jaeger 链路追踪数据源（可选）
+  - name: Jaeger
+    type: jaeger
+    access: proxy
+    url: http://jaeger:16686
+    isDefault: false
+    editable: true
+    uid: jaeger
+    version: 1
+
+  # TestData 数据源（用于测试）
+  - name: TestData
+    type: testdata
+    access: proxy
+    isDefault: false
+    editable: false
+    version: 1

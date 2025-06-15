@@ -1,0 +1,283 @@
+{
+  "navigation": {
+    "dashboard": "仪表板",
+    "devices": "设备管理",
+    "alerts": "告警管理",
+    "topology": "网络拓扑",
+    "assets": "资产管理",
+    "reports": "分析报表",
+    "automation": "自动化工具",
+    "apiManagement": "API管理",
+    "settings": "系统设置",
+    "deployment": "部署管理",
+    "userManagement": "用户管理",
+    "aiAnalytics": "AI分析",
+    "intelligentAnalysis": "智能分析"
+  },
+  "actions": {
+    "save": "保存",
+    "cancel": "取消",
+    "delete": "删除",
+    "edit": "编辑",
+    "add": "添加",
+    "create": "创建",
+    "update": "更新",
+    "refresh": "刷新",
+    "export": "导出",
+    "import": "导入",
+    "search": "搜索",
+    "filter": "筛选",
+    "reset": "重置",
+    "submit": "提交",
+    "close": "关闭",
+    "confirm": "确认"
+  },
+  "status": {
+    "active": "活跃",
+    "inactive": "非活跃",
+    "online": "在线",
+    "offline": "离线",
+    "pending": "待处理",
+    "completed": "已完成",
+    "failed": "失败",
+    "success": "成功",
+    "error": "错误",
+    "warning": "警告",
+    "info": "信息",
+    "healthy": "健康",
+    "critical": "严重",
+    "unknown": "未知"
+  },
+  "language": {
+    "english": "English",
+    "chinese": "中文",
+    "switchLanguage": "切换语言"
+  },
+  "loading": "加载中...",
+  "noData": "暂无数据",
+  "error": "发生错误",
+  "success": "操作成功",
+  "monitoringDashboard": {
+    "header": {
+      "title": "监控仪表板",
+      "subtitle": "监控组件整体状态和关键指标"
+    },
+    "controls": {
+      "autoRefreshLabel": "自动刷新",
+      "interval": {
+        "seconds10": "10秒",
+        "seconds30": "30秒",
+        "minute1": "1分钟",
+        "minutes5": "5分钟"
+      }
+    },
+    "overview": {
+      "systemHealth": {
+        "title": "系统健康度",
+        "componentsHealthy": "组件健康"
+      },
+      "activeAlerts": {
+        "title": "活跃告警",
+        "totalAlerts": "共 {count} 条告警"
+      },
+      "dataIngestionRate": {
+        "title": "数据摄入率"
+      },
+      "queryRate": {
+        "title": "查询率"
+      },
+      "systemUptime": {
+        "title": "系统运行时间"
+      }
+    },
+    "storage": {
+      "title": "存储使用"
+    },
+    "network": {
+      "traffic": {
+        "title": "网络流量"
+      }
+    },
+    "componentStatus": {
+      "header": {
+        "title": "组件状态",
+        "description": "监控组件的实时状态和关键指标"
+      },
+      "card": {
+        "uptimeLabel": "运行时间:",
+        "alertsLabel": "告警:"
+      }
+    },
+    "activeAlertsTabs": {
+      "header": {
+        "title": "活跃告警",
+        "description": "需要关注的告警信息"
+      },
+      "noAlerts": "没有活跃告警"
+    },
+    "performanceTrends": {
+      "header": {
+        "title": "性能趋势",
+        "description": "关键指标的变化趋势"
+      },
+      "cpuUsage": {
+        "title": "CPU 使用率"
+      },
+      "memoryUsage": {
+        "title": "内存使用率"
+      },
+      "requestCount": {
+        "title": "请求数量"
+      },
+      "errorRate": {
+        "title": "错误率"
+      },
+      "averageLabel": "平均: {value}"
+    },
+    "quickActions": {
+      "header": {
+        "title": "快速操作",
+        "description": "常用的管理操作"
+      },
+      "buttons": {
+        "configManagement": "配置管理",
+        "deploymentManagement": "部署管理",
+        "logViewing": "日志查看",
+        "externalLinks": "外部链接"
+      }
+    }
+  },
+  "metrics": {
+    "cpu": "CPU",
+    "memory": "内存",
+    "requests": "请求",
+    "errors": "错误"
+  },
+  "units": {
+    "perMinute": "/分钟",
+    "megabytesPerSecond": "MB/秒"
+  },
+  "categories": {
+    "collector": "数据采集",
+    "storage": "数据存储",
+    "visualization": "数据可视化",
+    "alerting": "告警管理"
+  },
+  "componentDetails": {
+    "tabs": {
+      "overview": "概览",
+      "versions": "版本",
+      "config": "配置",
+      "docs": "文档"
+    },
+    "portLabel": "端口:",
+    "notFound": "未找到组件信息",
+    "overview": {
+      "mainFeatures": "主要功能",
+      "defaultPort": "默认端口",
+      "dependencies": "依赖组件",
+      "systemRequirements": "系统需求",
+      "cpuLabel": "CPU:",
+      "memoryLabel": "内存:",
+      "diskLabel": "磁盘:"
+    },
+    "versions": {
+      "latestBadge": "最新",
+      "selectedButton": "已选择",
+      "selectButton": "选择",
+      "releaseDateLabel": "发布日期:",
+      "changelogLabel": "更新日志:"
+    },
+    "config": {
+      "defaultSettingsSufficient": "此组件不需要额外配置，可以使用默认设置。"
+    },
+    "docs": {
+      "officialDocsTitle": "官方文档",
+      "visitOfficialDocsDescription": "访问 {componentName} 的官方文档以获取详细的安装和配置指南。",
+      "accessDocsButton": "访问文档"
+    }
+  },
+  "componentSettings": {
+    "noSettingsAvailable": "此组件没有可配置的设置。",
+    "nodeExporter": {
+      "enableHostMetrics": { "label": "启用主机指标收集" },
+      "listenPort": { "label": "监听端口" },
+      "enabledCollectors": { "label": "启用的收集器" }
+    },
+    "categraf": {
+      "interval": { "label": "采集间隔 (秒)" },
+      "hostname": { "label": "主机名" },
+      "enabledPlugins": { "label": "启用的插件" }
+    },
+    "victoriametrics": {
+      "retentionPeriod": { "label": "数据保留期 (天)" },
+      "httpListenPort": { "label": "HTTP监听端口" },
+      "storagePath": { "label": "存储路径" },
+      "enableDeduplication": { "label": "启用数据去重" },
+      "enableRemoteWrite": { "label": "启用远程写入" }
+    },
+     "vmstorage": {
+        "retentionPeriod": {"label": "数据保留期 (天)"},
+        "httpListenPort": {"label": "HTTP监听端口"},
+        "storagePath": {"label": "存储路径"},
+        "replicas": {"label": "存储节点副本数"},
+        "enableDeduplication": {"label": "启用数据去重"},
+        "enableAutoScale": {"label": "启用自动扩容"}
+    },
+    "vminsert": {
+        "httpListenPort": {"label": "HTTP监听端口"},
+        "storageNodes": {"label": "存储节点地址", "placeholder": "存储节点地址，用逗号分隔"},
+        "replicas": {"label": "插入节点副本数"},
+        "enableAutoScale": {"label": "启用自动扩容"}
+    },
+    "vmselect": {
+        "httpListenPort": {"label": "HTTP监听端口"},
+        "storageNodes": {"label": "存储节点地址", "placeholder": "存储节点地址，用逗号分隔"},
+        "replicas": {"label": "查询节点副本数"},
+        "cacheSizeMB": {"label": "查询缓存大小 (MB)"},
+        "enableAutoScale": {"label": "启用自动扩容"}
+    },
+    "vmalert": {
+        "httpListenPort": {"label": "HTTP监听端口"},
+        "datasourceUrl": {"label": "数据源URL"},
+        "notifierUrl": {"label": "通知器URL"},
+        "evaluationInterval": {"label": "评估间隔 (秒)"},
+        "enableExternalLabels": {"label": "启用外部标签"}
+    },
+    "vmagent": {
+      "remoteWriteUrl": { "label": "远程存储URL" },
+      "scrapeInterval": { "label": "抓取间隔 (秒)" },
+      "enableServiceDiscovery": { "label": "启用服务发现" }
+    },
+    "grafana": {
+      "httpPort": { "label": "HTTP端口" },
+      "adminUser": { "label": "管理员用户名" },
+      "adminPassword": { "label": "管理员密码" },
+      "autoConfigDataSource": { "label": "自动配置数据源" },
+      "vmDataSource": { "label": "VictoriaMetrics" }
+    },
+    "alertmanager": {
+      "httpPort": { "label": "HTTP端口" },
+      "clusterPeers": { "label": "集群对等节点", "placeholder": "每行一个节点地址，例如: alertmanager-peer:9094" },
+      "notificationChannel": { "label": "通知渠道" },
+      "notifiers": {
+        "email": "邮件",
+        "webhook": "Webhook",
+        "slack": "Slack",
+        "wechat": "微信",
+        "dingtalk": "钉钉"
+      }
+    },
+    "snmpExporter": {
+      "httpPort": { "label": "HTTP端口" },
+      "snmpVersion": { "label": "SNMP版本" },
+      "versions": {
+        "v1": "SNMP v1",
+        "v2c": "SNMP v2c",
+        "v3": "SNMP v3"
+      },
+      "communityString": { "label": "Community字符串" },
+      "targetDevices": { "label": "目标设备", "placeholder": "每行一个IP地址，例如: 192.168.1.1" }
+    }
+  }
+}
