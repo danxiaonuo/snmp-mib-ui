@@ -1,4 +1,3 @@
-version: '3.8'
 
 services:
   # PostgreSQL 数据库
@@ -47,7 +46,7 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     container_name: mibweb-frontend
     ports:
       - "3000:3000"
@@ -65,27 +64,27 @@ services:
       - mibweb-network
     restart: unless-stopped
 
-  # Go 后端 API (临时禁用)
-  # backend:
-  #   build:
-  #     context: ./backend
-  #     dockerfile: Dockerfile
-  #   container_name: mibweb-backend
-  #   ports:
-  #     - "8080:8080"
-  #   environment:
-  #     - ENVIRONMENT=production
-  #     - PORT=8080
-  #     - DATABASE_URL=postgresql://netmon_user:netmon_pass_2024@postgres:5432/network_monitor
-  #     - REDIS_URL=redis://:redis_pass_2024@redis:6379
-  #     - JWT_SECRET=jwt_secret_key_2024_very_secure
-  #     - CORS_ORIGINS=http://localhost:3000
-  #   depends_on:
-  #     - postgres
-  #     - redis
-  #   networks:
-  #     - mibweb-network
-  #   restart: unless-stopped
+  # Go 后端 API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: mibweb-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - ENVIRONMENT=production
+      - PORT=8080
+      - DATABASE_URL=postgresql://netmon_user:netmon_pass_2024@postgres:5432/network_monitor
+      - REDIS_URL=redis://:redis_pass_2024@redis:6379
+      - JWT_SECRET=jwt_secret_key_2024_very_secure
+      - CORS_ORIGINS=http://localhost:3000
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - mibweb-network
+    restart: unless-stopped
 
   # Nginx 反向代理 (临时禁用)
   # nginx:

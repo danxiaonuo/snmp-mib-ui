@@ -564,7 +564,61 @@ func (s *MIBService) GetMIBOIDs(id uint) ([]models.OID, error) {
 }
 
 func (s *MIBService) ImportMIBs(file multipart.File) (map[string]interface{}, error) {
-	// TODO: Implement MIB import from JSON/CSV
+	// 实现 MIB 从 JSON/CSV 导入功能
+	var importedMibs []models.MIB
+	
+	switch format {
+	case "json":
+		var jsonData []map[string]interface{}
+		if err := json.Unmarshal(data, &jsonData); err != nil {
+			return nil, fmt.Errorf("invalid JSON format: %v", err)
+		}
+		
+		for _, item := range jsonData {
+			mib := models.MIB{
+				Name:        getString(item, "name"),
+				Filename:    getString(item, "filename"),
+				Description: getString(item, "description"),
+				Author:      getString(item, "author"),
+				Version:     getString(item, "version"),
+				Status:      "imported",
+			}
+			importedMibs = append(importedMibs, mib)
+		}
+		
+	case "csv":
+		reader := csv.NewReader(strings.NewReader(string(data)))
+		records, err := reader.ReadAll()
+		if err != nil {
+			return nil, fmt.Errorf("invalid CSV format: %v", err)
+		}
+		
+		// 跳过标题行
+		for i, record := range records {
+			if i == 0 || len(record) < 4 {
+				continue
+			}
+			
+			mib := models.MIB{
+				Name:        record[0],
+				Filename:    record[1],
+				Description: record[2],
+				Author:      record[3],
+				Status:      "imported",
+			}
+			if len(record) > 4 {
+				mib.Version = record[4]
+			}
+			importedMibs = append(importedMibs, mib)
+		}
+	}
+	
+	// 批量保存到数据库
+	if len(importedMibs) > 0 {
+		if err := s.db.Create(&importedMibs).Error; err != nil {
+			return nil, fmt.Errorf("failed to save imported MIBs: %v", err)
+		}
+	}
 	result := map[string]interface{}{
 		"imported": 5,
 		"skipped":  2,

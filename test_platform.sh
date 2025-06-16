@@ -179,9 +179,9 @@ test_config_generation() {
     
     local base_url="http://localhost:8080"
     
-    # 测试 Prometheus SNMP Exporter 配置生成
-    local prometheus_data='{
-        "config_name": "test-prometheus-config",
+    # 测试 SNMP 配置生成
+    local snmp_data='{
+        "config_name": "test-snmp-config",
         "config_type": "snmp_exporter",
         "device_info": {
             "ip": "192.168.1.1",
@@ -191,7 +191,7 @@ test_config_generation() {
         "selected_oids": ["1.3.6.1.2.1.1.1.0", "1.3.6.1.2.1.1.3.0"]
     }'
     
-    test_api "生成 Prometheus 配置" "$base_url/api/v1/configs/generate" "POST" "$prometheus_data"
+    test_api "生成 SNMP 配置" "$base_url/api/v1/configs/generate" "POST" "$snmp_data"
     
     # 测试 Categraf 配置生成
     local categraf_data='{

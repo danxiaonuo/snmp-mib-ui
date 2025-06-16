@@ -433,10 +433,6 @@ mibweb-offline-deployment-YYYYMMDD-HHMMSS/
 │   ├── postgres-15.tar           # PostgreSQL 数据库
 │   ├── redis-7.tar               # Redis 缓存
 │   ├── nginx-alpine.tar          # Nginx 反向代理
-│   ├── grafana-latest.tar        # Grafana 监控
-│   ├── victoriametrics-latest.tar # VictoriaMetrics 时序数据库
-│   ├── alertmanager-latest.tar   # Alertmanager 告警管理
-│   ├── node-exporter-latest.tar  # Node Exporter 系统监控
 │   ├── categraf-latest.tar       # Categraf 数据采集
 │   ├── vmagent-latest.tar        # VMAgent 数据代理
 │   ├── vmalert-latest.tar        # VMAlert 告警引擎
@@ -450,8 +446,6 @@ mibweb-offline-deployment-YYYYMMDD-HHMMSS/
 │   ├── docker-compose.offline.yml # 离线 Docker Compose
 │   ├── database-setup.sql        # 数据库初始化
 │   ├── nginx/                    # Nginx 配置
-│   ├── grafana/                  # Grafana 配置
-│   └── prometheus/               # Prometheus 配置
 ├── scripts/                       # 部署脚本
 │   ├── offline-install.sh        # 离线安装主脚本
 │   ├── load-images.sh            # Docker 镜像加载
@@ -1012,7 +1006,6 @@ docker-compose up -d
 #### Prometheus 监控配置
 
 ```yaml
-# prometheus.yml
 global:
   scrape_interval: 15s
   evaluation_interval: 15s
@@ -1021,10 +1014,8 @@ rule_files:
   - "alert_rules.yml"
 
 alerting:
-  alertmanagers:
     - static_configs:
         - targets:
-          - alertmanager:9093
 
 scrape_configs:
   - job_name: 'mibweb-frontend'
@@ -1104,7 +1095,6 @@ groups:
 #### AlertManager 配置
 
 ```yaml
-# alertmanager.yml
 global:
   smtp_smarthost: 'smtp.example.com:587'
   smtp_from: 'alerts@example.com'
@@ -1164,7 +1154,6 @@ docker cp $(docker-compose ps -q redis):/tmp/dump.rdb "$BACKUP_DIR/redis_$DATE.r
 
 # 备份配置文件
 echo "Backing up configuration files..."
-tar -czf "$BACKUP_DIR/config_$DATE.tar.gz" .env docker-compose*.yml nginx/ grafana/ prometheus/
 
 # 备份上传文件
 echo "Backing up uploaded files..."
@@ -1446,9 +1435,6 @@ kubectl apply -f k8s/
 | 8080 | 后端 API | REST API 服务 |
 | 5432 | PostgreSQL | 数据库服务 |
 | 6379 | Redis | 缓存服务 |
-| 9090 | Prometheus | 监控指标收集 |
-| 3001 | Grafana | 监控可视化 |
-| 9093 | AlertManager | 告警管理 |
 | 80 | HTTP | Web 服务（生产环境） |
 | 443 | HTTPS | 安全 Web 服务 |
 
@@ -1470,8 +1456,6 @@ mibweb-ui/
 │   └── forms/                   # 表单组件
 ├── configs/                      # 配置文件
 │   ├── nginx/                   # Nginx 配置
-│   ├── grafana/                 # Grafana 配置
-│   └── prometheus/              # Prometheus 配置
 ├── database/                     # 数据库相关
 │   ├── migrations/              # 数据库迁移
 │   └── seeds/                   # 初始数据

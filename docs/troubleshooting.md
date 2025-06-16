@@ -41,7 +41,7 @@ docker-compose ps --format "table {{.Name}}\t{{.State}}\t{{.Ports}}"
 
 # 检查端口占用
 echo "\n🌐 检查关键端口..."
-ports=(3000 3001 8428 8429 9093 9100)
+ports=(3000 8080 5432 6379)
 for port in "${ports[@]}"; do
     if netstat -tlnp 2>/dev/null | grep ":$port " >/dev/null; then
         echo "✅ 端口 $port 正在使用"
@@ -62,9 +62,8 @@ free -h
 # 检查服务健康状态
 echo "\n🏥 检查服务健康状态..."
 services=(
-    "http://localhost:8428/health:VictoriaMetrics"
-    "http://localhost:3001/api/health:Grafana"
-    "http://localhost:9093/-/healthy:Alertmanager"
+    "http://localhost:8080/health:Backend API"
+    "http://localhost:3000:Frontend"
 )
 
 for service in "${services[@]}"; do
@@ -137,7 +136,6 @@ echo "\n🎉 快速修复完成！"
 **症状**:
 ```bash
 $ docker-compose up -d
-ERROR: for victoriametrics  Cannot start service victoriametrics: driver failed programming external connectivity
 ```
 
 **原因分析**:
@@ -169,8 +167,6 @@ docker-compose up -d
 
 **症状**:
 ```bash
-$ docker-compose logs victoriametrics
-victoriametrics exited with code 137
 ```
 
 **原因分析**:
@@ -182,7 +178,6 @@ victoriametrics exited with code 137
 ```yaml
 # docker-compose.yml 中调整内存限制
 services:
-  victoriametrics:
     deploy:
       resources:
         limits:
@@ -245,9 +240,6 @@ sudo iptables -L
 ```yaml
 # 确保Node Exporter正确配置
 services:
-  node-exporter:
-    image: prom/node-exporter:latest
-    container_name: node-exporter
     restart: unless-stopped
     ports:
       - "9100:9100"
@@ -274,8 +266,6 @@ services:
 services:
   vmagent:
     command:
-      - '--promscrape.config=/etc/vmagent/prometheus.yml'
-      - '--remoteWrite.url=http://victoriametrics:8428/api/v1/write'
       - '--remoteWrite.maxDiskUsagePerURL=1GB'
       - '--memory.allowedPercent=80'
       - '--promscrape.maxScrapeSize=100MB'
@@ -283,7 +273,6 @@ services:
 ```
 
 ```yaml
-# prometheus.yml 采集配置优化
 global:
   scrape_interval: 15s     # 减少采集间隔
   evaluation_interval: 15s
@@ -291,9 +280,7 @@ global:
     cluster: 'production'
 
 scrape_configs:
-  - job_name: 'node-exporter'
     static_configs:
-      - targets: ['node-exporter:9100']
     scrape_interval: 10s     # 高频采集关键指标
     scrape_timeout: 5s
     metrics_path: /metrics
@@ -314,7 +301,6 @@ services:
     volumes:
       - ./configs/relabel.yml:/etc/vmagent/relabel.yml
     command:
-      - '--promscrape.config=/etc/vmagent/prometheus.yml'
       - '--remoteWrite.relabelConfig=/etc/vmagent/relabel.yml'
 ```
 
@@ -354,10 +340,8 @@ data source connected, but no labels received
 curl http://localhost:8428/api/v1/label/__name__/values
 
 # 2. 检查网络连通性
-docker exec grafana curl http://victoriametrics:8428/api/v1/query?query=up
 
 # 3. 检查Grafana数据源配置
-# URL应该是: http://victoriametrics:8428
 # 不是: http://localhost:8428
 ```
 
@@ -365,8 +349,6 @@ docker exec grafana curl http://victoriametrics:8428/api/v1/query?query=up
 ```json
 {
   "name": "VictoriaMetrics",
-  "type": "prometheus",
-  "url": "http://victoriametrics:8428",
   "access": "proxy",
   "isDefault": true,
   "jsonData": {
@@ -386,7 +368,6 @@ docker exec grafana curl http://victoriametrics:8428/api/v1/query?query=up
 ```yaml
 # VictoriaMetrics查询优化
 services:
-  victoriametrics:
     command:
       - '--search.maxConcurrentRequests=16'    # 增加并发查询数
       - '--search.maxQueryDuration=60s'        # 增加查询超时时间
@@ -449,7 +430,6 @@ vm_active_timeseries
 **优化方案**:
 ```yaml
 services:
-  victoriametrics:
     command:
       - '--memory.allowedPercent=70'           # 限制内存使用
       - '--retentionPeriod=30d'                # 减少数据保留期
@@ -481,7 +461,6 @@ curl 'http://localhost:8428/api/v1/query?query=vm_data_size_bytes'
 ```yaml
 # 使用SSD存储
 services:
-  victoriametrics:
     volumes:
       - /fast-ssd/victoria-metrics:/victoria-metrics-data
     command:
@@ -514,11 +493,8 @@ docker network ls
 docker network inspect monitoring_default
 
 # 2. 测试容器间连通性
-docker exec vmagent ping victoriametrics
-docker exec grafana curl http://victoriametrics:8428/health
 
 # 3. 检查DNS解析
-docker exec vmagent nslookup victoriametrics
 ```
 
 **解决方案**:
@@ -534,7 +510,6 @@ networks:
         - subnet: 172.20.0.0/16
 
 services:
-  victoriametrics:
     networks:
       - monitoring
   
@@ -542,7 +517,6 @@ services:
     networks:
       - monitoring
   
-  grafana:
     networks:
       - monitoring
 ```
@@ -569,13 +543,11 @@ server {
     listen 80;
     server_name monitoring.example.com;
     
-    location /grafana/ {
         proxy_pass http://localhost:3001/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
     }
     
-    location /victoriametrics/ {
         proxy_pass http://localhost:8428/;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -696,7 +668,6 @@ groups:
 curl http://localhost:9093/-/healthy
 
 # 2. 检查配置语法
-docker exec alertmanager amtool config show
 
 # 3. 测试通知
 curl -X POST http://localhost:9093/api/v1/alerts \
@@ -714,7 +685,6 @@ curl -X POST http://localhost:9093/api/v1/alerts \
 
 **邮件通知配置示例**:
 ```yaml
-# alertmanager.yml
 global:
   smtp_smarthost: 'smtp.gmail.com:587'
   smtp_from: 'alerts@example.com'
@@ -751,13 +721,9 @@ receivers:
 docker-compose logs
 
 # 查看特定服务日志
-docker-compose logs victoriametrics
 docker-compose logs vmagent
-docker-compose logs grafana
-docker-compose logs alertmanager
 
 # 实时跟踪日志
-docker-compose logs -f --tail=100 victoriametrics
 
 # 导出日志到文件
 docker-compose logs > monitoring-logs-$(date +%Y%m%d).log
@@ -792,7 +758,6 @@ ERROR: scrape timeout
 
 # 配置重载失败
 ERROR: cannot reload config
-# 解决：检查prometheus.yml语法
 ```
 
 #### Grafana错误
@@ -815,7 +780,6 @@ ERROR: database locked
 ```yaml
 # 调整日志级别以获取更多信息
 services:
-  victoriametrics:
     command:
       - '--loggerLevel=DEBUG'  # DEBUG, INFO, WARN, ERROR
   
@@ -823,7 +787,6 @@ services:
     command:
       - '--loggerLevel=INFO'
   
-  grafana:
     environment:
       - GF_LOG_LEVEL=debug
 ```
@@ -834,7 +797,6 @@ services:
 
 ```yaml
 services:
-  victoriametrics:
     command:
       # 内存优化
       - '--memory.allowedPercent=80'
@@ -941,7 +903,6 @@ cp docker-compose.yml.backup docker-compose.yml 2>/dev/null || echo "未找到�
 
 # 6. 重新创建数据目录
 echo "📁 重新创建数据目录..."
-mkdir -p data/{victoria-metrics,grafana,alertmanager}
 sudo chown -R 1000:1000 data/
 
 # 7. 启动服务
@@ -967,7 +928,6 @@ echo "请检查服务状态并根据需要恢复数据"
 #!/bin/bash
 
 # 停止VictoriaMetrics
-docker-compose stop victoriametrics
 
 # 恢复数据
 rm -rf ./data/victoria-metrics/*
@@ -977,7 +937,6 @@ tar -xzf victoria-metrics-snapshot-20231201.tar.gz -C ./data/victoria-metrics/
 sudo chown -R 1000:1000 ./data/victoria-metrics/
 
 # 重启服务
-docker-compose start victoriametrics
 
 # 验证数据
 curl 'http://localhost:8428/api/v1/query?query=up'
@@ -987,18 +946,12 @@ curl 'http://localhost:8428/api/v1/query?query=up'
 
 ```bash
 # 恢复Grafana配置
-docker-compose stop grafana
-cp grafana-backup.db ./data/grafana/grafana.db
-sudo chown 472:472 ./data/grafana/grafana.db
-docker-compose start grafana
 
 # 恢复告警规则
 cp alert-rules-backup.yml ./configs/alert-rules.yml
 docker-compose restart vmalert
 
 # 恢复Alertmanager配置
-cp alertmanager-backup.yml ./configs/alertmanager.yml
-docker-compose restart alertmanager
 ```
 
 ## 📞 获取帮助
