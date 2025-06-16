@@ -27,9 +27,9 @@ describe('Dashboard Page', () => {
     render(<DashboardPage />)
     
     // Check for main dashboard elements
-    expect(screen.getByText('SNMP MIB 监控平台')).toBeInTheDocument()
-    expect(screen.getByText('系统概览')).toBeInTheDocument()
-    expect(screen.getByText('快速操作')).toBeInTheDocument()
+    expect(screen.getByText('Dashboard')).toBeInTheDocument()
+    expect(screen.getByText('Recent Activity')).toBeInTheDocument()
+    expect(screen.getByText('Quick Upload')).toBeInTheDocument()
   })
 
   it('displays system statistics', () => {
@@ -46,16 +46,16 @@ describe('Dashboard Page', () => {
     render(<DashboardPage />)
     
     // Check for action buttons
-    expect(screen.getByText('上传 MIB')).toBeInTheDocument()
-    expect(screen.getByText('添加设备')).toBeInTheDocument()
-    expect(screen.getByText('创建规则')).toBeInTheDocument()
-    expect(screen.getByText('系统设置')).toBeInTheDocument()
+    expect(screen.getByText('Quick Upload')).toBeInTheDocument()
+    expect(screen.getByText('Export Data')).toBeInTheDocument()
+    expect(screen.getByText('Recent Activity')).toBeInTheDocument()
+    expect(screen.getByText('System Status')).toBeInTheDocument()
   })
 
   it('displays recent activities section', () => {
     render(<DashboardPage />)
     
-    expect(screen.getByText('最近活动')).toBeInTheDocument()
-    expect(screen.getByText('系统状态')).toBeInTheDocument()
+    expect(screen.getByText('Recent Activity')).toBeInTheDocument()
+    expect(screen.getByText('System Status')).toBeInTheDocument()
   })
 })

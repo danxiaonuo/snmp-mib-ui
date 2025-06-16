@@ -20,22 +20,22 @@ interface BreadcrumbNavProps {
 
 // 路径映射配置
 const PATH_LABELS: Record<string, string> = {
-  '': '首页',
-  'mibs': 'MIB 管理',
-  'config-gen': '配置生成',
-  'devices': '设备管理',
+  '': 'Home',
+  'mibs': 'MIB Management',
+  'config-gen': 'Configuration Generator',
+  'devices': 'Device Management',
   'monitoring-installer': 'Monitoring Installer',
-  'alert-rules': '告警规则',
-  'intelligent-analysis': '智能分析',
-  'simple-dashboard': '简单仪表板',
-  'dashboard': '仪表板',
-  'settings': '设置',
-  'profile': '个人资料',
-  'admin': '管理员',
+  'alert-rules': 'Alert Rules',
+  'intelligent-analysis': 'Intelligent Analysis',
+  'simple-dashboard': 'Simple Dashboard',
+  'dashboard': 'Dashboard',
+  'settings': 'Settings',
+  'profile': 'Profile',
+  'admin': 'Administrator',
   'api': 'API',
-  'docs': '文档',
-  'help': '帮助',
-  'about': '关于'
+  'docs': 'Documentation',
+  'help': 'Help',
+  'about': 'About',
 }
 
 // 路径图标映射

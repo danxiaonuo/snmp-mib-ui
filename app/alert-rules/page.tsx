@@ -23,32 +23,32 @@ import { toast } from "sonner"
 const mockAlertRules = [
   {
     id: "1",
-    name: "交换机CPU使用率告警",
-    description: "监控交换机CPU使用率超过80%",
+    name: "Switch CPU Usage Alert",
+    description: "Monitor switch CPU usage exceeding 80%",
     promql: "(100 - (avg by (instance) (irate(cpu_idle_total[5m])) * 100)) > 80",
     severity: "warning",
     threshold: 80,
     duration: "5m",
     enabled: true,
-    deviceGroup: "核心交换机",
-    vendor: "华为",
-    tags: ["CPU", "性能"],
+    deviceGroup: "Core Switches",
+    vendor: "Huawei",
+    tags: ["CPU", "Performance"],
     lastTriggered: "2024-01-15 14:30:00",
     triggerCount: 5,
     status: "active"
   },
   {
     id: "2",
-    name: "端口状态异常告警",
-    description: "监控交换机端口状态变化",
+    name: "Port Status Abnormal Alert",
+    description: "Monitor switch port status changes",
     promql: "ifOperStatus{job=\"snmp\"} != ifAdminStatus{job=\"snmp\"}",
     severity: "critical",
     threshold: 1,
     duration: "1m",
     enabled: true,
-    deviceGroup: "接入交换机",
-    vendor: "思科",
-    tags: ["端口", "连接"],
+    deviceGroup: "Access Switches",
+    vendor: "Cisco",
+    tags: ["Access", "Standard"],
     lastTriggered: "2024-01-15 16:45:00",
     triggerCount: 12,
     status: "firing"
@@ -58,10 +58,10 @@ const mockAlertRules = [
 const mockTemplates = [
   {
     id: "1",
-    name: "华为交换机CPU监控",
-    category: "华为",
+    name: "Huawei Switch CPU Monitoring",
+    category: "Performance Monitoring",
     type: "CPU",
-    description: "华为交换机CPU使用率监控模板",
+    description: "Huawei switch CPU usage monitoring template",
     promql: "(100 - (avg by (instance) (irate(hwCpuDevCpuUsage[5m])))) > {{threshold}}",
     defaultThreshold: 80,
     severity: "warning",
@@ -70,10 +70,10 @@ const mockTemplates = [
   },
   {
     id: "2",
-    name: "思科交换机内存监控",
-    category: "思科",
-    type: "内存",
-    description: "思科交换机内存使用率监控模板",
+    name: "Cisco Switch Memory Monitoring",
+    category: "Network Monitoring",
+    type: "Memory",
+    description: "Cisco switch memory usage monitoring template",
     promql: "(ciscoMemoryPoolUsed / ciscoMemoryPoolFree * 100) > {{threshold}}",
     defaultThreshold: 85,
     severity: "warning",
@@ -85,21 +85,21 @@ const mockTemplates = [
 const mockDeviceGroups = [
   {
     id: "1",
-    name: "核心交换机",
-    description: "数据中心核心交换机组",
+    name: "Cisco Switch Memory Monitoring",
+    description: "Cisco switch memory usage monitoring template",
     deviceCount: 8,
     ruleCount: 15,
-    tags: ["核心", "关键业务"],
-    location: "机房A"
+    tags: ["Core", "Critical Business"],
+    location: "Data Center A"
   },
   {
     id: "2",
-    name: "接入交换机",
-    description: "楼层接入交换机组",
+    name: "Core Switches",
+    description: "Data center core switch group",
     deviceCount: 45,
     ruleCount: 32,
-    tags: ["接入", "办公区域"],
-    location: "各楼层"
+    tags: ["Port", "Connection"],
+    location: "All Floors"
   }
 ]
 
@@ -114,7 +114,7 @@ export default function AlertRulesPage() {
   const [promqlCode, setPromqlCode] = useState("")
   const [syntaxValid, setSyntaxValid] = useState(true)
 
-  // 过滤规则
+  // Filter rules
   const filteredRules = mockAlertRules.filter(rule => {
     const matchesSearch = rule.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          rule.description.toLowerCase().includes(searchTerm.toLowerCase())
@@ -157,7 +157,7 @@ export default function AlertRulesPage() {
   }
 
   const handleApplyTemplate = (templateId: string, deviceGroupId: string) => {
-    toast.success("模板应用成功，已为设备组创建告警规则")
+    toast.success("Template applied successfully, alert rules created for device group")
   }
 
   return (
@@ -973,7 +973,7 @@ export default function AlertRulesPage() {
                 setEditingRule(null)
               }} className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700">
                 <Save className="mr-2 h-4 w-4" />
-                {editingRule ? "更新规则" : "创建规则"}
+                {editingRule ? "Update Rule" : "Create Rule"}
               </Button>
             </div>
           </div>

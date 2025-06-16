@@ -129,7 +129,7 @@ interface AlertItem {
   status: 'active' | 'resolved' | 'acknowledged'
 }
 
-// 生成模拟时间序列数据
+// Generate mock time series data
 const generateTimeSeriesData = (points: number, baseValue: number, variance: number): MetricData[] => {
   const data: MetricData[] = []
   const now = new Date()
@@ -533,7 +533,7 @@ export default function MonitoringDashboard() {
         </div>
       </div>
 
-      {/* 系统概览 */}
+      {/* System Overview */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricCard
           title={t('monitoringDashboard.overview.systemHealth.title')}
@@ -601,7 +601,7 @@ export default function MonitoringDashboard() {
         />
       </div>
 
-      {/* 组件状态 */}
+      {/* Component Status */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -778,7 +778,7 @@ export default function MonitoringDashboard() {
         </Card>
       </div>
 
-      {/* 快速操作 */}
+      {/* Quick Actions */}
       <Card>
         <CardHeader>
           <CardTitle>{t('monitoringDashboard.quickActions.header.title')}</CardTitle>
