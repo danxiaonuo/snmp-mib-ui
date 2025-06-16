@@ -24,7 +24,7 @@ const PATH_LABELS: Record<string, string> = {
   'mibs': 'MIB 管理',
   'config-gen': '配置生成',
   'devices': '设备管理',
-  'monitoring-installer': '监控安装器',
+  'monitoring-installer': 'Monitoring Installer',
   'alert-rules': '告警规则',
   'intelligent-analysis': '智能分析',
   'simple-dashboard': '简单仪表板',

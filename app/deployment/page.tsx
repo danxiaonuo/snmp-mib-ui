@@ -151,7 +151,7 @@ export default function DeploymentPage() {
     )
   }
 
-  // 组件选择
+  // Component selection
   const toggleComponentSelection = (componentName: string) => {
     setSelectedComponents(prev => 
       prev.includes(componentName) 
@@ -160,10 +160,10 @@ export default function DeploymentPage() {
     )
   }
 
-  // 批量部署组件
+  // Batch deploy components
   const handleBatchDeploy = async () => {
     if (selectedHosts.length === 0 || selectedComponents.length === 0) {
-      alert('请选择主机和组件')
+      alert('Please select hosts and components')
       return
     }
 
@@ -335,8 +335,8 @@ export default function DeploymentPage() {
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">监控组件部署</h1>
-          <p className="text-muted-foreground">远程部署监控组件和配置文件到目标主机</p>
+          <h1 className="text-3xl font-bold">Monitoring Component Deployment</h1>
+          <p className="text-muted-foreground">Remote deployment of monitoring components and configuration files to target hosts</p>
         </div>
         <div className="flex gap-2">
           <Button onClick={loadHosts} variant="outline">
@@ -348,17 +348,17 @@ export default function DeploymentPage() {
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="hosts">主机管理</TabsTrigger>
-          <TabsTrigger value="components">组件部署</TabsTrigger>
-          <TabsTrigger value="configs">配置部署</TabsTrigger>
-          <TabsTrigger value="tasks">任务状态</TabsTrigger>
+          <TabsTrigger value="hosts">Host Management</TabsTrigger>
+          <TabsTrigger value="components">Component Deployment</TabsTrigger>
+          <TabsTrigger value="configs">Configuration Deployment</TabsTrigger>
+          <TabsTrigger value="tasks">Task Status</TabsTrigger>
         </TabsList>
 
         <TabsContent value="hosts" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>目标主机</CardTitle>
-              <CardDescription>选择要部署监控组件的主机</CardDescription>
+              <CardTitle>Target Hosts</CardTitle>
+              <CardDescription>Select hosts for monitoring component deployment</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -407,8 +407,8 @@ export default function DeploymentPage() {
         <TabsContent value="components" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>监控组件</CardTitle>
-              <CardDescription>选择要部署的监控组件</CardDescription>
+              <CardTitle>Monitoring Components</CardTitle>
+              <CardDescription>Select monitoring components to deploy</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
@@ -450,7 +450,7 @@ export default function DeploymentPage() {
                   disabled={isLoading || selectedHosts.length === 0 || selectedComponents.length === 0}
                 >
                   <Upload className="h-4 w-4 mr-2" />
-                  批量部署 ({selectedComponents.length} 组件到 {selectedHosts.length} 主机)
+                  Batch Deploy ({selectedComponents.length} components to {selectedHosts.length} hosts)
                 </Button>
               </div>
             </CardContent>
@@ -460,8 +460,8 @@ export default function DeploymentPage() {
         <TabsContent value="configs" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>配置部署</CardTitle>
-              <CardDescription>生成并部署监控配置文件到目标主机</CardDescription>
+              <CardTitle>Configuration Deployment</CardTitle>
+              <CardDescription>Generate and deploy monitoring configuration files to target hosts</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
@@ -471,9 +471,9 @@ export default function DeploymentPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="monitoring">监控配置</SelectItem>
-                    <SelectItem value="alerting">告警配置</SelectItem>
-                    <SelectItem value="snmp">SNMP配置</SelectItem>
+                    <SelectItem value="monitoring">Monitoring Configuration</SelectItem>
+                    <SelectItem value="alerting">Alerting Configuration</SelectItem>
+                    <SelectItem value="snmp">SNMP Configuration</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -631,7 +631,7 @@ export default function DeploymentPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle>组件部署任务</CardTitle>
+                <CardTitle>Component Deployment Tasks</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">

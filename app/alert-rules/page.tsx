@@ -170,11 +170,11 @@ export default function AlertRulesPage() {
               <Bell className="h-4 w-4 text-white" />
             </div>
             <h2 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent dark:from-gray-100 dark:to-gray-400">
-              告警规则配置
+              Alert Rules Configuration
             </h2>
           </div>
           <p className="text-muted-foreground">
-            智能化告警规则管理，支持PromQL编辑、批量操作和实时监控
+            Intelligent alert rule management with PromQL editing, batch operations, and real-time monitoring
           </p>
         </div>
         
@@ -277,7 +277,7 @@ export default function AlertRulesPage() {
                     <span>告警规则管理</span>
                   </CardTitle>
                   <CardDescription>
-                    智能化规则管理，支持批量操作、实时监控和性能分析
+                    Intelligent rule management with batch operations, real-time monitoring, and performance analysis
                   </CardDescription>
                 </div>
                 <div className="flex items-center space-x-3">
@@ -296,7 +296,7 @@ export default function AlertRulesPage() {
                     <div className="relative">
                       <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                       <Input
-                        placeholder="搜索规则名称、描述或标签..."
+                        placeholder="Search rule name, description or tags..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="pl-10 h-12 border-2 focus:border-blue-500 transition-colors"
@@ -307,10 +307,10 @@ export default function AlertRulesPage() {
                     <Select value={filterSeverity} onValueChange={setFilterSeverity}>
                       <SelectTrigger className="w-40 h-12">
                         <Filter className="mr-2 h-4 w-4" />
-                        <SelectValue placeholder="严重程度" />
+                        <SelectValue placeholder="Severity" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="all">全部严重程度</SelectItem>
+                        <SelectItem value="all">All Severities</SelectItem>
                         <SelectItem value="critical">🔴 严重</SelectItem>
                         <SelectItem value="warning">🟡 警告</SelectItem>
                         <SelectItem value="info">🔵 信息</SelectItem>
@@ -318,7 +318,7 @@ export default function AlertRulesPage() {
                     </Select>
                     <Select value={filterStatus} onValueChange={setFilterStatus}>
                       <SelectTrigger className="w-32 h-12">
-                        <SelectValue placeholder="状态" />
+                        <SelectValue placeholder="Status" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="all">全部状态</SelectItem>
