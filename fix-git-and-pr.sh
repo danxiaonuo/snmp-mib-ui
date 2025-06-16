@@ -5,8 +5,6 @@
 
 set -e
 
-echo "🚀 开始修复 Git 认证并创建 PR..."
-
 # 颜色定义
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -19,6 +17,33 @@ log_info() { echo -e "${BLUE}[INFO]${NC} $1"; }
 log_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
 log_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
 log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
+
+# 显示帮助信息
+show_help() {
+    echo "Git 认证修复和 PR 创建工具"
+    echo ""
+    echo "用法: $0 [选项]"
+    echo ""
+    echo "功能:"
+    echo "  - 自动检查和配置Git认证"
+    echo "  - 智能推送分支到远程仓库" 
+    echo "  - 自动创建Pull Request"
+    echo ""
+    echo "支持的认证方式:"
+    echo "  1. 个人访问令牌 (HTTPS)"
+    echo "  2. SSH 密钥"
+    echo "  3. GitHub CLI"
+    echo ""
+    echo "示例:"
+    echo "  $0           # 运行完整流程"
+    echo "  $0 --help    # 显示帮助信息"
+}
+
+# 检查参数
+if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+    show_help
+    exit 0
+fi
 
 # 检查Git配置
 check_git_config() {
@@ -48,6 +73,7 @@ check_git_status() {
     fi
     
     # 显示状态
+    echo "当前状态:"
     git status --short
     
     # 获取当前分支
@@ -77,26 +103,33 @@ commit_changes() {
         
         if [[ $REPLY =~ ^[Yy]$ ]]; then
             read -p "请输入提交信息: " COMMIT_MSG
+            if [ -z "$COMMIT_MSG" ]; then
+                COMMIT_MSG="feat: update project files and configurations"
+            fi
             git add .
             git commit -m "$COMMIT_MSG"
             log_success "更改已提交"
         else
             log_warning "跳过提交，继续执行..."
         fi
+    else
+        log_info "没有未提交的更改"
     fi
 }
 
 # 检查未推送的提交
 check_unpushed_commits() {
     # 先尝试获取远程信息
-    git fetch origin "$CURRENT_BRANCH" 2>/dev/null || log_warning "无法获取远程分支信息"
+    log_info "检查远程分支状态..."
+    git fetch origin "$CURRENT_BRANCH" 2>/dev/null || log_warning "无法获取远程分支信息（可能是新分支）"
     
     # 检查未推送的提交
     UNPUSHED_COMMITS=$(git log origin/${CURRENT_BRANCH}..HEAD --oneline 2>/dev/null | wc -l || echo "unknown")
     
-    if [ "$UNPUSHED_COMMITS" = "unknown" ] || [ "$UNPUSHED_COMMITS" -eq 0 ]; then
-        log_warning "检测到可能是新分支或无未推送提交"
-        echo "将尝试推送当前分支..."
+    if [ "$UNPUSHED_COMMITS" = "unknown" ]; then
+        log_warning "检测到新分支，将进行首次推送"
+    elif [ "$UNPUSHED_COMMITS" -eq 0 ]; then
+        log_warning "没有新的提交需要推送"
     else
         log_info "发现 ${UNPUSHED_COMMITS} 个未推送的提交"
     fi
@@ -117,6 +150,7 @@ configure_auth() {
         1)
             log_info "配置个人访问令牌..."
             
+            echo ""
             echo "请在 GitHub 上生成个人访问令牌："
             echo "1. 访问 https://github.com/settings/tokens"
             echo "2. 点击 'Generate new token (classic)'"
@@ -147,26 +181,28 @@ configure_auth() {
             log_info "配置 SSH 认证..."
             
             # 检查是否已有 SSH 密钥
-            if [ ! -f ~/.ssh/id_rsa ] && [ ! -f ~/.ssh/id_ed25519 ]; then
+            SSH_KEY_FILE=""
+            if [ -f ~/.ssh/id_ed25519 ]; then
+                SSH_KEY_FILE="$HOME/.ssh/id_ed25519"
+            elif [ -f ~/.ssh/id_rsa ]; then
+                SSH_KEY_FILE="$HOME/.ssh/id_rsa"
+            else
                 echo "生成新的 SSH 密钥..."
                 read -p "请输入你的邮箱: " EMAIL
-                ssh-keygen -t ed25519 -C "$EMAIL" -f ~/.ssh/id_ed25519 -N ""
-                SSH_KEY_FILE="~/.ssh/id_ed25519"
-            else
-                SSH_KEY_FILE="~/.ssh/id_rsa"
-                if [ -f ~/.ssh/id_ed25519 ]; then
-                    SSH_KEY_FILE="~/.ssh/id_ed25519"
-                fi
+                ssh-keygen -t ed25519 -C "$EMAIL" -f "$HOME/.ssh/id_ed25519" -N ""
+                SSH_KEY_FILE="$HOME/.ssh/id_ed25519"
             fi
             
             # 启动 ssh-agent 并添加密钥
-            eval "$(ssh-agent -s)"
-            ssh-add $SSH_KEY_FILE
+            eval "$(ssh-agent -s)" > /dev/null
+            ssh-add "$SSH_KEY_FILE" 2>/dev/null || log_warning "添加SSH密钥时出现警告"
             
             # 显示公钥
             echo ""
             log_warning "请将以下 SSH 公钥添加到 GitHub:"
-            cat ${SSH_KEY_FILE}.pub
+            echo "----------------------------------------"
+            cat "${SSH_KEY_FILE}.pub"
+            echo "----------------------------------------"
             echo ""
             echo "添加步骤："
             echo "1. 访问 https://github.com/settings/ssh/new"
@@ -184,7 +220,7 @@ configure_auth() {
             if ssh -T git@github.com 2>&1 | grep -q "successfully authenticated"; then
                 log_success "SSH 连接测试成功"
             else
-                log_warning "SSH 连接测试完成（可能需要手动确认）"
+                log_warning "SSH 连接测试完成（请确认连接正常）"
             fi
             
             log_success "SSH 认证配置完成"
@@ -248,7 +284,7 @@ smart_push() {
     elif git push -u origin "$CURRENT_BRANCH" 2>/dev/null; then
         log_success "分支推送成功（设置upstream）"
         push_success=true
-    # 方式3: 强制推送（谨慎使用）
+    # 方式3: 处理冲突和其他情况
     else
         log_warning "常规推送失败，尝试其他方式..."
         
@@ -269,8 +305,9 @@ smart_push() {
             echo ""
             log_warning "推送仍然失败，可能的原因："
             echo "1. 认证配置问题"
-            echo "2. 网络连接问题"
+            echo "2. 网络连接问题"  
             echo "3. 远程分支冲突"
+            echo "4. 仓库权限问题"
             echo ""
             read -p "是否尝试强制推送？(y/N): " -n 1 -r
             echo
@@ -291,6 +328,7 @@ smart_push() {
         echo "1. 网络连接"
         echo "2. 认证配置"
         echo "3. 仓库权限"
+        echo "4. 分支保护规则"
         exit 1
     fi
 }
@@ -307,7 +345,7 @@ create_pull_request() {
     
     # 动态生成PR描述
     COMMIT_COUNT=$(git rev-list --count HEAD ^origin/$BASE_BRANCH 2>/dev/null || echo "1")
-    RECENT_COMMITS=$(git log --oneline -5 | sed 's/^/- /')
+    RECENT_COMMITS=$(git log --oneline -5 --format="- %s" 2>/dev/null || echo "- Updated project files")
     
     PR_BODY="## Summary
 This PR includes project structure optimization and deployment improvements.
@@ -344,22 +382,27 @@ Total commits: $COMMIT_COUNT"
             
             # 获取PR URL
             PR_URL=$(gh pr view --json url --jq .url 2>/dev/null)
-            echo "PR 地址: $PR_URL"
-            
-            # 尝试在浏览器中打开
-            if command -v xdg-open &> /dev/null; then
-                xdg-open "$PR_URL" 2>/dev/null &
-            elif command -v open &> /dev/null; then
-                open "$PR_URL" 2>/dev/null &
+            if [ -n "$PR_URL" ]; then
+                echo "PR 地址: $PR_URL"
+                
+                # 尝试在浏览器中打开
+                if command -v xdg-open &> /dev/null; then
+                    xdg-open "$PR_URL" 2>/dev/null &
+                elif command -v open &> /dev/null; then
+                    open "$PR_URL" 2>/dev/null &
+                fi
             fi
             
             return 0
         else
             log_warning "GitHub CLI 创建失败，切换到手动方式..."
         fi
+    else
+        log_warning "GitHub CLI 未安装或未认证，使用手动方式..."
     fi
     
     # 手动创建PR的指导
+    echo ""
     log_info "手动创建 PR 指导："
     
     # 清理URL以供显示
@@ -389,49 +432,38 @@ Total commits: $COMMIT_COUNT"
     fi
 }
 
-# 检查参数
-if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
-    echo "Git 认证修复和 PR 创建工具"
-    echo ""
-    echo "用法: $0 [选项]"
-    echo ""
-    echo "功能:"
-    echo "  - 自动检查和配置Git认证"
-    echo "  - 智能推送分支到远程仓库" 
-    echo "  - 自动创建Pull Request"
-    echo ""
-    echo "支持的认证方式:"
-    echo "  1. 个人访问令牌 (HTTPS)"
-    echo "  2. SSH 密钥"
-    echo "  3. GitHub CLI"
-    exit 0
-fi
-
 # 主执行流程
-echo "======================================"
-echo "🚀 Git 认证修复和 PR 创建工具"
-echo "======================================"
+main() {
+    echo "======================================"
+    echo "🚀 Git 认证修复和 PR 创建工具"
+    echo "======================================"
+    echo ""
+    
+    check_git_config
+    check_git_status
+    commit_changes
+    check_unpushed_commits
+    configure_auth
+    smart_push
+    create_pull_request
+    
+    echo ""
+    echo "======================================"
+    log_success "脚本执行完成！"
+    echo "======================================"
+    echo ""
+    echo "📋 执行总结:"
+    echo "✅ Git 配置已检查"
+    echo "✅ 认证方式已配置"  
+    echo "✅ 分支已推送到远程"
+    echo "✅ PR 创建流程已完成"
+    echo ""
+    echo "🔧 后续操作:"
+    echo "- 检查PR状态并等待审核"
+    echo "- 如需修改，在当前分支继续提交"
+    echo "- 使用 'git push' 更新PR"
+}
 
-check_git_config
-check_git_status
-commit_changes
-check_unpushed_commits
-configure_auth
-smart_push
-create_pull_request
-
-echo ""
-echo "======================================"
-log_success "脚本执行完成！"
-echo "======================================"
-echo ""
-echo "📋 执行总结:"
-echo "✅ Git 配置已检查"
-echo "✅ 认证方式已配置"  
-echo "✅ 分支已推送到远程"
-echo "✅ PR 创建流程已完成"
-echo ""
-echo "🔧 后续操作:"
-echo "- 检查PR状态并等待审核"
-echo "- 如需修改，在当前分支继续提交"
-echo "- 使用 'git push' 更新PR"
+# 启动主流程
+echo "🚀 开始修复 Git 认证并创建 PR..."
+main
