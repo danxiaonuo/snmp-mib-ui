@@ -3,6 +3,7 @@ package services
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"strings"
 	"text/template"
@@ -11,7 +12,6 @@ import (
 	"github.com/go-redis/redis/v8"
 	"golang.org/x/crypto/ssh"
 	"gorm.io/gorm"
-	"mib-platform/models"
 )
 
 // ConfigDeploymentService 配置部署服务
@@ -492,8 +492,8 @@ func (s *ConfigDeploymentService) getConfigDeploymentTask(taskID string) (*Confi
 	}
 
 	var task ConfigDeploymentTask
-	if err := s.redis.JSONGet(context.Background(), taskKey, ".", &task).Err(); err != nil {
-		// 如果 JSON 操作失败，尝试简单的反序列化
+	// 简单的 JSON 反序列化，不使用 JSONGet
+	if err := json.Unmarshal([]byte(result), &task); err != nil {
 		return nil, fmt.Errorf("failed to deserialize task: %v", err)
 	}
 

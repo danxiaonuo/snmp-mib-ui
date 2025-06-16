@@ -12,11 +12,10 @@
     "snmp",
     "mib",
     "network-monitoring",
-    "monitoring",
     "nextjs",
     "golang",
-    "victoriametrics",
-    "grafana"
+    "webui",
+    "platform"
   ],
   "private": true,
   "scripts": {

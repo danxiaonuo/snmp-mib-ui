@@ -1,12 +1,10 @@
 package services
 
 import (
-	"context"
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
 	"encoding/base64"
-	"encoding/json"
 	"fmt"
 	"io"
 	"net"
@@ -619,8 +617,8 @@ func (s *HostService) decrypt(ciphertext string) (string, error) {
 		return "", fmt.Errorf("ciphertext too short")
 	}
 
-	nonce, ciphertext := data[:nonceSize], data[nonceSize:]
-	plaintext, err := gcm.Open(nil, nonce, ciphertext, nil)
+	nonce, ciphertext := data[:nonceSize], string(data[nonceSize:])
+	plaintext, err := gcm.Open(nil, nonce, []byte(ciphertext), nil)
 	if err != nil {
 		return "", err
 	}

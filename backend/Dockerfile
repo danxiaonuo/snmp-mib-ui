@@ -1,5 +1,5 @@
 # Build stage
-FROM golang:1.21-alpine AS builder
+FROM golang:1.23-alpine AS builder
 
 # Set Go proxy for faster downloads
 ENV GOPROXY=https://goproxy.cn,direct

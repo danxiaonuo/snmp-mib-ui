@@ -72,8 +72,7 @@ func main() {
 
 	// Initialize services
 	deviceService := services.NewDeviceService(db, redis)
-	prometheusService := services.NewPrometheusService(cfg.PrometheusURL, logger)
-	alertRulesService := services.NewAlertRulesService(db, prometheusService, logger)
+	alertRulesService := services.NewAlertRulesService(db, logger)
 	hostService := services.NewHostService(db, redis)
 	deploymentService := services.NewDeploymentService(db, redis, hostService)
 	configDeploymentService := services.NewConfigDeploymentService(db, redis, hostService)
@@ -83,7 +82,7 @@ func main() {
 	snmpController := controllers.NewSNMPController(db, redis)
 	configController := controllers.NewConfigController(db, redis)
 	deviceController := controllers.NewDeviceController(db, redis)
-	alertRulesController := controllers.NewAlertRulesController(alertRulesService, deviceService, prometheusService)
+	alertRulesController := controllers.NewAlertRulesController(alertRulesService, deviceService)
 	hostController := controllers.NewHostController(hostService)
 	deploymentController := controllers.NewDeploymentController(deploymentService, hostService)
 	configDeploymentController := controllers.NewConfigDeploymentController(configDeploymentService, hostService)

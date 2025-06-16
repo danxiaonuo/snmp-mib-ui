@@ -3,8 +3,8 @@ package services
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
-	"io"
 	"strings"
 	"text/template"
 	"time"
@@ -333,24 +333,24 @@ func (s *DeploymentService) executeDeploymentAsync(task *DeploymentTask) {
 }
 
 func (s *DeploymentService) deployComponent(client *ssh.Client, host *models.Host, component *ComponentDeployment) error {
-	template, exists := componentTemplates[component.Name]
+	compTemplate, exists := componentTemplates[component.Name]
 	if !exists {
 		return fmt.Errorf("unknown component: %s", component.Name)
 	}
 
 	switch component.DeployMethod {
 	case "docker":
-		return s.deployWithDocker(client, host, component, template)
+		return s.deployWithDocker(client, host, component, compTemplate)
 	case "binary":
-		return s.deployWithBinary(client, host, component, template)
+		return s.deployWithBinary(client, host, component, compTemplate)
 	case "systemd":
-		return s.deployWithSystemd(client, host, component, template)
+		return s.deployWithSystemd(client, host, component, compTemplate)
 	default:
-		return s.deployWithDocker(client, host, component, template) // 默认使用 Docker
+		return s.deployWithDocker(client, host, component, compTemplate) // 默认使用 Docker
 	}
 }
 
-func (s *DeploymentService) deployWithDocker(client *ssh.Client, host *models.Host, component *ComponentDeployment, template ComponentTemplate) error {
+func (s *DeploymentService) deployWithDocker(client *ssh.Client, host *models.Host, component *ComponentDeployment, compTemplate ComponentTemplate) error {
 	// 检查 Docker 是否安装
 	_, err := s.hostService.executeSSHCommand(client, "docker --version")
 	if err != nil {
@@ -369,7 +369,7 @@ sudo systemctl start docker
 	}
 
 	// 生成 Docker Compose 文件
-	tmpl, err := template.New("docker-compose").Parse(template.DockerCompose)
+	tmpl, err := template.New("docker-compose").Parse(compTemplate.DockerCompose)
 	if err != nil {
 		return fmt.Errorf("failed to parse docker-compose template: %v", err)
 	}
@@ -414,13 +414,13 @@ sudo systemctl start docker
 	return nil
 }
 
-func (s *DeploymentService) deployWithBinary(client *ssh.Client, host *models.Host, component *ComponentDeployment, template ComponentTemplate) error {
+func (s *DeploymentService) deployWithBinary(client *ssh.Client, host *models.Host, component *ComponentDeployment, compTemplate ComponentTemplate) error {
 	// 下载二进制文件
 	downloadCmd := fmt.Sprintf(`
 cd /tmp
 wget %s -O %s.tar.gz
 tar -xzf %s.tar.gz
-`, template.BinaryURL, component.Name, component.Name)
+`, compTemplate.BinaryURL, component.Name, component.Name)
 
 	_, err := s.hostService.executeSSHCommand(client, downloadCmd)
 	if err != nil {
@@ -440,16 +440,16 @@ sudo useradd --no-create-home --shell /bin/false %s || true
 	}
 
 	// 创建 systemd 服务
-	return s.createSystemdService(client, component, template)
+	return s.createSystemdService(client, component, compTemplate)
 }
 
-func (s *DeploymentService) deployWithSystemd(client *ssh.Client, host *models.Host, component *ComponentDeployment, template ComponentTemplate) error {
-	return s.createSystemdService(client, component, template)
+func (s *DeploymentService) deployWithSystemd(client *ssh.Client, host *models.Host, component *ComponentDeployment, compTemplate ComponentTemplate) error {
+	return s.createSystemdService(client, component, compTemplate)
 }
 
-func (s *DeploymentService) createSystemdService(client *ssh.Client, component *ComponentDeployment, template ComponentTemplate) error {
+func (s *DeploymentService) createSystemdService(client *ssh.Client, component *ComponentDeployment, compTemplate ComponentTemplate) error {
 	// 生成 systemd 服务文件
-	tmpl, err := template.New("systemd").Parse(template.SystemdService)
+	tmpl, err := template.New("systemd").Parse(compTemplate.SystemdService)
 	if err != nil {
 		return fmt.Errorf("failed to parse systemd template: %v", err)
 	}
@@ -514,9 +514,8 @@ func (s *DeploymentService) getDeploymentTask(taskID string) (*DeploymentTask, e
 	}
 
 	var task DeploymentTask
-	if err := s.redis.JSONGet(context.Background(), taskKey, ".", &task).Err(); err != nil {
-		// 如果 JSON 操作失败，尝试简单的反序列化
-		// 这里需要根据实际的 Redis 客户端实现
+	// 简单的 JSON 反序列化，不使用 JSONGet
+	if err := json.Unmarshal([]byte(result), &task); err != nil {
 		return nil, fmt.Errorf("failed to deserialize task: %v", err)
 	}
 

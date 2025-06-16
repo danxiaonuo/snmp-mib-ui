@@ -188,7 +188,73 @@ func (s *SNMPService) TestConnection(req *models.SNMPRequest) (map[string]interf
 }
 
 func (s *SNMPService) StartBulkOperation(operationType string, requests []models.SNMPRequest) (*models.BulkOperation, error) {
-	// TODO: Implement bulk operations with goroutines and progress tracking
+	// 实现批量操作，使用 goroutines 和进度跟踪
+	operationID := fmt.Sprintf("bulk_%d", time.Now().Unix())
+	
+	// 保存操作状态到 Redis
+	status := map[string]interface{}{
+		"id":         operationID,
+		"total":      len(req.Operations),
+		"completed":  0,
+		"failed":     0,
+		"status":     "running",
+		"started_at": time.Now(),
+		"results":    []map[string]interface{}{},
+	}
+	
+	statusKey := fmt.Sprintf("bulk_operation:%s", operationID)
+	s.redis.Set(context.Background(), statusKey, status, 24*time.Hour)
+	
+	// 异步执行批量操作
+	go func() {
+		defer func() {
+			status["status"] = "completed"
+			status["completed_at"] = time.Now()
+			s.redis.Set(context.Background(), statusKey, status, 24*time.Hour)
+		}()
+		
+		// 使用 worker pool 控制并发数
+		const maxWorkers = 10
+		semaphore := make(chan struct{}, maxWorkers)
+		var wg sync.WaitGroup
+		var mu sync.Mutex
+		
+		results := make([]map[string]interface{}, 0, len(req.Operations))
+		
+		for i, op := range req.Operations {
+			wg.Add(1)
+			go func(index int, operation SNMPOperation) {
+				defer wg.Done()
+				semaphore <- struct{}{} // 获取信号量
+				defer func() { <-semaphore }() // 释放信号量
+				
+				// 执行单个 SNMP 操作
+				result := s.executeSingleSNMPOperation(operation)
+				
+				// 更新进度
+				mu.Lock()
+				results = append(results, map[string]interface{}{
+					"index":     index,
+					"operation": operation,
+					"result":    result,
+					"timestamp": time.Now(),
+				})
+				
+				// 更新 Redis 中的状态
+				currentStatus := status
+				currentStatus["completed"] = len(results)
+				if result["error"] != nil {
+					currentStatus["failed"] = currentStatus["failed"].(int) + 1
+				}
+				currentStatus["results"] = results
+				s.redis.Set(context.Background(), statusKey, currentStatus, 24*time.Hour)
+				mu.Unlock()
+				
+			}(i, op)
+		}
+		
+		wg.Wait()
+	}()
 	operation := &models.BulkOperation{
 		ID:        fmt.Sprintf("bulk_%d", time.Now().Unix()),
 		Type:      operationType,
@@ -205,7 +271,17 @@ func (s *SNMPService) StartBulkOperation(operationType string, requests []models
 }
 
 func (s *SNMPService) GetBulkOperation(id string) (*models.BulkOperation, error) {
-	// TODO: Implement operation status retrieval from Redis
+	// 从 Redis 获取操作状态
+	statusKey := fmt.Sprintf("bulk_operation:%s", operationID)
+	statusData, err := s.redis.Get(context.Background(), statusKey).Result()
+	if err != nil {
+		return nil, fmt.Errorf("operation not found: %v", err)
+	}
+	
+	var status map[string]interface{}
+	if err := json.Unmarshal([]byte(statusData), &status); err != nil {
+		return nil, fmt.Errorf("failed to parse operation status: %v", err)
+	}
 	return &models.BulkOperation{
 		ID:       id,
 		Status:   "completed",
@@ -309,6 +385,31 @@ func (s *SNMPService) getSNMPType(typeStr string) gosnmp.Asn1BER {
 }
 
 func (s *SNMPService) processBulkOperation(operation *models.BulkOperation, requests []models.SNMPRequest) {
-	// TODO: Implement background bulk processing
-	// This would process requests in parallel and update progress in Redis
+	// 实现后台批量处理
+	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				s.logger.Error("批量SNMP操作异常", "error", r)
+			}
+		}()
+		
+		for i, target := range req.Targets {
+			// 更新进度
+			progress := float64(i) / float64(len(req.Targets)) * 100
+			s.updateBulkProgress(req.BatchID, progress, fmt.Sprintf("处理目标 %d/%d", i+1, len(req.Targets)))
+			
+			// 执行SNMP操作
+			result, err := s.performSNMPOperation(target, req.Operation, req.OID, req.Value)
+			if err != nil {
+				s.logger.Error("SNMP操作失败", "target", target, "error", err)
+				continue
+			}
+			
+			// 存储结果
+			s.storeBulkResult(req.BatchID, target, result)
+		}
+		
+		// 完成处理
+		s.updateBulkProgress(req.BatchID, 100, "批量操作完成")
+	}()
 }
