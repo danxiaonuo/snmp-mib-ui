@@ -102,11 +102,11 @@ export default function MonitoringInstaller() {
         }, 500)
       } else {
         setIsInstalling(false)
-        console.error('安装失败:', result.errors)
+        console.error('Installation failed:', result.errors)
       }
     } catch (error) {
       setIsInstalling(false)
-      console.error('安装请求失败:', error)
+      console.error('Installation request failed:', error)
     }
   }
 
@@ -157,7 +157,7 @@ networks:
   // 批量安装组件
   const handleBatchInstall = async () => {
     if (selectedComponents.length === 0) {
-      alert('请选择至少一个组件进行安装')
+      alert('Please select at least one component to install')
       return
     }
     
@@ -199,11 +199,11 @@ networks:
         }, 1000)
       } else {
         setIsInstalling(false)
-        console.error('批量安装失败:', result.errors)
+        console.error('Batch installation failed:', result.errors)
       }
     } catch (error) {
       setIsInstalling(false)
-      console.error('批量安装请求失败:', error)
+      console.error('Batch installation request failed:', error)
     }
   }
 
@@ -271,10 +271,10 @@ networks:
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-purple-600">
               <Monitor className="h-4 w-4 text-white" />
             </div>
-            <h2 className="text-3xl font-bold tracking-tight">监控组件安装器</h2>
+            <h2 className="text-3xl font-bold tracking-tight">Monitoring Component Installer</h2>
           </div>
           <p className="text-muted-foreground">
-            一键安装和配置监控组件，快速搭建完整的监控系统
+            One-click installation and configuration of monitoring components to quickly build a complete monitoring system
           </p>
         </div>
         
@@ -289,29 +289,29 @@ networks:
             disabled={isInstalling || selectedComponents.length === 0}
           >
             <Download className="mr-2 h-4 w-4" />
-            批量安装 ({selectedComponents.length})
+            Batch Install ({selectedComponents.length})
           </Button>
         </div>
       </div>
 
-      {/* 安装进度 */}
+      {/* Installation Progress */}
       {isInstalling && (
         <Alert>
           <Activity className="h-4 w-4" />
           <AlertDescription>
-            正在安装组件... {installProgress}%
+            Installing components... {installProgress}%
             <Progress value={installProgress} className="mt-2" />
           </AlertDescription>
         </Alert>
       )}
 
-      {/* 主要内容 */}
+      {/* Main Content */}
       <Tabs defaultValue="components" className="w-full">
         <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="components">组件管理</TabsTrigger>
-          <TabsTrigger value="templates">安装模板</TabsTrigger>
-          <TabsTrigger value="config">配置管理</TabsTrigger>
-          <TabsTrigger value="status">系统状态</TabsTrigger>
+          <TabsTrigger value="components">Component Management</TabsTrigger>
+          <TabsTrigger value="templates">Installation Templates</TabsTrigger>
+          <TabsTrigger value="config">Configuration Management</TabsTrigger>
+          <TabsTrigger value="status">System Status</TabsTrigger>
         </TabsList>
 
         <TabsContent value="components" className="space-y-6">
@@ -367,7 +367,7 @@ networks:
                         variant={status === 'running' ? 'outline' : 'default'}
                       >
                         <Download className="mr-2 h-4 w-4" />
-                        {status === 'running' ? '重装' : '安装'}
+                        {status === 'running' ? 'Reinstall' : 'Install'}
                       </Button>
                     </div>
                   </CardContent>
@@ -380,29 +380,29 @@ networks:
         <TabsContent value="templates" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>安装模板</CardTitle>
-              <CardDescription>预配置的监控组件组合，适用于不同场景</CardDescription>
+              <CardTitle>Installation Templates</CardTitle>
+              <CardDescription>Pre-configured monitoring component combinations for different scenarios</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="p-4 border rounded-lg">
-                  <h4 className="font-medium">基础监控</h4>
+                  <h4 className="font-medium">Basic Monitoring</h4>
                   <p className="text-sm text-muted-foreground mt-1">
-                    包含 Prometheus + Grafana + Node Exporter
+                    Includes Prometheus + Grafana + Node Exporter
                   </p>
-                  <Button className="mt-3" size="sm">选择模板</Button>
+                  <Button className="mt-3" size="sm">Select Template</Button>
                 </div>
                 <div className="p-4 border rounded-lg">
-                  <h4 className="font-medium">完整监控</h4>
+                  <h4 className="font-medium">Complete Monitoring</h4>
                   <p className="text-sm text-muted-foreground mt-1">
-                    包含所有主要监控组件和告警系统
+                    Includes all major monitoring components and alerting system
                   </p>
-                  <Button className="mt-3" size="sm">选择模板</Button>
+                  <Button className="mt-3" size="sm">Select Template</Button>
                 </div>
                  <div className="p-4 border rounded-lg">
-                  <h4 className="font-medium">VictoriaMetrics 栈</h4>
+                  <h4 className="font-medium">VictoriaMetrics Stack</h4>
                   <p className="text-sm text-muted-foreground mt-1">
-                    包含 VictoriaMetrics 单机版, VMAgent, Grafana
+                    Includes VictoriaMetrics standalone, VMAgent, Grafana
                   </p>
                   <Button className="mt-3" size="sm">选择模板</Button>
                 </div>
@@ -421,11 +421,11 @@ networks:
         <TabsContent value="config" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>配置管理</CardTitle>
-              <CardDescription>管理监控组件的配置文件</CardDescription>
+              <CardTitle>Configuration Management</CardTitle>
+              <CardDescription>Manage configuration files for monitoring components</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground">配置管理功能正在开发中...</p>
+              <p className="text-muted-foreground">Configuration management features are under development...</p>
             </CardContent>
           </Card>
         </TabsContent>
@@ -473,28 +473,28 @@ networks:
             
             <Card>
               <CardHeader>
-                <CardTitle>组件状态</CardTitle>
-                <CardDescription>监控组件运行状态</CardDescription>
+                <CardTitle>Component Status</CardTitle>
+                <CardDescription>Monitoring component runtime status</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span>运行中组件</span>
+                    <span>Running Components</span>
                     <span className="text-sm text-muted-foreground">
                       {Object.values(componentStatuses).filter(status => status === 'running').length} / {components.length}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span>已选择组件</span>
+                    <span>Selected Components</span>
                     <span className="text-sm text-muted-foreground">{selectedComponents.length}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span>最后检查</span>
-                    <span className="text-sm text-muted-foreground">刚刚</span>
+                    <span>Last Check</span>
+                    <span className="text-sm text-muted-foreground">Just now</span>
                   </div>
                   {systemInfo?.runningContainers && systemInfo.runningContainers.length > 0 && (
                     <div className="mt-4">
-                      <h4 className="text-sm font-medium mb-2">运行中的容器:</h4>
+                      <h4 className="text-sm font-medium mb-2">Running Containers:</h4>
                       <div className="space-y-1">
                         {systemInfo.runningContainers.map((container: string) => (
                           <div key={container} className="text-xs text-muted-foreground">
