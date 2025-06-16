@@ -4,8 +4,8 @@
 [![Go Version](https://img.shields.io/badge/Go-1.23+-blue.svg)](https://golang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-15+-black.svg)](https://nextjs.org/)
 [![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
-[![Test Coverage](https://img.shields.io/badge/Coverage-92%25-brightgreen.svg)](https://github.com/evan7434/snmp-mib-ui)
-[![Production Ready](https://img.shields.io/badge/Production-Ready-success.svg)](https://github.com/evan7434/snmp-mib-ui)
+[![Test Coverage](https://img.shields.io/badge/Coverage-92%25-brightgreen.svg)](#)
+[![Production Ready](https://img.shields.io/badge/Production-Ready-success.svg)](#)
 
 > 🚀 **企业级SNMP网络监控解决方案** - 基于现代化技术栈构建的专业网络设备管理平台
 
@@ -51,7 +51,7 @@
 
 ```bash
 # 1. 克隆项目
-git clone https://github.com/evan7434/snmp-mib-ui.git
+git clone <your-repository-url>
 cd snmp-mib-ui
 
 # 2. 一键部署 (推荐)
@@ -114,13 +114,13 @@ docker-compose down
 - **实时仪表板**: 设备状态和性能实时展示
 - **历史数据**: 长期趋势分析和容量规划
 - **自定义图表**: 灵活的图表配置和展示
-- **报表导出**: 支持PDF、Excel等格式导出
+- **数据导出**: 支持多种格式的数据导出
 
 ### 🔧 系统管理
 - **用户管理**: 多角色权限控制
 - **系统配置**: 灵活的系统参数配置
 - **日志审计**: 完整的操作日志记录
-- **备份恢复**: 数据备份和恢复功能
+- **数据管理**: 数据备份和恢复功能
 
 ## 🛠️ 开发指南
 
@@ -164,9 +164,9 @@ cd backend && go test ./...  # 后端测试
 
 ### 📝 API文档
 
-- **Swagger UI**: http://localhost:8080/swagger/
-- **API文档**: [docs/api-reference.md](docs/api-reference.md)
-- **开发指南**: [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)
+- **Swagger UI**: http://localhost:8080/swagger/ (开发环境)
+- **API文档**: 查看docs/api-reference.md
+- **开发指南**: 查看docs/DEVELOPMENT.md
 
 ## 🔧 配置说明
 
@@ -210,16 +210,16 @@ services:
 ## 📊 性能指标
 
 ### 🚀 系统性能
-- **响应时间**: API平均响应 < 100ms
-- **并发能力**: 支持1000+并发用户
-- **设备容量**: 支持10000+设备监控
-- **数据处理**: 100万+指标/分钟
+- **响应时间**: API平均响应时间优秀
+- **并发能力**: 支持大量并发用户
+- **设备容量**: 支持大规模设备监控
+- **数据处理**: 高效的指标处理能力
 
 ### 📈 监控指标
-- **可用性**: 99.9%+ SLA保证
-- **数据准确性**: 99.99%数据完整性
-- **告警及时性**: 秒级告警响应
-- **存储效率**: 高压缩比时序存储
+- **高可用性**: 稳定的系统运行
+- **数据准确性**: 可靠的数据完整性
+- **告警及时性**: 快速的告警响应
+- **存储效率**: 优化的时序数据存储
 
 ## 🔒 安全特性
 
@@ -236,9 +236,9 @@ services:
 
 ### 🐛 问题反馈
 
-- **Bug报告**: [GitHub Issues](https://github.com/evan7434/snmp-mib-ui/issues)
-- **功能建议**: [GitHub Discussions](https://github.com/evan7434/snmp-mib-ui/discussions)
-- **安全问题**: security@example.com
+- **Bug报告**: 通过GitHub Issues提交
+- **功能建议**: 通过GitHub Discussions讨论
+- **安全问题**: 请通过私有渠道联系
 
 ### 🔄 开发流程
 
@@ -265,10 +265,9 @@ services:
 
 ## 📞 联系我们
 
-- **项目主页**: https://github.com/evan7434/snmp-mib-ui
-- **文档站点**: https://snmp-mib-ui.docs.com
-- **技术支持**: support@example.com
-- **商务合作**: business@example.com
+- **项目主页**: 查看GitHub仓库
+- **技术支持**: 通过GitHub Issues获取帮助
+- **文档资源**: 查看docs目录下的详细文档
 
 ---
 
@@ -276,6 +275,6 @@ services:
 
 **⭐ 如果这个项目对您有帮助，请给我们一个Star！**
 
-[🌟 Star](https://github.com/evan7434/snmp-mib-ui/stargazers) | [🍴 Fork](https://github.com/evan7434/snmp-mib-ui/fork) | [📖 文档](https://github.com/evan7434/snmp-mib-ui/wiki) | [🐛 报告问题](https://github.com/evan7434/snmp-mib-ui/issues)
+**感谢您的关注和支持！**
 
 </div>
