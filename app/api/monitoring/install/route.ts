@@ -369,6 +369,16 @@ export async function POST(request: NextRequest) {
     }
     
     switch (action) {
+      case 'smart_analysis': {
+        // 智能分析现有组件和生成安装决策
+        const analysisResult = await performSmartAnalysis(hostId, components, versions || {})
+        
+        return NextResponse.json({
+          success: true,
+          data: analysisResult
+        })
+      }
+      
       case 'install': {
         if (!configs) {
           return NextResponse.json(
