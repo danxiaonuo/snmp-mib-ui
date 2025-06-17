@@ -25,6 +25,8 @@ import {
   CheckSquare
 } from 'lucide-react'
 import { COMPONENT_CONFIGS } from './components/ComponentDetails'
+import { IntegratedHostSelection } from './components/IntegratedHostSelection'
+import InstallProgress from './components/InstallProgress'
 
 // Use the actual component configurations from ComponentDetails.tsx
 const allMonitoringComponentsConfig = COMPONENT_CONFIGS
@@ -45,11 +47,15 @@ const getIconForCategory = (category: string) => {
 };
 
 export default function MonitoringInstaller() {
+  // 安装步骤状态
+  const [currentStep, setCurrentStep] = useState<'select' | 'hosts' | 'config' | 'install'>('select')
   const [isInstalling, setIsInstalling] = useState(false)
   const [installProgress, setInstallProgress] = useState(0)
   const [selectedComponents, setSelectedComponents] = useState<string[]>([])
+  const [selectedHosts, setSelectedHosts] = useState<string[]>([])
   const [componentStatuses, setComponentStatuses] = useState<Record<string, string>>({})
   const [systemInfo, setSystemInfo] = useState<any>(null)
+  const [installConfig, setInstallConfig] = useState<any>({})
 
   const components = Object.values(allMonitoringComponentsConfig).map(comp => {
     const latestVersion = comp.versions.find(v => v.isLatest) || comp.versions[0];
@@ -154,10 +160,42 @@ networks:
     return imageMap[componentId] || `${componentId}:${version}`
   }
 
+  // 进入下一步：主机选择
+  const handleNextToHostSelection = () => {
+    if (selectedComponents.length === 0) {
+      alert('请至少选择一个组件')
+      return
+    }
+    setCurrentStep('hosts')
+  }
+
+  // 主机选择完成，进入配置步骤
+  const handleHostsSelected = (hosts: string[]) => {
+    setSelectedHosts(hosts)
+    setCurrentStep('config')
+  }
+
+  // 配置确认完成，开始安装
+  const handleStartInstall = () => {
+    setCurrentStep('install')
+    handleBatchInstall()
+  }
+
+  // 返回上一步
+  const handleBackStep = () => {
+    if (currentStep === 'hosts') {
+      setCurrentStep('select')
+    } else if (currentStep === 'config') {
+      setCurrentStep('hosts')
+    } else if (currentStep === 'install') {
+      setCurrentStep('config')
+    }
+  }
+
   // 批量安装组件
   const handleBatchInstall = async () => {
-    if (selectedComponents.length === 0) {
-      alert('Please select at least one component to install')
+    if (selectedComponents.length === 0 || selectedHosts.length === 0) {
+      alert('请选择组件和目标主机')
       return
     }
     
@@ -178,6 +216,7 @@ networks:
         body: JSON.stringify({
           action: 'install',
           components: selectedComponents,
+          hosts: selectedHosts,
           configs
         }),
       })
@@ -283,14 +322,49 @@ networks:
             <RefreshCw className="mr-2 h-4 w-4" />
             刷新状态
           </Button>
-          <Button 
-            size="sm" 
-            onClick={handleBatchInstall}
-            disabled={isInstalling || selectedComponents.length === 0}
-          >
-            <Download className="mr-2 h-4 w-4" />
-            Batch Install ({selectedComponents.length})
-          </Button>
+          {currentStep === 'select' && (
+            <Button 
+              size="sm" 
+              onClick={handleNextToHostSelection}
+              disabled={selectedComponents.length === 0}
+            >
+              <Download className="mr-2 h-4 w-4" />
+              下一步: 选择主机 ({selectedComponents.length})
+            </Button>
+          )}
+          {currentStep === 'hosts' && (
+            <div className="flex items-center space-x-2">
+              <Button variant="outline" size="sm" onClick={handleBackStep}>
+                返回
+              </Button>
+              <Button 
+                size="sm" 
+                onClick={() => setCurrentStep('config')}
+                disabled={selectedHosts.length === 0}
+              >
+                下一步: 配置确认 ({selectedHosts.length} 主机)
+              </Button>
+            </div>
+          )}
+          {currentStep === 'config' && (
+            <div className="flex items-center space-x-2">
+              <Button variant="outline" size="sm" onClick={handleBackStep}>
+                返回
+              </Button>
+              <Button 
+                size="sm" 
+                onClick={handleStartInstall}
+                disabled={isInstalling}
+              >
+                开始安装
+              </Button>
+            </div>
+          )}
+          {currentStep === 'install' && (
+            <Button variant="outline" size="sm" onClick={handleBackStep} disabled={isInstalling}>
+              返回配置
+            </Button>
+          )}
         </div>
       </div>
 
@@ -305,16 +379,46 @@ networks:
         </Alert>
       )}
 
-      {/* Main Content */}
-      <Tabs defaultValue="components" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="components">Component Management</TabsTrigger>
-          <TabsTrigger value="templates">Installation Templates</TabsTrigger>
-          <TabsTrigger value="config">Configuration Management</TabsTrigger>
-          <TabsTrigger value="status">System Status</TabsTrigger>
-        </TabsList>
+      {/* 步骤指示器 */}
+      <div className="flex items-center justify-center space-x-4 mb-6">
+        <div className={`flex items-center space-x-2 ${currentStep === 'select' ? 'text-blue-600' : currentStep === 'hosts' || currentStep === 'config' || currentStep === 'install' ? 'text-green-600' : 'text-gray-400'}`}>
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep === 'select' ? 'bg-blue-600 text-white' : currentStep === 'hosts' || currentStep === 'config' || currentStep === 'install' ? 'bg-green-600 text-white' : 'bg-gray-200'}`}>
+            1
+          </div>
+          <span className="font-medium">选择组件</span>
+        </div>
+        <div className={`w-8 h-0.5 ${currentStep === 'hosts' || currentStep === 'config' || currentStep === 'install' ? 'bg-green-600' : 'bg-gray-200'}`}></div>
+        <div className={`flex items-center space-x-2 ${currentStep === 'hosts' ? 'text-blue-600' : currentStep === 'config' || currentStep === 'install' ? 'text-green-600' : 'text-gray-400'}`}>
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep === 'hosts' ? 'bg-blue-600 text-white' : currentStep === 'config' || currentStep === 'install' ? 'bg-green-600 text-white' : 'bg-gray-200'}`}>
+            2
+          </div>
+          <span className="font-medium">选择主机</span>
+        </div>
+        <div className={`w-8 h-0.5 ${currentStep === 'config' || currentStep === 'install' ? 'bg-green-600' : 'bg-gray-200'}`}></div>
+        <div className={`flex items-center space-x-2 ${currentStep === 'config' ? 'text-blue-600' : currentStep === 'install' ? 'text-green-600' : 'text-gray-400'}`}>
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep === 'config' ? 'bg-blue-600 text-white' : currentStep === 'install' ? 'bg-green-600 text-white' : 'bg-gray-200'}`}>
+            3
+          </div>
+          <span className="font-medium">配置确认</span>
+        </div>
+        <div className={`w-8 h-0.5 ${currentStep === 'install' ? 'bg-green-600' : 'bg-gray-200'}`}></div>
+        <div className={`flex items-center space-x-2 ${currentStep === 'install' ? 'text-blue-600' : 'text-gray-400'}`}>
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep === 'install' ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>
+            4
+          </div>
+          <span className="font-medium">执行安装</span>
+        </div>
+      </div>
 
-        <TabsContent value="components" className="space-y-6">
+      {/* 根据当前步骤显示不同内容 */}
+      {currentStep === 'select' && (
+        <div className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>选择监控组件</CardTitle>
+              <CardDescription>选择需要安装的监控组件，支持多选</CardDescription>
+            </CardHeader>
+            <CardContent>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"> {/* Adjusted grid for more items */}
             {components.map((component) => {
               const Icon = component.icon
@@ -360,156 +464,89 @@ networks:
                            status === 'error' ? '错误' : '未知'}
                         </span>
                       </div>
-                      <Button 
-                        size="sm" 
-                        onClick={() => handleInstall(component.id)}
-                        disabled={isInstalling}
-                        variant={status === 'running' ? 'outline' : 'default'}
-                      >
-                        <Download className="mr-2 h-4 w-4" />
-                        {status === 'running' ? 'Reinstall' : 'Install'}
-                      </Button>
+                      <Badge variant={isSelected ? 'default' : 'secondary'}>
+                        {isSelected ? '已选择' : '点击选择'}
+                      </Badge>
                     </div>
                   </CardContent>
                 </Card>
               )
             })}
           </div>
-        </TabsContent>
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
-        <TabsContent value="templates" className="space-y-6">
+      {/* 主机选择步骤 */}
+      {currentStep === 'hosts' && (
+        <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Installation Templates</CardTitle>
-              <CardDescription>Pre-configured monitoring component combinations for different scenarios</CardDescription>
+              <CardTitle>选择目标主机</CardTitle>
+              <CardDescription>选择要部署监控组件的目标主机</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="p-4 border rounded-lg">
-                  <h4 className="font-medium">Basic Monitoring</h4>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Includes Prometheus + Grafana + Node Exporter
-                  </p>
-                  <Button className="mt-3" size="sm">Select Template</Button>
+              <IntegratedHostSelection 
+                selectedComponents={selectedComponents}
+                onHostsSelected={handleHostsSelected}
+                onBack={handleBackStep}
+              />
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* 配置确认步骤 */}
+      {currentStep === 'config' && (
+        <div className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>配置确认</CardTitle>
+              <CardDescription>确认安装配置和部署参数</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-medium mb-2">选中的组件 ({selectedComponents.length})</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedComponents.map(componentId => {
+                      const component = allMonitoringComponentsConfig[componentId]
+                      return (
+                        <Badge key={componentId} variant="outline">
+                          {component?.name || componentId}
+                        </Badge>
+                      )
+                    })}
+                  </div>
                 </div>
-                <div className="p-4 border rounded-lg">
-                  <h4 className="font-medium">Complete Monitoring</h4>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Includes all major monitoring components and alerting system
-                  </p>
-                  <Button className="mt-3" size="sm">Select Template</Button>
-                </div>
-                 <div className="p-4 border rounded-lg">
-                  <h4 className="font-medium">VictoriaMetrics Stack</h4>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Includes VictoriaMetrics standalone, VMAgent, Grafana
-                  </p>
-                  <Button className="mt-3" size="sm">选择模板</Button>
-                </div>
-                <div className="p-4 border rounded-lg">
-                  <h4 className="font-medium">VictoriaMetrics 集群基础</h4>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    包含 VMStorage, VMInsert, VMSelect, VMAgent, Grafana
-                  </p>
-                  <Button className="mt-3" size="sm">选择模板</Button>
+                <div>
+                  <h4 className="font-medium mb-2">目标主机 ({selectedHosts.length})</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedHosts.map(hostId => (
+                      <Badge key={hostId} variant="outline">
+                        {hostId}
+                      </Badge>
+                    ))}
+                  </div>
                 </div>
               </div>
             </CardContent>
           </Card>
-        </TabsContent>
+        </div>
+      )}
 
-        <TabsContent value="config" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Configuration Management</CardTitle>
-              <CardDescription>Manage configuration files for monitoring components</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">Configuration management features are under development...</p>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="status" className="space-y-6">
-          <div className="grid gap-6 md:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>系统环境</CardTitle>
-                <CardDescription>Docker 环境检查</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span>Docker</span>
-                    <Badge variant={systemInfo?.docker?.available ? "default" : "destructive"}>
-                      {systemInfo?.docker?.available ? '可用' : '不可用'}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span>Docker Compose</span>
-                    <Badge variant={systemInfo?.dockerCompose?.available ? "default" : "destructive"}>
-                      {systemInfo?.dockerCompose?.available ? '可用' : '不可用'}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span>系统就绪</span>
-                    <Badge variant={systemInfo?.ready ? "default" : "destructive"}>
-                      {systemInfo?.ready ? '就绪' : '未就绪'}
-                    </Badge>
-                  </div>
-                  {systemInfo?.docker?.version && (
-                    <div className="text-sm text-muted-foreground">
-                      Docker: {systemInfo.docker.version}
-                    </div>
-                  )}
-                  {systemInfo?.dockerCompose?.version && (
-                    <div className="text-sm text-muted-foreground">
-                      Compose: {systemInfo.dockerCompose.version}
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader>
-                <CardTitle>Component Status</CardTitle>
-                <CardDescription>Monitoring component runtime status</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span>Running Components</span>
-                    <span className="text-sm text-muted-foreground">
-                      {Object.values(componentStatuses).filter(status => status === 'running').length} / {components.length}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span>Selected Components</span>
-                    <span className="text-sm text-muted-foreground">{selectedComponents.length}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span>Last Check</span>
-                    <span className="text-sm text-muted-foreground">Just now</span>
-                  </div>
-                  {systemInfo?.runningContainers && systemInfo.runningContainers.length > 0 && (
-                    <div className="mt-4">
-                      <h4 className="text-sm font-medium mb-2">Running Containers:</h4>
-                      <div className="space-y-1">
-                        {systemInfo.runningContainers.map((container: string) => (
-                          <div key={container} className="text-xs text-muted-foreground">
-                            {container}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-      </Tabs>
+      {/* 安装执行步骤 */}
+      {currentStep === 'install' && (
+        <div className="space-y-6">
+          <InstallProgress 
+            isInstalling={isInstalling}
+            components={selectedComponents}
+            onInstall={handleBatchInstall}
+            onCancel={() => setCurrentStep('config')}
+          />
+        </div>
+      )}
     </div>
   )
 }

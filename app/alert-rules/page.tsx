@@ -16,8 +16,10 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Progress } from "@/components/ui/progress"
-import { AlertTriangle, Plus, Search, Filter, Download, Upload, Settings, Play, Pause, Copy, Edit, Trash2, Eye, Code, Save, RefreshCw, Bell, Target, Users, Tag, Layers, GitBranch, Clock, TrendingUp, AlertCircle, CheckCircle, XCircle, Activity, Zap, Shield, BarChart3, PieChart, LineChart } from "lucide-react"
+import { AlertTriangle, Plus, Search, Filter, Download, Upload, Settings, Play, Pause, Copy, Edit, Trash2, Eye, Code, Save, RefreshCw, Bell, Target, Users, Tag, Layers, GitBranch, Clock, TrendingUp, AlertCircle, CheckCircle, XCircle, Activity, Zap, Shield, BarChart3, PieChart, LineChart, Rocket } from "lucide-react"
 import { toast } from "sonner"
+
+import { AlertRuleDeploymentFlow } from './components/AlertRuleDeploymentFlow'
 
 // 模拟数据
 const mockAlertRules = [
@@ -113,6 +115,96 @@ export default function AlertRulesPage() {
   const [editingRule, setEditingRule] = useState<any>(null)
   const [promqlCode, setPromqlCode] = useState("")
   const [syntaxValid, setSyntaxValid] = useState(true)
+  const [showDeploymentFlow, setShowDeploymentFlow] = useState(false)
+
+  // 告警规则模板数据
+  const alertRuleTemplates = [
+    {
+      id: 'cpu-usage-high',
+      name: 'CPU使用率过高',
+      description: '监控设备CPU使用率超过阈值',
+      promql: '(100 - (avg by (instance) (irate(cpu_idle_total[5m])) * 100)) > {{threshold}}',
+      severity: 'warning' as const,
+      category: '性能监控',
+      targetMetrics: ['CPU', '系统性能'],
+      defaultThreshold: 80,
+      defaultDuration: '5m',
+      parameters: [
+        {
+          name: 'threshold',
+          type: 'number' as const,
+          description: 'CPU使用率阈值(%)',
+          defaultValue: 80,
+          min: 0,
+          max: 100,
+          unit: '%'
+        },
+        {
+          name: 'duration',
+          type: 'duration' as const,
+          description: '持续时间',
+          defaultValue: '5m'
+        }
+      ],
+      applicableDeviceTypes: ['server', 'router', 'switch']
+    },
+    {
+      id: 'memory-usage-high',
+      name: '内存使用率过高',
+      description: '监控设备内存使用率超过阈值',
+      promql: '(memory_used / memory_total * 100) > {{threshold}}',
+      severity: 'warning' as const,
+      category: '性能监控',
+      targetMetrics: ['Memory', '系统性能'],
+      defaultThreshold: 85,
+      defaultDuration: '3m',
+      parameters: [
+        {
+          name: 'threshold',
+          type: 'number' as const,
+          description: '内存使用率阈值(%)',
+          defaultValue: 85,
+          min: 0,
+          max: 100,
+          unit: '%'
+        },
+        {
+          name: 'duration',
+          type: 'duration' as const,
+          description: '持续时间',
+          defaultValue: '3m'
+        }
+      ],
+      applicableDeviceTypes: ['server', 'router', 'switch']
+    },
+    {
+      id: 'interface-down',
+      name: '接口状态异常',
+      description: '监控网络接口状态变化',
+      promql: 'ifOperStatus{job="snmp"} != ifAdminStatus{job="snmp"}',
+      severity: 'critical' as const,
+      category: '网络监控',
+      targetMetrics: ['Interface', '网络状态'],
+      defaultThreshold: 1,
+      defaultDuration: '1m',
+      parameters: [
+        {
+          name: 'interface_filter',
+          type: 'select' as const,
+          description: '接口过滤',
+          defaultValue: 'all',
+          options: ['all', 'uplink', 'access', 'trunk']
+        },
+        {
+          name: 'duration',
+          type: 'duration' as const,
+          description: '持续时间',
+          defaultValue: '1m'
+        }
+      ],
+      applicableDeviceTypes: ['router', 'switch']
+    }
+  ]
 
   // Filter rules
   const filteredRules = mockAlertRules.filter(rule => {
@@ -158,6 +250,21 @@ export default function AlertRulesPage() {
 
   const handleApplyTemplate = (templateId: string, deviceGroupId: string) => {
     toast.success("Template applied successfully, alert rules created for device group")
+  }
+
+  // 显示部署流程
+  if (showDeploymentFlow) {
+    return (
+      <div className="flex-1 space-y-6 p-4 md:p-8 pt-6">
+        <div className="flex items-center space-x-4 mb-6">
+          <Button variant="outline" onClick={() => setShowDeploymentFlow(false)}>
+            ← 返回告警规则
+          </Button>
+          <h2 className="text-2xl font-bold">告警规则部署流程</h2>
+        </div>
+        <AlertRuleDeploymentFlow alertRules={alertRuleTemplates} />
+      </div>
+    )
   }
 
   return (
@@ -223,6 +330,10 @@ export default function AlertRulesPage() {
         <Button onClick={() => setShowRuleEditor(true)} className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700">
           <Plus className="mr-2 h-4 w-4" />
           新建规则
+        </Button>
+        <Button onClick={() => setShowDeploymentFlow(true)} className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700">
+          <Rocket className="mr-2 h-4 w-4" />
+          规则部署
         </Button>
         <Button variant="outline" size="sm">
           <Download className="mr-2 h-4 w-4" />
