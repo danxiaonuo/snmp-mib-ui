@@ -49,7 +49,7 @@ export function MobileNav() {
       </SheetTrigger>
       <SheetContent
         side="left"
-        className="p-0 w-[280px] sm:w-[300px] z-50"
+        className="p-0 w-[280px] sm:w-[300px] z-50 mobile-nav-content"
         onInteractOutside={() => setOpen(false)}
         id="mobile-navigation"
       >

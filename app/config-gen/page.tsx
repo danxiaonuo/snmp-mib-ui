@@ -28,7 +28,10 @@ import {
   Target,
   Brain,
   Sparkles,
+  Rocket,
 } from "lucide-react"
+
+import { ConfigDeploymentFlow } from './components/ConfigDeploymentFlow'
 
 // Enhanced OID data structure with intelligence features
 interface EnhancedOID {
@@ -63,6 +66,123 @@ export default function ConfigGenPage() {
   const [selectedComplexity, setSelectedComplexity] = useState("all")
   const [sortBy, setSortBy] = useState("importance")
   const [showRecommendedOnly, setShowRecommendedOnly] = useState(false)
+  const [showDeploymentFlow, setShowDeploymentFlow] = useState(false)
+
+  // 配置模板数据
+  const configTemplates = [
+    {
+      id: 'snmp-exporter-basic',
+      name: 'SNMP Exporter 基础配置',
+      type: 'snmp_exporter' as const,
+      description: '基础SNMP监控配置，包含常用系统指标',
+      category: '监控配置',
+      content: `modules:
+  default:
+    walk:
+      - 1.3.6.1.2.1.1.1.0  # sysDescr
+      - 1.3.6.1.2.1.1.3.0  # sysUpTime
+      - 1.3.6.1.2.1.2.2.1.10  # ifInOctets
+      - 1.3.6.1.2.1.2.2.1.16  # ifOutOctets
+    metrics:
+      - name: snmp_up
+        oid: 1.3.6.1.2.1.1.1.0
+        type: gauge
+        help: SNMP device availability
+    auth:
+      community: {{community}}
+    version: {{version}}
+    timeout: {{timeout}}s
+    retries: {{retries}}`,
+      parameters: [
+        {
+          name: 'community',
+          type: 'string' as const,
+          description: 'SNMP Community字符串',
+          defaultValue: 'public',
+          required: true
+        },
+        {
+          name: 'version',
+          type: 'select' as const,
+          description: 'SNMP版本',
+          defaultValue: '2',
+          required: true,
+          options: ['1', '2', '3']
+        },
+        {
+          name: 'timeout',
+          type: 'number' as const,
+          description: '超时时间(秒)',
+          defaultValue: 5,
+          required: true
+        },
+        {
+          name: 'retries',
+          type: 'number' as const,
+          description: '重试次数',
+          defaultValue: 3,
+          required: true
+        }
+      ],
+      targetComponents: ['snmp-exporter']
+    },
+    {
+      id: 'prometheus-config',
+      name: 'Prometheus 监控配置',
+      type: 'prometheus' as const,
+      description: 'Prometheus服务发现和抓取配置',
+      category: '监控配置',
+      content: `global:
+  scrape_interval: {{scrape_interval}}
+  evaluation_interval: {{evaluation_interval}}
+
+scrape_configs:
+  - job_name: 'snmp'
+    static_configs:
+      - targets: {{targets}}
+    metrics_path: /snmp
+    params:
+      module: [default]
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: {{snmp_exporter_address}}`,
+      parameters: [
+        {
+          name: 'scrape_interval',
+          type: 'string' as const,
+          description: '抓取间隔',
+          defaultValue: '15s',
+          required: true
+        },
+        {
+          name: 'evaluation_interval',
+          type: 'string' as const,
+          description: '评估间隔',
+          defaultValue: '15s',
+          required: true
+        },
+        {
+          name: 'targets',
+          type: 'string' as const,
+          description: '监控目标(JSON数组格式)',
+          defaultValue: '["192.168.1.1:161", "192.168.1.2:161"]',
+          required: true
+        },
+        {
+          name: 'snmp_exporter_address',
+          type: 'string' as const,
+          description: 'SNMP Exporter地址',
+          defaultValue: 'localhost:9116',
+          required: true
+        }
+      ],
+      targetComponents: ['prometheus']
+    }
+  ]
 
   // Enhanced OID dataset with intelligence features
   const enhancedOids: EnhancedOID[] = [
@@ -484,6 +604,21 @@ ${oid.oid}
     document.body.removeChild(element)
   }
 
+  // 显示部署流程
+  if (showDeploymentFlow) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center space-x-4 mb-6">
+          <Button variant="outline" onClick={() => setShowDeploymentFlow(false)}>
+            ← 返回配置生成
+          </Button>
+          <h2 className="text-2xl font-bold">配置部署流程</h2>
+        </div>
+        <ConfigDeploymentFlow templates={configTemplates} />
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -494,6 +629,10 @@ ${oid.oid}
           </p>
         </div>
         <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={() => setShowDeploymentFlow(true)}>
+            <Rocket className="h-4 w-4 mr-2" />
+            配置部署
+          </Button>
           <Button variant="outline" onClick={() => setIsPreviewOpen(true)} disabled={!generatedConfig}>
             <Eye className="h-4 w-4 mr-2" />
             Preview

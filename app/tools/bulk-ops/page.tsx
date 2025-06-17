@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { BulkOperationFlow } from './components/BulkOperationFlow'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
@@ -35,6 +36,60 @@ export default function BulkOperationsPage() {
   const [selectedOperation, setSelectedOperation] = useState("generate")
   const [isRunning, setIsRunning] = useState(false)
   const [operations, setOperations] = useState<BulkOperation[]>([])
+  const [showOperationFlow, setShowOperationFlow] = useState(false)
+  
+  // 批量操作数据
+  const bulkOperations = [
+    {
+      id: 'restart-service',
+      name: '重启服务',
+      description: '重启指定的系统服务',
+      category: 'system' as const,
+      type: 'command' as const,
+      command: 'systemctl restart {{service_name}}',
+      parameters: [
+        {
+          name: 'service_name',
+          type: 'select' as const,
+          description: '要重启的服务名称',
+          defaultValue: 'nginx',
+          required: true,
+          options: ['nginx', 'apache2', 'mysql', 'postgresql', 'redis', 'docker']
+        },
+        {
+          name: 'wait_time',
+          type: 'number' as const,
+          description: '重启后等待时间(秒)',
+          defaultValue: 10,
+          required: false
+        }
+      ],
+      requiresConfirmation: true,
+      dangerLevel: 'medium' as const,
+      estimatedDuration: '2-5分钟'
+    },
+    {
+      id: 'deploy-monitoring',
+      name: '部署监控组件',
+      description: '在选定主机上部署监控组件',
+      category: 'monitoring' as const,
+      type: 'script' as const,
+      parameters: [
+        {
+          name: 'component_type',
+          type: 'select' as const,
+          description: '监控组件类型',
+          defaultValue: 'node-exporter',
+          required: true,
+          options: ['node-exporter', 'prometheus', 'grafana', 'alertmanager']
+        }
+      ],
+      requiresConfirmation: true,
+      dangerLevel: 'medium' as const,
+      estimatedDuration: '5-15分钟'
+    }
+  ]
+  
   const [mibFiles, setMibFiles] = useState<MibFile[]>([
     { id: "1", name: "CISCO-MEMORY-POOL-MIB.mib", selected: true, status: "ready", size: "24.5 KB" },
     { id: "2", name: "IF-MIB.mib", selected: true, status: "ready", size: "78.2 KB" },

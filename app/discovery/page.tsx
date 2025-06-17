@@ -134,6 +134,30 @@ export default function DiscoveryPage() {
   const [activeTab, setActiveTab] = useState("discovery")
   const [discoveryTasks, setDiscoveryTasks] = useState(mockDiscoveryTasks)
   const [hosts, setHosts] = useState(mockHosts)
+
+  // 将发现的主机添加到主机管理器
+  const addHostsToManager = async (discoveredHosts: any[]) => {
+    try {
+      const response = await fetch('/api/hosts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'bulk-add',
+          hosts: discoveredHosts
+        })
+      })
+      
+      const result = await response.json()
+      if (result.success) {
+        toast.success(`成功添加 ${result.count} 台主机到主机库`)
+      }
+    } catch (error) {
+      console.error('添加主机到管理器失败:', error)
+      toast.error('添加主机失败')
+    }
+  }
   const [credentials, setCredentials] = useState(mockCredentials)
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedStatus, setSelectedStatus] = useState("all")
@@ -234,15 +258,68 @@ export default function DiscoveryPage() {
   }
 
   // 启动发现任务
-  const handleStartTask = (taskId) => {
+  const handleStartTask = async (taskId) => {
     setDiscoveryTasks(tasks => 
       tasks.map(task => 
         task.id === taskId 
-          ? { ...task, status: "running", startedAt: new Date().toLocaleString() }
+          ? { ...task, status: "running", startedAt: new Date().toLocaleString(), progress: 0 }
           : task
       )
     )
+    
+    // 模拟发现进度
+    const interval = setInterval(() => {
+      setDiscoveryTasks(tasks => 
+        tasks.map(task => {
+          if (task.id === taskId && task.status === "running") {
+            const newProgress = Math.min(task.progress + Math.random() * 15, 100)
+            const isCompleted = newProgress >= 100
+            
+            return {
+              ...task,
+              progress: newProgress,
+              status: isCompleted ? "completed" : "running",
+              completedAt: isCompleted ? new Date().toLocaleString() : null,
+              totalHosts: isCompleted ? 254 : Math.floor(newProgress * 2.54),
+              foundHosts: isCompleted ? 45 : Math.floor(newProgress * 0.45),
+              onlineHosts: isCompleted ? 38 : Math.floor(newProgress * 0.38)
+            }
+          }
+          return task
+        })
+      )
+    }, 2000)
+
+    // 清理定时器
+    setTimeout(() => {
+      clearInterval(interval)
+      // 自动添加发现的主机到主机库
+      const discoveredHosts = mockHosts.slice(0, 3).map(host => ({
+        ...host,
+        discoveredAt: new Date().toISOString()
+      }))
+      addHostsToManager(discoveredHosts)
+    }, 20000)
+    
     toast.success("发现任务已启动")
+  }
+
+  // 停止发现任务
+  const handleStopTask = (taskId) => {
+    setDiscoveryTasks(tasks => 
+      tasks.map(task => 
+        task.id === taskId 
+          ? { ...task, status: "stopped", completedAt: new Date().toLocaleString() }
+          : task
+      )
+    )
+    toast.success("发现任务已停止")
+  }
+
+  // 删除发现任务
+  const handleDeleteTask = (taskId) => {
+    setDiscoveryTasks(tasks => tasks.filter(task => task.id !== taskId))
+    toast.success("发现任务已删除")
   }
 
   // 查看主机详情
@@ -251,9 +328,70 @@ export default function DiscoveryPage() {
     setIsHostDetailDialogOpen(true)
   }
 
+  // 编辑主机信息
+  const handleEditHost = (host) => {
+    setSelectedHost(host)
+    // 这里可以打开编辑对话框
+    toast.info("编辑主机功能")
+  }
+
   // 测试主机连接
-  const handleTestConnection = (hostId) => {
-    toast.success("连接测试成功")
+  const handleTestConnection = async (hostId) => {
+    toast.loading("正在测试连接...")
+    
+    // 模拟连接测试
+    setTimeout(() => {
+      const success = Math.random() > 0.2 // 80%成功率
+      if (success) {
+        toast.success("连接测试成功")
+        // 更新主机状态
+        setHosts(hosts => 
+          hosts.map(host => 
+            host.id === hostId 
+              ? { ...host, status: "online", lastSeen: new Date().toLocaleString() }
+              : host
+          )
+        )
+      } else {
+        toast.error("连接测试失败")
+        setHosts(hosts => 
+          hosts.map(host => 
+            host.id === hostId 
+              ? { ...host, status: "offline" }
+              : host
+          )
+        )
+      }
+    }, 2000)
+  }
+
+  // 批量添加主机到主机库
+  const handleBatchAddToManager = () => {
+    const selectedHosts = hosts.filter(host => host.selected)
+    if (selectedHosts.length === 0) {
+      toast.error("请先选择要添加的主机")
+      return
+    }
+    addHostsToManager(selectedHosts)
+  }
+
+  // 切换主机选择状态
+  const toggleHostSelection = (hostId) => {
+    setHosts(hosts => 
+      hosts.map(host => 
+        host.id === hostId 
+          ? { ...host, selected: !host.selected }
+          : host
+      )
+    )
+  }
+
+  // 全选/取消全选主机
+  const toggleAllHostsSelection = () => {
+    const allSelected = hosts.every(host => host.selected)
+    setHosts(hosts => 
+      hosts.map(host => ({ ...host, selected: !allSelected }))
+    )
   }
 
   return (
@@ -429,6 +567,18 @@ export default function DiscoveryPage() {
                           启动
                         </Button>
                       )}
+                      {task.status === "running" && (
+                        <Button size="sm" variant="outline" onClick={() => handleStopTask(task.id)}>
+                          <Pause className="h-4 w-4 mr-1" />
+                          停止
+                        </Button>
+                      )}
+                      {(task.status === "completed" || task.status === "stopped" || task.status === "failed") && (
+                        <Button size="sm" variant="ghost" onClick={() => handleDeleteTask(task.id)}>
+                          <Trash2 className="h-4 w-4 mr-1" />
+                          删除
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </CardHeader>
@@ -502,6 +652,14 @@ export default function DiscoveryPage() {
                   <SelectItem value="数据库服务器">数据库服务器</SelectItem>
                 </SelectContent>
               </Select>
+              <Button 
+                onClick={handleBatchAddToManager}
+                disabled={!hosts.some(host => host.selected)}
+                className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                批量添加到主机库 ({hosts.filter(host => host.selected).length})
+              </Button>
             </div>
           </div>
 
@@ -510,6 +668,14 @@ export default function DiscoveryPage() {
               <Table>
                 <TableHeader>
                   <TableRow>
+                    <TableHead className="w-12">
+                      <input
+                        type="checkbox"
+                        checked={hosts.length > 0 && hosts.every(host => host.selected)}
+                        onChange={toggleAllHostsSelection}
+                        className="rounded"
+                      />
+                    </TableHead>
                     <TableHead>主机信息</TableHead>
                     <TableHead>系统信息</TableHead>
                     <TableHead>资源配置</TableHead>
@@ -520,7 +686,15 @@ export default function DiscoveryPage() {
                 </TableHeader>
                 <TableBody>
                   {filteredHosts.map((host) => (
-                    <TableRow key={host.id}>
+                    <TableRow key={host.id} className={host.selected ? 'bg-blue-50' : ''}>
+                      <TableCell>
+                        <input
+                          type="checkbox"
+                          checked={host.selected || false}
+                          onChange={() => toggleHostSelection(host.id)}
+                          className="rounded"
+                        />
+                      </TableCell>
                       <TableCell>
                         <div className="space-y-1">
                           <div className="font-medium">{host.name}</div>
@@ -574,13 +748,13 @@ export default function DiscoveryPage() {
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center space-x-1">
-                          <Button size="sm" variant="ghost" onClick={() => handleViewHost(host)}>
+                          <Button size="sm" variant="ghost" onClick={() => handleViewHost(host)} title="查看详情">
                             <Eye className="h-4 w-4" />
                           </Button>
-                          <Button size="sm" variant="ghost" onClick={() => handleTestConnection(host.id)}>
+                          <Button size="sm" variant="ghost" onClick={() => handleTestConnection(host.id)} title="测试连接">
                             <Wifi className="h-4 w-4" />
                           </Button>
-                          <Button size="sm" variant="ghost">
+                          <Button size="sm" variant="ghost" onClick={() => handleEditHost(host)} title="编辑主机">
                             <Edit className="h-4 w-4" />
                           </Button>
                         </div>

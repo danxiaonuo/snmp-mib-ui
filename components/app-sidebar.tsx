@@ -2,6 +2,7 @@
 
 import type * as React from "react"
 import { FileText, Settings, Wrench, HardDrive, Home, Database, Monitor, Bell, BarChart3, Shield, Activity } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 import { NavMain } from "@/components/nav-main"
 import { NavUser } from "@/components/nav-user"
@@ -289,13 +290,24 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { t } = useLanguage()
+
+  const translatedNavMain = data.navMain.map(item => ({
+    ...item,
+    title: t(`navigation.${getNavigationKey(item.title)}`),
+    items: item.items?.map(subItem => ({
+      ...subItem,
+      title: t(`navigation.${getNavigationKey(subItem.title)}`)
+    }))
+  }))
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={translatedNavMain} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
@@ -303,4 +315,62 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarRail />
     </Sidebar>
   )
+}
+
+// Helper function to convert display names to translation keys
+function getNavigationKey(title: string): string {
+  const keyMap: { [key: string]: string } = {
+    "Dashboard": "dashboard",
+    "MIB Management": "mibManagement", 
+    "MIB Library": "mibLibrary",
+    "Import/Export": "importExport",
+    "OID Browser": "oidBrowser",
+    "MIB Validator": "mibValidator",
+    "Configuration Generator": "configGenerator",
+    "Generate Config": "generateConfig",
+    "Templates": "templates",
+    "Config Validator": "configValidator",
+    "Version History": "versionHistory",
+    "Device Management": "deviceManagement",
+    "Devices": "devices",
+    "Device Templates": "deviceTemplates",
+    "SNMP Testing": "snmpTesting",
+    "Monitoring": "monitoring",
+    "Real-time Monitor": "realtimeMonitor",
+    "Performance": "performance",
+    "Capacity Planning": "capacityPlanning",
+    "Network Discovery": "networkDiscovery",
+    "Auto Discovery": "autoDiscovery",
+    "Manual Discovery": "manualDiscovery",
+    "Discovery Rules": "discoveryRules",
+    "Alerts & Events": "alertsEvents",
+    "Alerts": "alerts",
+    "Events": "events",
+    "Alert Rules": "alertRules",
+    "Notifications": "notifications",
+    "Analytics & Reports": "reports",
+    "System Reports": "systemReports",
+    "Custom Reports": "customReports",
+    "Data Export": "dataExport",
+    "Automation Tools": "automation",
+    "Scripts": "scripts",
+    "Tasks": "tasks",
+    "Bulk Operations": "bulkOperations",
+    "Asset Management": "assets",
+    "Inventory": "inventory",
+    "Lifecycle": "lifecycle",
+    "Compliance": "compliance",
+    "Vulnerabilities": "vulnerabilities",
+    "System Settings": "settings",
+    "General": "general",
+    "Security": "security",
+    "Backup": "backup",
+    "Users": "users",
+    "API Management": "apiManagement",
+    "Services": "services",
+    "Mobile": "mobile",
+    "Deployment": "deployment"
+  }
+  
+  return keyMap[title] || title.toLowerCase().replace(/\s+/g, '')
 }

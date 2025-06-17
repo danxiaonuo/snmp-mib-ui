@@ -1,6 +1,11 @@
 "use client"
 
 import { useState } from "react"
+import { useLocalStorage } from "@/hooks/use-local-storage"
+import { useAutoRefresh } from "@/hooks/use-auto-refresh"
+import { useGlobalShortcuts, usePageShortcuts } from "@/hooks/use-keyboard-shortcuts"
+import { AutoRefreshIndicator } from "@/components/enhanced-ui/auto-refresh-indicator"
+import { DragDropZone, FileList } from "@/components/enhanced-ui/drag-drop-zone"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -17,9 +22,38 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Textarea } from "@/components/ui/textarea"
-import { Upload, FileText, Trash2, Eye, Download, Search } from "lucide-react"
+import { Upload, FileText, Trash2, Eye, Download, Search, RefreshCw, Plus } from "lucide-react"
+import { toast } from "sonner"
 
 export default function MIBsPage() {
+  // 使用持久化存储
+  const [searchTerm, setSearchTerm] = useLocalStorage("mibs-search", "")
+  const [uploadFiles, setUploadFiles] = useState<File[]>([])
+
+  // 启用快捷键
+  useGlobalShortcuts()
+  usePageShortcuts('mibs')
+
+  // 模拟数据获取函数
+  const fetchMibs = async () => {
+    console.log('刷新MIB列表...')
+    await new Promise(resolve => setTimeout(resolve, 800))
+  }
+
+  // 自动刷新
+  const {
+    isRefreshing,
+    lastRefresh,
+    retryCount,
+    currentInterval,
+    manualRefresh,
+    pause,
+    resume
+  } = useAutoRefresh(fetchMibs, {
+    interval: 60000, // MIB文件变化较少，60秒刷新一次
+    enabled: true
+  })
+
   const [mibs, setMibs] = useState([
     {
       id: 1,
