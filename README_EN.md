@@ -149,64 +149,127 @@ After deployment, you can access the following services:
 
 ## 📖 Detailed Feature Modules
 
-### 🎛️ Device Management
-- **🔍 Auto Discovery**
-  - Support for SNMP v1/v2c/v3 protocols
-  - CIDR network scanning (e.g., 192.168.1.0/24)
-  - IP range scanning (e.g., 192.168.1.1-192.168.1.100)
-  - Custom Community strings
-  - Automatic device type identification (switches/routers/servers)
+### 🎛️ Device Management (`/devices`)
+- **🔍 Device Discovery & Registration**
+  - Auto-discovery with SNMP v1/v2c/v3 protocols
+  - CIDR subnet and IP range scanning
+  - Automatic device type identification (router/switch/server)
+  - Custom Community strings and authentication config
 
-- **📊 Real-time Monitoring**
-  - CPU and memory usage monitoring
-  - Network interface traffic statistics
-  - Device uptime and status
-  - Port status and link quality
-  - Custom monitoring metrics
+- **📊 Device Monitoring & Status**
+  - Real-time device status monitoring (online/offline/warning)
+  - Device uptime and last seen timestamps
+  - Device location, model, and type management
+  - Batch device operations and selection
 
-- **🏷️ Device Grouping**
-  - Group by location, type, vendor
-  - Flexible tagging system
-  - Batch device operations
-  - Group permission management
+- **🔧 Device Configuration Management**
+  - Device templates management (`/devices/templates`)
+  - Device testing functionality (`/devices/testing`)
+  - Device grouping and tagging system
 
-### 📁 MIB File Management
-- **📤 File Upload**
-  - Single file upload (.mib, .txt formats)
-  - Batch file upload (ZIP archive support)
-  - Drag-and-drop interface
-  - Upload progress display
+### 📁 MIB File Management (`/mibs`)
+- **📤 MIB File Operations**
+  - Drag-and-drop MIB file upload (.mib, .txt formats)
+  - Batch file upload and management
+  - MIB file search and filtering
+  - File details viewing and download
 
-- **✅ Syntax Validation**
-  - Real-time syntax checking
-  - Error location and hints
-  - Dependency checking
-  - Duplicate OID detection
+- **✅ MIB Validation & Parsing**
+  - MIB syntax validator (`/mibs/validator`)
+  - Real-time syntax checking and error hints
+  - MIB dependency analysis
 
-- **🌳 OID Browser**
-  - Tree structure display
-  - OID search and filtering
-  - Detailed property viewing
-  - OID list export
+- **🌳 OID Browsing & Management**
+  - OID browser (`/mibs/oid-browser`)
+  - Tree structure OID display
+  - OID search and detailed property viewing
+  - MIB import/export (`/mibs/import-export`)
 
-### 🚨 Smart Alert System
-- **📋 Rule Management**
+### 🚨 Alert Rules System (`/alert-rules`)
+- **📋 Alert Rule Management**
   - Visual rule editor
-  - PromQL expression support
-  - Multi-level alert thresholds
-  - Alert suppression and grouping
+  - PromQL expression support and validation
+  - Multi-level alert thresholds (critical/warning/info)
+  - Rule enable/disable status management
 
-- **📝 Template System**
-  - Pre-built device templates (Cisco, Huawei, H3C, etc.)
-  - Custom template creation
-  - Template import/export
-  - One-click application to device groups
+- **🚀 Rule Deployment & Sync**
+  - Alert rule deployment workflow
+  - Prometheus rule synchronization
+  - Batch rule operations
+  - Rule template system
 
-- **🤖 AI Smart Recommendations**
-  - Device type-based rule recommendations
-  - Historical data analysis
-  - Anomaly pattern recognition
-  - Optimization suggestions
+- **📊 Alert Monitoring**
+  - Real-time alert status viewing (`/alerts`)
+  - Alert history records
+  - Alert statistics and analysis
+
+### 🔧 Monitoring Installer (`/monitoring-installer`)
+- **📦 Component Installation Management**
+  - One-click VictoriaMetrics stack installation
+  - Node Exporter, SNMP Exporter deployment
+  - Grafana visualization component installation
+  - Component status monitoring and management
+
+- **🏗️ Deployment Configuration**
+  - Smart installation decisions (`/smart-install`)
+  - Host selection and discovery
+  - Installation progress monitoring (`/dashboard`)
+  - Deployment template management (`/templates`)
+
+- **⚙️ Configuration Management**
+  - Monitoring configuration generation (`/config`)
+  - Configuration migration management
+  - Version upgrade management
+
+### 🛠️ Configuration Generator (`/config-gen`)
+- **📝 Configuration File Generation**
+  - SNMP Exporter configuration generation
+  - Prometheus configuration templates
+  - Multiple monitoring system configuration support
+  - Smart OID selection and recommendations
+
+- **✅ Configuration Validation**
+  - Configuration syntax validator (`/validator`)
+  - Configuration template management (`/templates`)
+  - Configuration version control (`/versions`)
+
+- **🚀 Configuration Deployment**
+  - Configuration deployment workflow
+  - Batch configuration updates
+  - Configuration rollback functionality
+
+### 🔧 Operations Toolkit (`/tools`)
+- **⚡ Bulk Operations** (`/bulk-ops`)
+  - Batch device configuration
+  - Batch MIB processing
+  - Batch rule deployment
+  - Operation progress monitoring
+
+- **🔍 SNMP Tools**
+  - SNMP Walker (`/snmp-walker`)
+  - OID Converter (`/oid-converter`)
+  - Configuration Diff Tool (`/config-diff`)
+
+### 📊 Real-Time Monitoring (`/real-time-dashboard`)
+- **📈 Real-Time Data Visualization**
+  - Dynamic monitoring with 2-second refresh
+  - Real-time CPU, memory, network charts
+  - Controllable refresh frequency
+  - Real-time alert display
+
+### 🏥 System Health Monitoring (`/system-health`)
+- **💻 System Metrics Monitoring**
+  - CPU, memory, disk usage rates
+  - Network latency and throughput
+  - Service status checking
+  - System uptime statistics
+
+### 🤖 Automation Workflows (`/automation`)
+- **⚙️ Workflow Management**
+  - Device discovery automation
+  - Alert response automation
+  - Scheduled task management
+  - Workflow template system
 
 ### 📊 Data Visualization
 - **📈 Real-time Dashboard**
