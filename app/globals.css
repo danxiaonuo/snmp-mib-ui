@@ -2,6 +2,60 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 移动端优化 */
+@media (max-width: 768px) {
+  .mobile-nav-content {
+    width: 85vw !important;
+    max-width: 320px;
+  }
+  
+  /* 触摸优化 */
+  button, .clickable {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+  }
+  
+  /* 卡片在移动端的优化 */
+  .grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+  }
+  
+  /* 确保文字在小屏幕上可读 */
+  .text-3xl {
+    font-size: 1.5rem;
+  }
+  
+  .text-2xl {
+    font-size: 1.25rem;
+  }
+}
+
+/* PWA 和移动端特殊样式 */
+.mobile-device {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.mobile-device input,
+.mobile-device textarea {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* iOS Safari 特殊处理 */
+.ios-safari {
+  height: calc(var(--vh, 1vh) * 100);
+}
+
+/* 横屏模式优化 */
+.landscape-mode {
+  height: calc(var(--vh, 1vh) * 100);
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

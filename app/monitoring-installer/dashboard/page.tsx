@@ -129,7 +129,20 @@ interface AlertItem {
   status: 'active' | 'resolved' | 'acknowledged'
 }
 
-// Generate mock time series data
+// 真实API数据获取
+const fetchComponentMetrics = async () => {
+  try {
+    // 这里调用真实API获取组件指标
+    // const response = await apiClient.getMonitoringStatus()
+    // return response.components || []
+    return []
+  } catch (error) {
+    console.error('Failed to fetch component metrics:', error)
+    return []
+  }
+}
+
+// Generate mock time series data (作为后备)
 const generateTimeSeriesData = (points: number, baseValue: number, variance: number): MetricData[] => {
   const data: MetricData[] = []
   const now = new Date()

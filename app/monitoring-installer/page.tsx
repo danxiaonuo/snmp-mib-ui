@@ -26,6 +26,8 @@ import {
 } from 'lucide-react'
 import { COMPONENT_CONFIGS } from './components/ComponentDetails'
 import { IntegratedHostSelection } from './components/IntegratedHostSelection'
+import { FlexibleHostSelection } from './components/FlexibleHostSelection'
+import { RemoteHostDiscovery } from './components/RemoteHostDiscovery'
 import InstallProgress from './components/InstallProgress'
 
 // Use the actual component configurations from ComponentDetails.tsx
@@ -52,7 +54,8 @@ export default function MonitoringInstaller() {
   const [isInstalling, setIsInstalling] = useState(false)
   const [installProgress, setInstallProgress] = useState(0)
   const [selectedComponents, setSelectedComponents] = useState<string[]>([])
-  const [selectedHosts, setSelectedHosts] = useState<string[]>([])
+  const [selectedHosts, setSelectedHosts] = useState<any[]>([])
+  const [selectedDeploymentMethod, setSelectedDeploymentMethod] = useState<string>('binary')
   const [componentStatuses, setComponentStatuses] = useState<Record<string, string>>({})
   const [systemInfo, setSystemInfo] = useState<any>(null)
   const [installConfig, setInstallConfig] = useState<any>({})
@@ -170,8 +173,9 @@ networks:
   }
 
   // 主机选择完成，进入配置步骤
-  const handleHostsSelected = (hosts: string[]) => {
+  const handleHostsSelected = (hosts: any[], deploymentMethod: string) => {
     setSelectedHosts(hosts)
+    setSelectedDeploymentMethod(deploymentMethod)
     setCurrentStep('config')
   }
 
@@ -328,7 +332,7 @@ networks:
               onClick={handleNextToHostSelection}
               disabled={selectedComponents.length === 0}
             >
-              <Download className="mr-2 h-4 w-4" />
+              <Server className="mr-2 h-4 w-4" />
               下一步: 选择主机 ({selectedComponents.length})
             </Button>
           )}
@@ -483,15 +487,43 @@ networks:
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>选择目标主机</CardTitle>
-              <CardDescription>选择要部署监控组件的目标主机</CardDescription>
+              <CardTitle>选择主机获取方式</CardTitle>
+              <CardDescription>选择如何获取要部署监控组件的目标主机</CardDescription>
             </CardHeader>
             <CardContent>
-              <IntegratedHostSelection 
-                selectedComponents={selectedComponents}
-                onHostsSelected={handleHostsSelected}
-                onBack={handleBackStep}
-              />
+              <Tabs defaultValue="discover" className="w-full">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="discover">发现远程主机</TabsTrigger>
+                  <TabsTrigger value="existing">使用现有主机</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="discover" className="mt-6">
+                  <RemoteHostDiscovery
+                    onHostsSelected={(hosts) => handleHostsSelected(hosts, 'binary')}
+                    onBack={handleBackStep}
+                  />
+                </TabsContent>
+                
+                <TabsContent value="existing" className="mt-6">
+                  {selectedComponents.length === 1 ? (
+                    <FlexibleHostSelection
+                      selectedComponent={{
+                        id: selectedComponents[0],
+                        name: allMonitoringComponentsConfig[selectedComponents[0]]?.name || selectedComponents[0],
+                        category: allMonitoringComponentsConfig[selectedComponents[0]]?.category || 'unknown'
+                      }}
+                      onHostsSelected={handleHostsSelected}
+                      onBack={handleBackStep}
+                    />
+                  ) : (
+                    <IntegratedHostSelection 
+                      selectedComponents={selectedComponents}
+                      onHostsSelected={(hosts) => handleHostsSelected(hosts, 'docker')}
+                      onBack={handleBackStep}
+                    />
+                  )}
+                </TabsContent>
+              </Tabs>
             </CardContent>
           </Card>
         </div>
@@ -521,11 +553,20 @@ networks:
                   </div>
                 </div>
                 <div>
+                  <h4 className="font-medium mb-2">部署方式</h4>
+                  <Badge variant="default">
+                    {selectedDeploymentMethod === 'binary' ? '二进制部署' :
+                     selectedDeploymentMethod === 'docker' ? 'Docker容器' :
+                     selectedDeploymentMethod === 'systemd' ? 'Systemd服务' :
+                     selectedDeploymentMethod === 'package' ? '包管理器' : selectedDeploymentMethod}
+                  </Badge>
+                </div>
+                <div>
                   <h4 className="font-medium mb-2">目标主机 ({selectedHosts.length})</h4>
                   <div className="flex flex-wrap gap-2">
-                    {selectedHosts.map(hostId => (
-                      <Badge key={hostId} variant="outline">
-                        {hostId}
+                    {selectedHosts.map((host, index) => (
+                      <Badge key={host.id || index} variant="outline">
+                        {host.name || host.id || `主机${index + 1}`} ({host.ip || 'N/A'})
                       </Badge>
                     ))}
                   </div>
