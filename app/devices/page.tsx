@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useLocalStorage } from "@/hooks/use-local-storage"
 import { useAutoRefresh } from "@/hooks/use-auto-refresh"
 import { useGlobalShortcuts, usePageShortcuts } from "@/hooks/use-keyboard-shortcuts"
@@ -22,6 +22,7 @@ import {
 import { Label } from "@/components/ui/label"
 import { Plus, Search, Edit, Trash2, Eye, WifiIcon, Router, Server, Shield, RefreshCw } from "lucide-react"
 import { toast } from "sonner"
+import { apiClient } from "@/lib/real-api-client"
 
 interface Device {
   id: string
@@ -58,12 +59,34 @@ export default function DevicesPage() {
   useGlobalShortcuts()
   usePageShortcuts('devices')
 
-  // 模拟数据获取函数
+  // 状态管理
+  const [devices, setDevices] = useState<Device[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [total, setTotal] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1)
+  const pageSize = 10
+
+  // 真实API数据获取函数
   const fetchDevices = async () => {
-    // 这里可以替换为真实的API调用
-    console.log('刷新设备列表...')
-    // 模拟网络延迟
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    try {
+      setIsLoading(true)
+      const response = await apiClient.getDevices({
+        page: currentPage,
+        limit: pageSize,
+        search: searchTerm,
+        status: statusFilter === 'all' ? undefined : statusFilter,
+        type: typeFilter === 'all' ? undefined : typeFilter
+      })
+      
+      setDevices(response.devices || [])
+      setTotal(response.total || 0)
+    } catch (error) {
+      console.error('Failed to fetch devices:', error)
+      toast.error('Failed to load devices')
+      setDevices([])
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   // 自动刷新
@@ -80,63 +103,64 @@ export default function DevicesPage() {
     enabled: true
   })
 
-  const [devices, setDevices] = useState<Device[]>([
-    {
-      id: "1",
-      name: "Core-Router-01",
-      type: "router",
-      ip: "192.168.1.1",
-      status: "online",
-      location: "Data Center",
-      model: "Cisco ISR4321",
-      uptime: "45 days",
-      lastSeen: "Now",
-    },
-    {
-      id: "2",
-      name: "Switch-Floor-03",
-      type: "switch",
-      ip: "192.168.1.10",
-      status: "warning",
-      location: "Floor 3",
-      model: "HP Aruba 2930F",
-      uptime: "23 days",
-      lastSeen: "2 min ago",
-    },
-    {
-      id: "3",
-      name: "Firewall-Edge-01",
-      type: "firewall",
-      ip: "10.0.0.1",
-      status: "online",
-      location: "Edge",
-      model: "Fortinet FortiGate",
-      uptime: "67 days",
-      lastSeen: "Now",
-    },
-    {
-      id: "4",
-      name: "AP-Lobby-05",
-      type: "access_point",
-      ip: "192.168.2.5",
-      status: "offline",
-      location: "Lobby",
-      model: "Ubiquiti UniFi",
-      uptime: "0 days",
-      lastSeen: "1 hour ago",
-    },
-    {
-      id: "5",
-      name: "Server-DB-01",
-      type: "server",
-      ip: "192.168.100.10",
-      status: "online",
-      location: "Data Center",
-      model: "Dell PowerEdge R740",
-      uptime: "89 days",
-      lastSeen: "Now",
-    },
-  ]
+  // 初始加载和依赖更新
+  useEffect(() => {
+    fetchDevices()
+  }, [currentPage, searchTerm, statusFilter, typeFilter])
+
+  // 创建设备
+  const handleCreateDevice = async () => {
+    try {
+      await apiClient.createDevice(newDevice as Omit<Device, 'id'>)
+      toast.success('Device created successfully')
+      setIsAddDialogOpen(false)
+      setNewDevice({ name: "", type: "router", ip: "", location: "", model: "" })
+      fetchDevices()
+    } catch (error) {
+      console.error('Failed to create device:', error)
+      toast.error('Failed to create device')
+    }
+  }
+
+  // 更新设备
+  const handleUpdateDevice = async () => {
+    if (!selectedDevice) return
+    try {
+      await apiClient.updateDevice(selectedDevice.id, selectedDevice)
+      toast.success('Device updated successfully')
+      setIsEditDialogOpen(false)
+      setSelectedDevice(null)
+      fetchDevices()
+    } catch (error) {
+      console.error('Failed to update device:', error)
+      toast.error('Failed to update device')
+    }
+  }
+
+  // 删除设备
+  const handleDeleteDevice = async () => {
+    if (!selectedDevice) return
+    try {
+      await apiClient.deleteDevice(selectedDevice.id)
+      toast.success('Device deleted successfully')
+      setIsDeleteDialogOpen(false)
+      setSelectedDevice(null)
+      fetchDevices()
+    } catch (error) {
+      console.error('Failed to delete device:', error)
+      toast.error('Failed to delete device')
+    }
+  }
+
+  // 如果还在加载中，显示加载状态
+  if (isLoading && devices.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <RefreshCw className="h-8 w-8 animate-spin" />
+        <span className="ml-2">Loading devices...</span>
+      </div>
+    )
+  }
 
   const getDeviceIcon = (type: string) => {
     switch (type) {
@@ -166,14 +190,18 @@ export default function DevicesPage() {
       default:
         return <Badge variant="secondary">Unknown</Badge>
     }
-  })
+  }
 
-  // 添加设备
-  const handleAddDevice = () => {
-    if (!newDevice.name || !newDevice.ip) {
-      toast.error("请填写设备名称和IP地址")
-      return
-    }
+  // 过滤设备
+  const filteredDevices = devices.filter(device => {
+    const matchesSearch = device.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         device.ip.includes(searchTerm) ||
+                         device.location.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesStatus = statusFilter === 'all' || device.status === statusFilter
+    const matchesType = typeFilter === 'all' || device.type === typeFilter
+    
+    return matchesSearch && matchesStatus && matchesType
+  })
 
     const device: Device = {
       id: Date.now().toString(),

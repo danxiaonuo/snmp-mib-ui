@@ -24,6 +24,7 @@ export interface Host {
   sshPort: number
   sshUser?: string
   sshKeyPath?: string
+  sshConnectable?: boolean
   // 元数据
   metadata: Record<string, any>
 }

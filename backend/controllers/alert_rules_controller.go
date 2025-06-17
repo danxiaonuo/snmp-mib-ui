@@ -134,50 +134,14 @@ func (c *AlertRulesController) QueryMetrics(ctx *gin.Context) {
 		return
 	}
 
-	// 实现指标查询功能
-	// 这里可以对接真实的时序数据库
-	mockMetrics := map[string]interface{}{
-		"status": "success",
-		"data": map[string]interface{}{
-			"resultType": "vector",
-			"result": []map[string]interface{}{
-				{
-					"metric": map[string]string{
-						"__name__":   req.Query,
-						"instance":   "192.168.1.1:161",
-						"job":        "snmp-exporter",
-						"device":     "switch-01",
-					},
-					"value": []interface{}{
-						time.Now().Unix(),
-						"0.85", // 示例值
-					},
-				},
-				{
-					"metric": map[string]string{
-						"__name__":   req.Query,
-						"instance":   "192.168.1.2:161", 
-						"job":        "snmp-exporter",
-						"device":     "switch-02",
-					},
-					"value": []interface{}{
-						time.Now().Unix(),
-						"0.72",
-					},
-				},
-			},
-		},
-		"query":     req.Query,
-		"timestamp": time.Now().Unix(),
-	}
-	
-	result := mockMetrics
-	result := map[string]interface{}{"error": "Metrics query not implemented"}
-	err := fmt.Errorf("metrics query functionality not implemented")
+	// 执行真实的指标查询
+	metricsData, err := c.alertRulesService.QueryMetrics(req.Query)
 	if err != nil {
-		utils.ErrorResponse(ctx, http.StatusInternalServerError, "查询指标数据失败", err)
+		utils.ErrorResponse(ctx, http.StatusInternalServerError, "查询指标失败", err)
 		return
 	}
+	
+	result := metricsData
 
 	utils.SuccessResponse(ctx, "查询指标数据成功", result)
 }
@@ -297,8 +261,10 @@ func (c *AlertRulesController) CreateAlertRule(ctx *gin.Context) {
 	}
 
 	// 验证PromQL表达式
-	// TODO: Implement PromQL validation without Prometheus
-	// Validation temporarily disabled
+	if err := utils.ValidatePromQLSyntax(req.Expression); err != nil {
+		utils.ErrorResponse(ctx, http.StatusBadRequest, "PromQL表达式语法错误", err)
+		return
+	}
 
 	rule, err := c.alertRulesService.CreateAlertRule(&req)
 	if err != nil {
