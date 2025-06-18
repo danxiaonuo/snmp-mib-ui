@@ -5,6 +5,12 @@
 
 set -e
 
+# 获取脚本所在目录
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# 切换到脚本所在目录（项目根目录）
+cd "$SCRIPT_DIR"
+
 # 颜色定义
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -18,11 +24,20 @@ log_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
 log_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
 log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 
+# 显示当前工作目录
+echo "📁 当前工作目录: $(pwd)"
+
 # 检查是否在Git仓库中
 if ! git rev-parse --git-dir > /dev/null 2>&1; then
-    log_error "当前目录不是Git仓库"
+    log_error "当前目录不是Git仓库: $(pwd)"
+    log_error "请确保在项目根目录下运行此脚本"
+    echo "📍 脚本位置: $SCRIPT_DIR"
     exit 1
 fi
+
+# 显示Git仓库根目录
+GIT_ROOT=$(git rev-parse --show-toplevel)
+log_info "Git仓库根目录: $GIT_ROOT"
 
 echo "🚀 快速修复脚本"
 echo "=================="
