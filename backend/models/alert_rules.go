@@ -378,9 +378,12 @@ type SyncConfigResponse struct {
 
 // DiscoverDevicesRequest 设备发现请求
 type DiscoverDevicesRequest struct {
-	TimeRange string `json:"time_range" example:"1h"`
-	JobFilter string `json:"job_filter" example:"switch"`
-	Force     bool   `json:"force" example:"false"`
+	TimeRange   string `json:"time_range" example:"1h"`
+	JobFilter   string `json:"job_filter" example:"switch"`
+	Force       bool   `json:"force" example:"false"`
+	IPRange     string `json:"ip_range" example:"192.168.1.0/24"`
+	Community   string `json:"community" example:"public"`
+	SNMPVersion string `json:"snmp_version" example:"2c"`
 }
 
 // DiscoverDevicesResponse 设备发现响应

@@ -2,13 +2,9 @@ package services
 
 import (
 	"bytes"
-	"context"
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"net/http"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strings"
 	"time"

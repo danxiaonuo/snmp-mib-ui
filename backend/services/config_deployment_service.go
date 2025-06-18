@@ -342,7 +342,7 @@ func (s *ConfigDeploymentService) deployConfigToHost(hostID uint, configFiles ma
 	result.HostIP = host.IP
 
 	// 创建 SSH 连接
-	client, err := s.hostService.createSSHClient(host.IP, host.Port, host.Username, host.Password, host.PrivateKey)
+	client, err := s.hostService.CreateSSHClient(host.IP, host.Port, host.Username, host.Password, host.PrivateKey)
 	if err != nil {
 		result.Message = fmt.Sprintf("Failed to connect to host: %v", err)
 		return result
@@ -356,7 +356,7 @@ func (s *ConfigDeploymentService) deployConfigToHost(hostID uint, configFiles ma
 		
 		// 创建目录
 		dirCmd := fmt.Sprintf("sudo mkdir -p %s", "/opt/monitoring/config")
-		if _, err := s.hostService.executeSSHCommand(client, dirCmd); err != nil {
+		if _, err := s.hostService.ExecuteSSHCommand(client, dirCmd); err != nil {
 			result.Message = fmt.Sprintf("Failed to create config directory: %v", err)
 			return result
 		}

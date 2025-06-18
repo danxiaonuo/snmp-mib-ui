@@ -81,7 +81,7 @@ docker-compose up -d
 docker-compose logs -f
 
 # 4. 访问系统
-open http://localhost:3000
+open http://localhost:12300
 ```
 
 ### 📱 访问地址
@@ -90,9 +90,9 @@ open http://localhost:3000
 
 | 服务 | 地址 | 说明 |
 |------|------|------|
-| 🌐 **Web界面** | http://localhost:3000 | 主要管理界面 |
-| 🔌 **API接口** | http://localhost:8080 | RESTful API |
-| 🏥 **健康检查** | http://localhost:3000/api/health | 系统状态检查 |
+| 🌐 **Web界面** | http://localhost:12300 | 主要管理界面 |
+| 🔌 **API接口** | http://localhost:17880 | RESTful API |
+| 🏥 **健康检查** | http://localhost:12300/api/health | 系统状态检查 |
 
 ## 📖 功能介绍
 
@@ -256,7 +256,7 @@ POSTGRES_PASSWORD=your_password
 REDIS_URL=redis://localhost:6379
 
 # 应用配置
-NEXT_PUBLIC_API_URL=http://localhost:8080
+NEXT_PUBLIC_API_URL=http://localhost:17880/api/v1
 JWT_SECRET=your-super-secret-jwt-key
 API_PORT=8080
 
@@ -393,7 +393,7 @@ services:
 
 ```bash
 # 健康检查
-curl -f http://localhost:3000/api/health || exit 1
+curl -f http://localhost:12300/api/health || exit 1
 
 # 系统资源监控
 docker stats --format "table {{.Container}}\t{{.CPUPerc}}\t{{.MemUsage}}"
@@ -433,7 +433,7 @@ docker-compose down -v && docker-compose up -d
 **Q: 前后端API调用失败？**
 ```bash
 # 检查API健康状态
-curl http://localhost:8080/api/v1/devices
+curl http://localhost:17880/api/v1/devices
 
 # 检查环境变量
 echo $NEXT_PUBLIC_API_URL

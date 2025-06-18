@@ -2,6 +2,7 @@ package services
 
 import (
 	"bufio"
+	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -563,9 +564,15 @@ func (s *MIBService) GetMIBOIDs(id uint) ([]models.OID, error) {
 	return oids, nil
 }
 
-func (s *MIBService) ImportMIBs(file multipart.File) (map[string]interface{}, error) {
+func (s *MIBService) ImportMIBs(file multipart.File, format string) (map[string]interface{}, error) {
 	// 实现 MIB 从 JSON/CSV 导入功能
 	var importedMibs []models.MIB
+	
+	// 读取文件内容
+	data, err := io.ReadAll(file)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read file: %v", err)
+	}
 	
 	switch format {
 	case "json":

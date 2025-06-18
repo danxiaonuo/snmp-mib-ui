@@ -314,7 +314,7 @@ export async function POST(request: NextRequest) {
             onlineHosts: convertedHosts.filter(h => h.status === 'online').length,
             hosts: convertedHosts,
             taskId: taskId
-          })
+          });
         } catch (error) {
           console.error('Discovery error:', error)
           // 如果后端调用失败，回退到模拟数据
@@ -361,7 +361,7 @@ export async function POST(request: NextRequest) {
           
           const addedHosts = mockDiscoveredHosts.map(hostData => 
             hostManager.addDiscoveredHost(hostData)
-          )
+          );
           
           return NextResponse.json({
             success: true,
@@ -369,12 +369,7 @@ export async function POST(request: NextRequest) {
             foundHosts: addedHosts.length,
             onlineHosts: addedHosts.filter(h => h.status === 'online').length,
             hosts: addedHosts
-          })
-        } catch (error) {
-          return NextResponse.json(
-            { success: false, error: '网络扫描失败' },
-            { status: 500 }
-          )
+          });
         }
 
       case 'add-manual':

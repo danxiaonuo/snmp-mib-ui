@@ -598,7 +598,8 @@ export default function ApiManagementPage() {
       </Tabs>
 
       {/* Add API Key Dialog */}
-      <DialogContent className="max-w-2xl">
+      <Dialog open={isAddKeyDialogOpen} onOpenChange={setIsAddKeyDialogOpen}>
+        <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>Create API Key</DialogTitle>
           <DialogDescription>Generate a new API key with specific permissions</DialogDescription>
@@ -672,10 +673,12 @@ export default function ApiManagementPage() {
           </Button>
           <Button onClick={handleAddApiKey}>Create API Key</Button>
         </DialogFooter>
-      </DialogContent>
+        </DialogContent>
+      </Dialog>
 
       {/* Add Webhook Dialog */}
-      <DialogContent className="max-w-2xl">
+      <Dialog open={isAddWebhookDialogOpen} onOpenChange={setIsAddWebhookDialogOpen}>
+        <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>Add Webhook</DialogTitle>
           <DialogDescription>Configure a new webhook endpoint for event notifications</DialogDescription>
@@ -740,7 +743,8 @@ export default function ApiManagementPage() {
           </Button>
           <Button onClick={handleAddWebhook}>Add Webhook</Button>
         </DialogFooter>
-      </DialogContent>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

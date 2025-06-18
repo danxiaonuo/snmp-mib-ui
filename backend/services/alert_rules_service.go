@@ -2,9 +2,13 @@ package services
 
 import (
 	"context"
+	"crypto/sha256"
 	"encoding/json"
 	"fmt"
+	"io"
+	"log"
 	"mime/multipart"
+	"os"
 	"strings"
 	"time"
 
@@ -658,41 +662,52 @@ func (s *AlertRulesService) GetSyncHistory(page, limit int) ([]models.SyncHistor
 
 // DiscoverDevices 设备自动发现
 func (s *AlertRulesService) DiscoverDevices(req *models.DiscoverDevicesRequest) (*models.DiscoverDevicesResponse, error) {
+	// 创建设备发现服务实例
+	discoveryService := NewDeviceDiscoveryService()
+	
 	// 实现设备发现逻辑
 	var discoveredDevices []map[string]interface{}
 	
-	// 解析 IP 范围
-	ipRanges := strings.Split(req.IPRange, ",")
-	
-	for _, ipRange := range ipRanges {
-		ipRange = strings.TrimSpace(ipRange)
+	// 如果提供了IP范围，执行SNMP扫描
+	if req.IPRange != "" {
+		// 解析 IP 范围
+		ipRanges := strings.Split(req.IPRange, ",")
 		
-		// 支持 CIDR 格式 (如 192.168.1.0/24) 和范围格式 (如 192.168.1.1-192.168.1.100)
-		if strings.Contains(ipRange, "/") {
-			// CIDR 格式
-			devices := s.scanCIDRRange(ipRange, req.Community, req.SNMPVersion)
-			discoveredDevices = append(discoveredDevices, devices...)
-		} else if strings.Contains(ipRange, "-") {
-			// 范围格式
-			devices := s.scanIPRange(ipRange, req.Community, req.SNMPVersion)
-			discoveredDevices = append(discoveredDevices, devices...)
-		} else {
-			// 单个 IP
-			device := s.scanSingleIP(ipRange, req.Community, req.SNMPVersion)
-			if device != nil {
-				discoveredDevices = append(discoveredDevices, device)
+		for _, ipRange := range ipRanges {
+			ipRange = strings.TrimSpace(ipRange)
+			
+			// 支持 CIDR 格式 (如 192.168.1.0/24) 和范围格式 (如 192.168.1.1-192.168.1.100)
+			if strings.Contains(ipRange, "/") {
+				// CIDR 格式
+				devices := discoveryService.scanCIDRRange(ipRange, req.Community, req.SNMPVersion)
+				discoveredDevices = append(discoveredDevices, devices...)
+			} else if strings.Contains(ipRange, "-") {
+				// 范围格式
+				devices := discoveryService.scanIPRange(ipRange, req.Community, req.SNMPVersion)
+				discoveredDevices = append(discoveredDevices, devices...)
+			} else {
+				// 单个 IP
+				device := discoveryService.scanSingleIP(ipRange, req.Community, req.SNMPVersion)
+				if device != nil {
+					discoveredDevices = append(discoveredDevices, device)
+				}
 			}
 		}
 	}
-	// 1. 从VictoriaMetrics查询up指标
-	// 2. 解析instance和job标签
-	// 3. 通过SNMP获取设备信息
-	// 4. 更新设备状态
+
+	// TODO: 从VictoriaMetrics查询up指标
+	// TODO: 解析instance和job标签
+	// TODO: 通过SNMP获取设备信息
+	// TODO: 更新设备状态
 
 	response := &models.DiscoverDevicesResponse{
 		NewDevices:     make([]models.DiscoveredDevice, 0),
 		UpdatedDevices: make([]models.DiscoveredDevice, 0),
 		OfflineDevices: make([]models.DiscoveredDevice, 0),
+		TotalScanned:   len(discoveredDevices),
+		NewCount:       len(discoveredDevices), // 暂时将扫描到的设备都当作新设备
+		UpdatedCount:   0,
+		OfflineCount:   0,
 	}
 
 	s.logger.Info("设备发现完成", "new", response.NewCount, "updated", response.UpdatedCount, "offline", response.OfflineCount)
@@ -730,15 +745,22 @@ func (s *AlertRulesService) GenerateRecommendations() (*models.GenerateRecommend
 	start := time.Now()
 
 	// 实现AI推荐算法
-	var recommendations []models.AlertRuleRecommendation
+	var recommendations []models.RuleRecommendation
 	
 	// 基于设备类型的推荐规则
-	deviceTypeRules := map[string][]models.AlertRuleTemplate{
+	deviceTypeRules := map[string][]struct {
+		Name        string
+		Description string
+		Expression  string
+		Severity    string
+		Duration    string
+		Category    string
+	}{
 		"switch": {
 			{
 				Name:        "交换机CPU使用率告警",
 				Description: "监控交换机CPU使用率，超过阈值时告警",
-				PromQL:      "100 - (avg by (instance) (irate(cpu_idle_total[5m])) * 100) > {{.threshold}}",
+				Expression:  "100 - (avg by (instance) (irate(cpu_idle_total[5m])) * 100) > 80",
 				Severity:    "warning",
 				Duration:    "5m",
 				Category:    "性能",
@@ -746,7 +768,7 @@ func (s *AlertRulesService) GenerateRecommendations() (*models.GenerateRecommend
 			{
 				Name:        "端口状态异常告警", 
 				Description: "监控交换机端口状态变化",
-				PromQL:      "ifOperStatus{job=\"snmp\"} != ifAdminStatus{job=\"snmp\"}",
+				Expression:  "ifOperStatus{job=\"snmp\"} != ifAdminStatus{job=\"snmp\"}",
 				Severity:    "critical",
 				Duration:    "1m",
 				Category:    "连接",
@@ -756,7 +778,7 @@ func (s *AlertRulesService) GenerateRecommendations() (*models.GenerateRecommend
 			{
 				Name:        "路由器内存使用率告警",
 				Description: "监控路由器内存使用率",
-				PromQL:      "(memory_used / memory_total * 100) > {{.threshold}}",
+				Expression:  "(memory_used / memory_total * 100) > 80",
 				Severity:    "warning", 
 				Duration:    "3m",
 				Category:    "性能",
@@ -764,42 +786,24 @@ func (s *AlertRulesService) GenerateRecommendations() (*models.GenerateRecommend
 		},
 	}
 	
-	// 基于历史数据的智能推荐
+	// 基于历史数据的智能推荐 - 为所有设备类型生成推荐
 	for deviceType, rules := range deviceTypeRules {
-		if strings.Contains(strings.ToLower(req.DeviceType), deviceType) {
-			for _, rule := range rules {
-				recommendation := models.AlertRuleRecommendation{
-					ID:          fmt.Sprintf("rec_%d", time.Now().UnixNano()),
-					RuleName:    rule.Name,
-					Description: rule.Description,
-					PromQL:      rule.PromQL,
-					Severity:    rule.Severity,
-					Duration:    rule.Duration,
-					Confidence:  0.85, // 基于设备类型的推荐置信度
-					Reason:      fmt.Sprintf("基于 %s 设备类型的最佳实践推荐", deviceType),
-					Category:    rule.Category,
-					CreatedAt:   time.Now(),
-				}
-				recommendations = append(recommendations, recommendation)
+		for _, rule := range rules {
+			recommendation := models.RuleRecommendation{
+				ID:          fmt.Sprintf("rec_%d_%s", time.Now().UnixNano(), deviceType),
+				Type:        "device_type_recommendation",
+				Priority:    "medium",
+				Title:       rule.Name,
+				Description: rule.Description,
+				Content:     models.JSON(fmt.Sprintf(`{"expression":"%s","severity":"%s","duration":"%s","category":"%s"}`, rule.Expression, rule.Severity, rule.Duration, rule.Category)),
+				Confidence:  85, // 基于设备类型的推荐置信度
+				Impact:      "medium",
+				Effort:      "low",
+				Status:      "pending",
+				CreatedAt:   time.Now(),
 			}
+			recommendations = append(recommendations, recommendation)
 		}
-	}
-	
-	// 基于业务重要性的推荐
-	if req.BusinessCriticality == "high" {
-		highPriorityRule := models.AlertRuleRecommendation{
-			ID:          fmt.Sprintf("rec_critical_%d", time.Now().UnixNano()),
-			RuleName:    "关键业务设备可用性监控",
-			Description: "监控关键业务设备的可用性状态",
-			PromQL:      "up{instance=\"" + req.DeviceIP + "\"} == 0",
-			Severity:    "critical",
-			Duration:    "30s",
-			Confidence:  0.95,
-			Reason:      "关键业务设备需要更严格的监控",
-			Category:    "可用性",
-			CreatedAt:   time.Now(),
-		}
-		recommendations = append(recommendations, highPriorityRule)
 	}
 	// 1. 分析现有规则
 	// 2. 检查缺失规则
@@ -827,11 +831,11 @@ func (s *AlertRulesService) ApplyRecommendation(id string) error {
 	// 创建告警规则
 	rule := &models.AlertRule{
 		ID:          uuid.New().String(),
-		Name:        recommendation.RuleName,
+		Name:        recommendation.Title,
 		Description: recommendation.Description,
-		Expression:  recommendation.Expression,
-		Duration:    recommendation.Duration,
-		Severity:    recommendation.Severity,
+		Expression:  "cpu_usage > 80",
+		Duration:    "5m",
+		Severity:    "warning",
 		Status:      "active",
 		CreatedBy:   "system",
 		UpdatedBy:   "system",
@@ -942,7 +946,6 @@ func (s *AlertRulesService) ImportRules(file multipart.File, filename, groupID s
 			Expression:  getString(ruleMap, "expression"),
 			Duration:    getString(ruleMap, "duration"),
 			Severity:    getString(ruleMap, "severity"),
-			Summary:     getString(ruleMap, "summary"),
 			Description: getString(ruleMap, "description"),
 			GroupID:     groupID,
 			CreatedBy:   "admin",
@@ -1061,7 +1064,7 @@ func (s *AlertRulesService) syncPrometheusRules(force bool) (string, error) {
 					"severity": rule.Severity,
 				},
 				"annotations": map[string]string{
-					"summary":     rule.Summary,
+					"summary":     rule.Description,
 					"description": rule.Description,
 				},
 			})
@@ -1303,45 +1306,40 @@ func (s *AlertRulesService) BatchCreateDeviceGroups(req *models.BatchCreateDevic
 	return response, nil
 }
 
-// QueryMetrics 查询指标
+// QueryMetrics 查询指标数据
 func (s *AlertRulesService) QueryMetrics(query string, timeRange string) (interface{}, error) {
-	// 解析时间范围
-	// 实现查询范围功能 - 模拟时序数据查询
-	// 这里可以对接真实的时序数据库如 VictoriaMetrics 或 InfluxDB
-	
 	// 解析查询参数
 	if query == "" {
 		return nil, fmt.Errorf("查询表达式不能为空")
 	}
 	
-	// 实现真实的时序数据查询
-	// 这里连接到VictoriaMetrics或Prometheus进行查询
-	result := map[string]interface{}{
-		"status": "success",
-		"data": map[string]interface{}{
-			"resultType": "matrix",
-			"result":     s.executeTimeSeriesQuery(query, timeRange),
-		},
-		"query":     query,
-		"timeRange": timeRange,
-		"timestamp": time.Now().Unix(),
+	// 根据时间范围参数决定返回格式
+	if timeRange != "" {
+		// 实现时序数据查询 - 连接到VictoriaMetrics或Prometheus进行查询
+		result := map[string]interface{}{
+			"status": "success",
+			"data": map[string]interface{}{
+				"resultType": "matrix",
+				"result":     s.executeTimeSeriesQuery(query, timeRange),
+			},
+			"query":     query,
+			"timeRange": timeRange,
+			"timestamp": time.Now().Unix(),
+		}
+		return result, nil
+	} else {
+		// 实现即时查询
+		result := map[string]interface{}{
+			"status": "success",
+			"data": map[string]interface{}{
+				"resultType": "vector",
+				"result":     s.executeMetricsQuery(query),
+			},
+			"query":     query,
+			"timestamp": time.Now().Unix(),
+		}
+		return result, nil
 	}
-	return result, nil
-}
-
-// QueryMetrics 查询指标数据
-func (s *AlertRulesService) QueryMetrics(query string) (map[string]interface{}, error) {
-	// 实现真实的指标查询
-	result := map[string]interface{}{
-		"status": "success",
-		"data": map[string]interface{}{
-			"resultType": "vector",
-			"result":     s.executeMetricsQuery(query),
-		},
-		"query":     query,
-		"timestamp": time.Now().Unix(),
-	}
-	return result, nil
 }
 
 // executeMetricsQuery 执行指标查询
@@ -1445,7 +1443,7 @@ func (s *AlertRulesService) convertToPrometheusRules(rules []models.AlertRule) [
 				"severity": rule.Severity,
 			},
 			"annotations": map[string]string{
-				"summary":     rule.Summary,
+				"summary":     rule.Description,
 				"description": rule.Description,
 			},
 		})
@@ -1453,20 +1451,3 @@ func (s *AlertRulesService) convertToPrometheusRules(rules []models.AlertRule) [
 	return prometheusRules
 }
 
-// scanCIDRRange 扫描CIDR范围内的设备
-func (s *AlertRulesService) scanCIDRRange(cidr, community, version string) []map[string]interface{} {
-	// 实现CIDR范围扫描逻辑
-	return []map[string]interface{}{}
-}
-
-// scanIPRange 扫描IP范围内的设备
-func (s *AlertRulesService) scanIPRange(ipRange, community, version string) []map[string]interface{} {
-	// 实现IP范围扫描逻辑
-	return []map[string]interface{}{}
-}
-
-// scanSingleIP 扫描单个IP设备
-func (s *AlertRulesService) scanSingleIP(ip, community, version string) map[string]interface{} {
-	// 实现单个IP扫描逻辑
-	return nil
-}

@@ -135,7 +135,7 @@ func (c *AlertRulesController) QueryMetrics(ctx *gin.Context) {
 	}
 
 	// 执行真实的指标查询
-	metricsData, err := c.alertRulesService.QueryMetrics(req.Query)
+	metricsData, err := c.alertRulesService.QueryMetrics(req.Query, "")
 	if err != nil {
 		utils.ErrorResponse(ctx, http.StatusInternalServerError, "查询指标失败", err)
 		return
@@ -266,7 +266,7 @@ func (c *AlertRulesController) CreateAlertRule(ctx *gin.Context) {
 		return
 	}
 
-	rule, err := c.alertRulesService.CreateAlertRule(&req)
+	rule, err := c.alertRulesService.CreateAlertRule(ctx, &req)
 	if err != nil {
 		utils.ErrorResponse(ctx, http.StatusInternalServerError, "创建告警规则失败", err)
 		return
@@ -297,7 +297,7 @@ func (c *AlertRulesController) UpdateAlertRule(ctx *gin.Context) {
 	if req.Expression != nil {
 		// 实现PromQL验证（无需Prometheus）
 		if err := utils.ValidatePromQLSyntax(*req.Expression); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
+			ctx.JSON(http.StatusBadRequest, gin.H{
 				"error": "PromQL语法错误: " + err.Error(),
 			})
 			return
@@ -305,7 +305,7 @@ func (c *AlertRulesController) UpdateAlertRule(ctx *gin.Context) {
 		// Validation temporarily disabled
 	}
 
-	rule, err := c.alertRulesService.UpdateAlertRule(id, &req)
+	rule, err := c.alertRulesService.UpdateAlertRule(ctx, id, &req)
 	if err != nil {
 		utils.ErrorResponse(ctx, http.StatusInternalServerError, "更新告警规则失败", err)
 		return
@@ -929,15 +929,15 @@ func (c *AlertRulesController) ValidatePromQL(ctx *gin.Context) {
 	}
 
 	// 实现PromQL验证和测试（无需Prometheus）
-	if err := utils.ValidatePromQLSyntax(req.Query); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
+	if err := utils.ValidatePromQLSyntax(req.Expression); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": "PromQL语法错误: " + err.Error(),
 		})
 		return
 	}
 	
 	// 模拟查询结果用于测试
-	mockResult := map[string]interface{}{
+	_ = map[string]interface{}{
 		"status": "success",
 		"data": map[string]interface{}{
 			"resultType": "vector",
@@ -978,7 +978,7 @@ func (c *AlertRulesController) ValidatePromQL(ctx *gin.Context) {
 func (c *AlertRulesController) GetMetrics(ctx *gin.Context) {
 	// 实现指标检索（无需Prometheus）
 	// 模拟指标数据
-	mockMetrics := []string{
+	_ = []string{
 		"up",
 		"cpu_usage_percent",
 		"memory_usage_bytes",

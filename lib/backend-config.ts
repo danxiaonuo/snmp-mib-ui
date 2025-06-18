@@ -1,7 +1,7 @@
 // 后端服务配置
 export const BACKEND_CONFIG = {
   // 后端API基础URL
-  baseUrl: process.env.NEXT_PUBLIC_BACKEND_URL || process.env.BACKEND_URL || 'http://localhost:8080',
+  baseUrl: process.env.NEXT_PUBLIC_BACKEND_URL || process.env.BACKEND_URL || 'http://localhost:17880',
   
   // API版本
   apiVersion: 'v1',

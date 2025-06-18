@@ -49,7 +49,7 @@ func main() {
 
 	// Middleware
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000", "http://mib-frontend:3000", "https://yourdomain.com", "*"},
+		AllowOrigins:     []string{"http://localhost:12300", "http://mib-frontend:3000", "https://yourdomain.com", "*"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization", "X-Requested-With"},
 		ExposeHeaders:    []string{"Content-Length"},
@@ -225,7 +225,7 @@ func main() {
 		// SSH操作API (不带版本，兼容前端调用)
 		sshCompat := router.Group("/api/ssh")
 		sshCompat.Use(cors.New(cors.Config{
-			AllowOrigins:     []string{"http://localhost:3000", "http://mib-frontend:3000", "https://yourdomain.com", "*"},
+			AllowOrigins:     []string{"http://localhost:12300", "http://mib-frontend:3000", "https://yourdomain.com", "*"},
 			AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
 			AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization", "X-Requested-With"},
 			ExposeHeaders:    []string{"Content-Length"},
@@ -259,22 +259,19 @@ func main() {
 		}
 
 		// 系统健康检查API
-		health := api.Group("/health")
-		{
-			health.GET("", func(c *gin.Context) {
-				c.JSON(200, gin.H{
-					"status":    "healthy",
-					"timestamp": "2024-01-01T00:00:00Z",
-					"version":   "1.0.0",
-					"services": gin.H{
-						"database": "connected",
-						"redis":    "connected",
-						"backend":  "running",
-					},
-					"uptime": 3600,
-				})
+		api.GET("/health", func(c *gin.Context) {
+			c.JSON(200, gin.H{
+				"status":    "healthy",
+				"timestamp": "2024-01-01T00:00:00Z",
+				"version":   "1.0.0",
+				"services": gin.H{
+					"database": "connected",
+					"redis":    "connected",
+					"backend":  "running",
+				},
+				"uptime": 3600,
 			})
-		}
+		})
 
 		// 监控组件管理API
 		monitoring := api.Group("/monitoring")

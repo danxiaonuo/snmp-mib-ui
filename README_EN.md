@@ -82,7 +82,7 @@ docker-compose up -d
 docker-compose logs -f
 
 # 4. Access the system
-open http://localhost:3000
+open http://localhost:12300
 ```
 
 ### 📱 Access URLs
@@ -91,9 +91,9 @@ After deployment, you can access the system through the following URLs:
 
 | Service | URL | Description |
 |---------|-----|-------------|
-| 🌐 **Web Interface** | http://localhost:3000 | Main management interface |
-| 🔌 **API Interface** | http://localhost:8080 | RESTful API |
-| 🏥 **Health Check** | http://localhost:3000/api/health | System status check |
+| 🌐 **Web Interface** | http://localhost:12300 | Main management interface |
+| 🔌 **API Interface** | http://localhost:17880 | RESTful API |
+| 🏥 **Health Check** | http://localhost:12300/api/health | System status check |
 
 ## 📖 Feature Introduction
 
@@ -204,7 +204,7 @@ POSTGRES_PASSWORD=your_password
 REDIS_URL=redis://localhost:6379
 
 # Application configuration
-NEXT_PUBLIC_API_URL=http://localhost:8080
+NEXT_PUBLIC_API_URL=http://localhost:17880/api/v1
 JWT_SECRET=your-super-secret-jwt-key
 API_PORT=8080
 

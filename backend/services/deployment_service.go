@@ -298,7 +298,7 @@ func (s *DeploymentService) executeDeploymentAsync(task *DeploymentTask) {
 	s.addLog(task, fmt.Sprintf("Starting deployment to host %s (%s)", host.Name, host.IP))
 
 	// 创建 SSH 连接
-	client, err := s.hostService.createSSHClient(host.IP, host.Port, host.Username, host.Password, host.PrivateKey)
+	client, err := s.hostService.CreateSSHClient(host.IP, host.Port, host.Username, host.Password, host.PrivateKey)
 	if err != nil {
 		task.Status = "failed"
 		task.Error = fmt.Sprintf("Failed to connect to host: %v", err)
@@ -352,7 +352,7 @@ func (s *DeploymentService) deployComponent(client *ssh.Client, host *models.Hos
 
 func (s *DeploymentService) deployWithDocker(client *ssh.Client, host *models.Host, component *ComponentDeployment, compTemplate ComponentTemplate) error {
 	// 检查 Docker 是否安装
-	_, err := s.hostService.executeSSHCommand(client, "docker --version")
+	_, err := s.hostService.ExecuteSSHCommand(client, "docker --version")
 	if err != nil {
 		// 安装 Docker
 		installScript := `
@@ -362,7 +362,7 @@ sudo usermod -aG docker $USER
 sudo systemctl enable docker
 sudo systemctl start docker
 `
-		_, err = s.hostService.executeSSHCommand(client, installScript)
+		_, err = s.hostService.ExecuteSSHCommand(client, installScript)
 		if err != nil {
 			return fmt.Errorf("failed to install Docker: %v", err)
 		}
@@ -392,7 +392,7 @@ sudo systemctl start docker
 
 	// 创建部署目录
 	deployDir := fmt.Sprintf("/opt/monitoring/%s", component.Name)
-	_, err = s.hostService.executeSSHCommand(client, fmt.Sprintf("sudo mkdir -p %s", deployDir))
+	_, err = s.hostService.ExecuteSSHCommand(client, fmt.Sprintf("sudo mkdir -p %s", deployDir))
 	if err != nil {
 		return fmt.Errorf("failed to create deploy directory: %v", err)
 	}
@@ -406,7 +406,7 @@ sudo systemctl start docker
 
 	// 启动服务
 	startCmd := fmt.Sprintf("cd %s && sudo docker-compose up -d", deployDir)
-	_, err = s.hostService.executeSSHCommand(client, startCmd)
+	_, err = s.hostService.ExecuteSSHCommand(client, startCmd)
 	if err != nil {
 		return fmt.Errorf("failed to start service: %v", err)
 	}
@@ -422,7 +422,7 @@ wget %s -O %s.tar.gz
 tar -xzf %s.tar.gz
 `, compTemplate.BinaryURL, component.Name, component.Name)
 
-	_, err := s.hostService.executeSSHCommand(client, downloadCmd)
+	_, err := s.hostService.ExecuteSSHCommand(client, downloadCmd)
 	if err != nil {
 		return fmt.Errorf("failed to download binary: %v", err)
 	}
@@ -434,7 +434,7 @@ sudo chmod +x /usr/local/bin/%s
 sudo useradd --no-create-home --shell /bin/false %s || true
 `, component.Name, component.Name, component.Name, component.Name)
 
-	_, err = s.hostService.executeSSHCommand(client, installCmd)
+	_, err = s.hostService.ExecuteSSHCommand(client, installCmd)
 	if err != nil {
 		return fmt.Errorf("failed to install binary: %v", err)
 	}
@@ -482,7 +482,7 @@ sudo systemctl enable %s
 sudo systemctl start %s
 `, component.Name, component.Name)
 
-	_, err = s.hostService.executeSSHCommand(client, startCmd)
+	_, err = s.hostService.ExecuteSSHCommand(client, startCmd)
 	if err != nil {
 		return fmt.Errorf("failed to start systemd service: %v", err)
 	}
@@ -555,7 +555,7 @@ func (s *DeploymentService) CheckComponentStatus(hostID uint, componentName stri
 		return "unknown", err
 	}
 
-	client, err := s.hostService.createSSHClient(host.IP, host.Port, host.Username, host.Password, host.PrivateKey)
+	client, err := s.hostService.CreateSSHClient(host.IP, host.Port, host.Username, host.Password, host.PrivateKey)
 	if err != nil {
 		return "offline", err
 	}
@@ -563,14 +563,14 @@ func (s *DeploymentService) CheckComponentStatus(hostID uint, componentName stri
 
 	// 检查 Docker 容器状态
 	dockerCmd := fmt.Sprintf("docker ps --filter name=%s --format '{{.Status}}'", componentName)
-	output, err := s.hostService.executeSSHCommand(client, dockerCmd)
+	output, err := s.hostService.ExecuteSSHCommand(client, dockerCmd)
 	if err == nil && strings.Contains(output, "Up") {
 		return "running", nil
 	}
 
 	// 检查 systemd 服务状态
 	systemdCmd := fmt.Sprintf("systemctl is-active %s", componentName)
-	output, err = s.hostService.executeSSHCommand(client, systemdCmd)
+	output, err = s.hostService.ExecuteSSHCommand(client, systemdCmd)
 	if err == nil && strings.TrimSpace(output) == "active" {
 		return "running", nil
 	}
@@ -585,7 +585,7 @@ func (s *DeploymentService) StopComponent(hostID uint, componentName string) err
 		return err
 	}
 
-	client, err := s.hostService.createSSHClient(host.IP, host.Port, host.Username, host.Password, host.PrivateKey)
+	client, err := s.hostService.CreateSSHClient(host.IP, host.Port, host.Username, host.Password, host.PrivateKey)
 	if err != nil {
 		return err
 	}
@@ -593,11 +593,11 @@ func (s *DeploymentService) StopComponent(hostID uint, componentName string) err
 
 	// 尝试停止 Docker 容器
 	dockerCmd := fmt.Sprintf("docker stop %s", componentName)
-	s.hostService.executeSSHCommand(client, dockerCmd)
+	s.hostService.ExecuteSSHCommand(client, dockerCmd)
 
 	// 尝试停止 systemd 服务
 	systemdCmd := fmt.Sprintf("sudo systemctl stop %s", componentName)
-	s.hostService.executeSSHCommand(client, systemdCmd)
+	s.hostService.ExecuteSSHCommand(client, systemdCmd)
 
 	return nil
 }
@@ -609,7 +609,7 @@ func (s *DeploymentService) StartComponent(hostID uint, componentName string) er
 		return err
 	}
 
-	client, err := s.hostService.createSSHClient(host.IP, host.Port, host.Username, host.Password, host.PrivateKey)
+	client, err := s.hostService.CreateSSHClient(host.IP, host.Port, host.Username, host.Password, host.PrivateKey)
 	if err != nil {
 		return err
 	}
@@ -617,11 +617,11 @@ func (s *DeploymentService) StartComponent(hostID uint, componentName string) er
 
 	// 尝试启动 Docker 容器
 	dockerCmd := fmt.Sprintf("docker start %s", componentName)
-	_, err1 := s.hostService.executeSSHCommand(client, dockerCmd)
+	_, err1 := s.hostService.ExecuteSSHCommand(client, dockerCmd)
 
 	// 尝试启动 systemd 服务
 	systemdCmd := fmt.Sprintf("sudo systemctl start %s", componentName)
-	_, err2 := s.hostService.executeSSHCommand(client, systemdCmd)
+	_, err2 := s.hostService.ExecuteSSHCommand(client, systemdCmd)
 
 	if err1 != nil && err2 != nil {
 		return fmt.Errorf("failed to start component: docker error: %v, systemd error: %v", err1, err2)
@@ -637,7 +637,7 @@ func (s *DeploymentService) UninstallComponent(hostID uint, componentName string
 		return err
 	}
 
-	client, err := s.hostService.createSSHClient(host.IP, host.Port, host.Username, host.Password, host.PrivateKey)
+	client, err := s.hostService.CreateSSHClient(host.IP, host.Port, host.Username, host.Password, host.PrivateKey)
 	if err != nil {
 		return err
 	}
@@ -651,7 +651,7 @@ func (s *DeploymentService) UninstallComponent(hostID uint, componentName string
 	}
 
 	for _, cmd := range dockerCmds {
-		s.hostService.executeSSHCommand(client, cmd)
+		s.hostService.ExecuteSSHCommand(client, cmd)
 	}
 
 	// 停止并禁用 systemd 服务
@@ -663,7 +663,7 @@ func (s *DeploymentService) UninstallComponent(hostID uint, componentName string
 	}
 
 	for _, cmd := range systemdCmds {
-		s.hostService.executeSSHCommand(client, cmd)
+		s.hostService.ExecuteSSHCommand(client, cmd)
 	}
 
 	// 删除二进制文件和配置
@@ -674,7 +674,7 @@ func (s *DeploymentService) UninstallComponent(hostID uint, componentName string
 	}
 
 	for _, cmd := range cleanupCmds {
-		s.hostService.executeSSHCommand(client, cmd)
+		s.hostService.ExecuteSSHCommand(client, cmd)
 	}
 
 	// 从数据库中删除组件记录

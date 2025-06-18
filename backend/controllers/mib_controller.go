@@ -268,7 +268,7 @@ func (c *MIBController) ImportMIBs(ctx *gin.Context) {
 	}
 	defer file.Close()
 
-	result, err := c.service.ImportMIBs(file)
+	result, err := c.service.ImportMIBs(file, "json")
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
