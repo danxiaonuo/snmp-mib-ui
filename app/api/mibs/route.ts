@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
   try {
     const url = new URL(request.url)
     const searchParams = url.searchParams.toString()
-    const backendUrl = `${BACKEND_URL}/api/v1/devices${searchParams ? '?' + searchParams : ''}`
+    const backendUrl = `${BACKEND_URL}/api/v1/mibs${searchParams ? '?' + searchParams : ''}`
     
     const response = await fetch(backendUrl, {
       method: 'GET',
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
     const data = await response.json()
     return NextResponse.json(data)
   } catch (error) {
-    console.error('Device API error:', error)
+    console.error('MIB API error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     
-    const response = await fetch(`${BACKEND_URL}/api/v1/devices`, {
+    const response = await fetch(`${BACKEND_URL}/api/v1/mibs`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     const data = await response.json()
     return NextResponse.json(data)
   } catch (error) {
-    console.error('Device API error:', error)
+    console.error('MIB API error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -57,7 +57,7 @@ export async function PUT(request: NextRequest) {
     const url = new URL(request.url)
     const id = url.searchParams.get('id')
     
-    const response = await fetch(`${BACKEND_URL}/api/v1/devices${id ? '/' + id : ''}`, {
+    const response = await fetch(`${BACKEND_URL}/api/v1/mibs${id ? '/' + id : ''}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ export async function PUT(request: NextRequest) {
     const data = await response.json()
     return NextResponse.json(data)
   } catch (error) {
-    console.error('Device API error:', error)
+    console.error('MIB API error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -82,7 +82,7 @@ export async function DELETE(request: NextRequest) {
     const url = new URL(request.url)
     const id = url.searchParams.get('id')
     
-    const response = await fetch(`${BACKEND_URL}/api/v1/devices${id ? '/' + id : ''}`, {
+    const response = await fetch(`${BACKEND_URL}/api/v1/mibs${id ? '/' + id : ''}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ export async function DELETE(request: NextRequest) {
     const data = await response.json()
     return NextResponse.json(data)
   } catch (error) {
-    console.error('Device API error:', error)
+    console.error('MIB API error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

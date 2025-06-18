@@ -1,7 +1,7 @@
 // 真实API客户端 - 替换模拟数据
 import { Device, MIB, AlertRule, MonitoringComponent } from '@/types'
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1'
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:17880/api/v1'
 
 class ApiClient {
   private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {

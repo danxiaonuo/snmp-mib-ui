@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { writeFile, mkdir, readdir, readFile } from 'fs/promises'
 import { join } from 'path'
 import { existsSync } from 'fs'
-import AdmZip from 'adm-zip'
+// import AdmZip from 'adm-zip'  // 暂时注释，需要安装依赖
 
 // MIB压缩包上传和解析API
 export async function POST(request: NextRequest) {
@@ -35,7 +35,10 @@ export async function POST(request: NextRequest) {
     try {
       // 解压缩文件
       if (zipFile.name.toLowerCase().endsWith('.zip')) {
-        const zip = new AdmZip(zipPath)
+        // const zip = new AdmZip(zipPath)  // 暂时注释，需要安装依赖
+        return NextResponse.json({ 
+          error: 'ZIP解析功能需要安装adm-zip依赖' 
+        }, { status: 501 })
         const extractPath = join(tempDir, 'extracted')
         zip.extractAllTo(extractPath, true)
         

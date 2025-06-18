@@ -29,6 +29,11 @@ const data = {
       icon: Home,
     },
     {
+      title: "Enhanced Dashboard",
+      url: "/enhanced-dashboard",
+      icon: Monitor,
+    },
+    {
       title: "MIB Management",
       url: "#",
       icon: FileText,

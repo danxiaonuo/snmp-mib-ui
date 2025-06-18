@@ -1,9 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Performance optimizations
-  experimental: {
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
-  },
   
   // Compression
   compress: true,
@@ -94,6 +91,14 @@ const nextConfig = {
   
   // Disable static optimization for dynamic pages
   trailingSlash: false,
+  
+  // Performance optimizations
+  experimental: {
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+  },
+  
+  // External packages configuration
+  serverExternalPackages: [],
   
   
   // TypeScript configuration

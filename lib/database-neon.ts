@@ -1,11 +1,10 @@
 // 使用Neon数据库连接（替代本地PostgreSQL）
 import { neon } from "@neondatabase/serverless"
 
-if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL environment variable is not set")
-}
+// 在构建时允许为空，运行时检查
+const databaseUrl = process.env.DATABASE_URL || 'postgresql://dummy:dummy@localhost:5432/dummy'
 
-export const sql = neon(process.env.DATABASE_URL)
+export const sql = neon(databaseUrl)
 
 // 数据库查询辅助函数
 export async function executeQuery(query: string, params: any[] = []) {

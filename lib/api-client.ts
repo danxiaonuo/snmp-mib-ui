@@ -18,7 +18,7 @@ class ApiClient {
       this.baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://mib-backend:8080/api/v1"
     } else {
       // Client-side
-      this.baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api/v1"
+      this.baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:17880/api/v1"
     }
   }
 

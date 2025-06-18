@@ -129,18 +129,7 @@ interface AlertItem {
   status: 'active' | 'resolved' | 'acknowledged'
 }
 
-// 真实API数据获取
-const fetchComponentMetrics = async () => {
-  try {
-    // 这里调用真实API获取组件指标
-    // const response = await apiClient.getMonitoringStatus()
-    // return response.components || []
-    return []
-  } catch (error) {
-    console.error('Failed to fetch component metrics:', error)
-    return []
-  }
-}
+// 真实API数据获取 - 移除重复定义
 
 // 获取真实时序数据
 const fetchTimeSeriesData = async (componentId: string, metric: string): Promise<MetricData[]> => {

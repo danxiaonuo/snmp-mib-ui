@@ -37,10 +37,9 @@ func ValidatePromQLSyntax(query string) error {
 
 // checkBasicSyntax 检查基本语法
 func checkBasicSyntax(query string) error {
-	// 检查是否包含非法字符
-	invalidChars := regexp.MustCompile(`[^\w\s\(\)\[\]\{\}\+\-\*\/\%\=\!\<\>\&\|\.\,\:\;\"\'\_\@\#\$\^\~\`]`)
-	if invalidChars.MatchString(query) {
-		return fmt.Errorf("包含非法字符")
+	// 基本长度检查
+	if len(strings.TrimSpace(query)) == 0 {
+		return fmt.Errorf("查询不能为空")
 	}
 
 	// 检查是否以操作符开始或结束

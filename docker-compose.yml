@@ -49,14 +49,16 @@ services:
       dockerfile: Dockerfile
     container_name: mibweb-frontend
     ports:
-      - "3000:3000"
+      - "12300:3000"
     environment:
       - NODE_ENV=development
       - DATABASE_URL=postgresql://netmon_user:netmon_pass_2024@postgres:5432/network_monitor
       - REDIS_URL=redis://:redis_pass_2024@redis:6379
       - NEXTAUTH_SECRET=mibweb_secret_key_2024_very_secure
-      - NEXTAUTH_URL=http://101.33.248.167:3000
+      - NEXTAUTH_URL=http://101.33.248.167:12300
       - API_BASE_URL=http://backend:8080
+      - NEXT_PUBLIC_BACKEND_URL=http://localhost:17880
+      - NEXT_PUBLIC_API_URL=http://localhost:17880/api/v1
     depends_on:
       - postgres
       - redis
@@ -71,14 +73,14 @@ services:
       dockerfile: Dockerfile
     container_name: mibweb-backend
     ports:
-      - "8080:8080"
+      - "17880:8080"
     environment:
       - ENVIRONMENT=production
       - PORT=8080
       - DATABASE_URL=postgresql://netmon_user:netmon_pass_2024@postgres:5432/network_monitor
       - REDIS_URL=redis://:redis_pass_2024@redis:6379
       - JWT_SECRET=jwt_secret_key_2024_very_secure
-      - CORS_ORIGINS=http://localhost:3000
+      - CORS_ORIGINS=http://localhost:12300
     depends_on:
       - postgres
       - redis

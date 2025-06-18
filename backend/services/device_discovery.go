@@ -3,7 +3,6 @@ package services
 import (
 	"fmt"
 	"net"
-	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -23,24 +22,24 @@ func NewDeviceDiscoveryService() *DeviceDiscoveryService {
 	}
 }
 
-// DiscoveredDevice 发现的设备信息
-type DiscoveredDevice struct {
-	IP          string            `json:"ip"`
-	Hostname    string            `json:"hostname"`
-	SysDescr    string            `json:"sys_descr"`
-	SysObjectID string            `json:"sys_object_id"`
-	SysName     string            `json:"sys_name"`
-	SysContact  string            `json:"sys_contact"`
-	SysLocation string            `json:"sys_location"`
-	Uptime      string            `json:"uptime"`
-	Vendor      string            `json:"vendor"`
-	Model       string            `json:"model"`
-	Version     string            `json:"version"`
-	Interfaces  []Interface       `json:"interfaces"`
-	Community   string            `json:"community"`
-	Version     string            `json:"snmp_version"`
-	ResponseTime int64            `json:"response_time_ms"`
-	LastSeen    time.Time         `json:"last_seen"`
+// DiscoveredDeviceInfo 发现的设备信息
+type DiscoveredDeviceInfo struct {
+	IP           string            `json:"ip"`
+	Hostname     string            `json:"hostname"`
+	SysDescr     string            `json:"sys_descr"`
+	SysObjectID  string            `json:"sys_object_id"`
+	SysName      string            `json:"sys_name"`
+	SysContact   string            `json:"sys_contact"`
+	SysLocation  string            `json:"sys_location"`
+	Uptime       string            `json:"uptime"`
+	Vendor       string            `json:"vendor"`
+	Model        string            `json:"model"`
+	DeviceVersion string           `json:"device_version"`
+	Interfaces   []Interface       `json:"interfaces"`
+	Community    string            `json:"community"`
+	SNMPVersion  string            `json:"snmp_version"`
+	ResponseTime int64             `json:"response_time_ms"`
+	LastSeen     time.Time         `json:"last_seen"`
 }
 
 // Interface 接口信息
@@ -56,7 +55,7 @@ type Interface struct {
 }
 
 // scanCIDRRange 扫描 CIDR 范围内的设备
-func (s *AlertRulesService) scanCIDRRange(cidr, community, version string) []map[string]interface{} {
+func (s *DeviceDiscoveryService) scanCIDRRange(cidr, community, version string) []map[string]interface{} {
 	var devices []map[string]interface{}
 	
 	_, ipNet, err := net.ParseCIDR(cidr)
@@ -76,7 +75,7 @@ func (s *AlertRulesService) scanCIDRRange(cidr, community, version string) []map
 }
 
 // scanIPRange 扫描 IP 范围内的设备
-func (s *AlertRulesService) scanIPRange(ipRange, community, version string) []map[string]interface{} {
+func (s *DeviceDiscoveryService) scanIPRange(ipRange, community, version string) []map[string]interface{} {
 	var devices []map[string]interface{}
 	
 	parts := strings.Split(ipRange, "-")
@@ -104,7 +103,7 @@ func (s *AlertRulesService) scanIPRange(ipRange, community, version string) []ma
 }
 
 // scanSingleIP 扫描单个 IP
-func (s *AlertRulesService) scanSingleIP(ip, community, version string) map[string]interface{} {
+func (s *DeviceDiscoveryService) scanSingleIP(ip, community, version string) map[string]interface{} {
 	device := s.discoverDevice(ip, community, version)
 	if device != nil {
 		return map[string]interface{}{
@@ -114,9 +113,9 @@ func (s *AlertRulesService) scanSingleIP(ip, community, version string) map[stri
 			"sys_name":      device.SysName,
 			"vendor":        device.Vendor,
 			"model":         device.Model,
-			"version":       device.Version,
+			"version":       device.DeviceVersion,
 			"community":     device.Community,
-			"snmp_version":  device.Version,
+			"snmp_version":  device.SNMPVersion,
 			"response_time": device.ResponseTime,
 			"last_seen":     device.LastSeen,
 			"interfaces":    device.Interfaces,
@@ -126,7 +125,7 @@ func (s *AlertRulesService) scanSingleIP(ip, community, version string) map[stri
 }
 
 // concurrentScan 并发扫描多个 IP
-func (s *AlertRulesService) concurrentScan(ips []string, community, version string) []map[string]interface{} {
+func (s *DeviceDiscoveryService) concurrentScan(ips []string, community, version string) []map[string]interface{} {
 	var devices []map[string]interface{}
 	var mu sync.Mutex
 	var wg sync.WaitGroup
@@ -151,9 +150,9 @@ func (s *AlertRulesService) concurrentScan(ips []string, community, version stri
 					"sys_name":      device.SysName,
 					"vendor":        device.Vendor,
 					"model":         device.Model,
-					"version":       device.Version,
+					"version":       device.DeviceVersion,
 					"community":     device.Community,
-					"snmp_version":  device.Version,
+					"snmp_version":  device.SNMPVersion,
 					"response_time": device.ResponseTime,
 					"last_seen":     device.LastSeen,
 					"interfaces":    device.Interfaces,
@@ -168,7 +167,7 @@ func (s *AlertRulesService) concurrentScan(ips []string, community, version stri
 }
 
 // discoverDevice 发现单个设备的详细信息
-func (s *AlertRulesService) discoverDevice(ip, community, version string) *DiscoveredDevice {
+func (s *DeviceDiscoveryService) discoverDevice(ip, community, version string) *DiscoveredDeviceInfo {
 	startTime := time.Now()
 	
 	// 创建 SNMP 连接
@@ -202,10 +201,10 @@ func (s *AlertRulesService) discoverDevice(ip, community, version string) *Disco
 		return nil
 	}
 	
-	device := &DiscoveredDevice{
+	device := &DiscoveredDeviceInfo{
 		IP:           ip,
 		Community:    community,
-		Version:      version,
+		SNMPVersion:  version,
 		ResponseTime: time.Since(startTime).Milliseconds(),
 		LastSeen:     time.Now(),
 	}
@@ -222,7 +221,7 @@ func (s *AlertRulesService) discoverDevice(ip, community, version string) *Disco
 	}
 	
 	// 解析厂商和型号信息
-	device.Vendor, device.Model, device.Version = s.parseDeviceInfo(device.SysDescr, device.SysObjectID)
+	device.Vendor, device.Model, device.DeviceVersion = s.parseDeviceInfo(device.SysDescr, device.SysObjectID)
 	
 	// 获取接口信息
 	device.Interfaces = s.getInterfaceInfo(conn)
@@ -231,7 +230,7 @@ func (s *AlertRulesService) discoverDevice(ip, community, version string) *Disco
 }
 
 // parseDeviceInfo 解析设备信息
-func (s *AlertRulesService) parseDeviceInfo(sysDescr, sysObjectID string) (vendor, model, version string) {
+func (s *DeviceDiscoveryService) parseDeviceInfo(sysDescr, sysObjectID string) (vendor, model, version string) {
 	sysDescr = strings.ToLower(sysDescr)
 	
 	// 厂商识别
@@ -290,7 +289,7 @@ func (s *AlertRulesService) parseDeviceInfo(sysDescr, sysObjectID string) (vendo
 }
 
 // getInterfaceInfo 获取接口信息
-func (s *AlertRulesService) getInterfaceInfo(conn *gosnmp.GoSNMP) []Interface {
+func (s *DeviceDiscoveryService) getInterfaceInfo(conn *gosnmp.GoSNMP) []Interface {
 	var interfaces []Interface
 	
 	// 获取接口基本信息
@@ -318,7 +317,7 @@ func (s *AlertRulesService) getInterfaceInfo(conn *gosnmp.GoSNMP) []Interface {
 }
 
 // incrementIP IP 地址递增
-func (s *AlertRulesService) incrementIP(ip net.IP) {
+func (s *DeviceDiscoveryService) incrementIP(ip net.IP) {
 	for j := len(ip) - 1; j >= 0; j-- {
 		ip[j]++
 		if ip[j] > 0 {
@@ -328,7 +327,7 @@ func (s *AlertRulesService) incrementIP(ip net.IP) {
 }
 
 // parseVersion 解析 SNMP 版本
-func (s *AlertRulesService) parseVersion(version string) gosnmp.SnmpVersion {
+func (s *DeviceDiscoveryService) parseVersion(version string) gosnmp.SnmpVersion {
 	switch version {
 	case "1":
 		return gosnmp.Version1
@@ -342,7 +341,7 @@ func (s *AlertRulesService) parseVersion(version string) gosnmp.SnmpVersion {
 }
 
 // formatSNMPValue 格式化 SNMP 值
-func (s *AlertRulesService) formatSNMPValue(pdu gosnmp.SnmpPDU) string {
+func (s *DeviceDiscoveryService) formatSNMPValue(pdu gosnmp.SnmpPDU) string {
 	switch pdu.Type {
 	case gosnmp.OctetString:
 		if bytes, ok := pdu.Value.([]byte); ok {

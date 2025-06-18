@@ -4,8 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"os"
-	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
@@ -14,8 +12,6 @@ import (
 	"github.com/go-redis/redis/v8"
 	"golang.org/x/crypto/ssh"
 	"gorm.io/gorm"
-
-	"mib-platform/models"
 )
 
 type ComponentVersionService struct {
@@ -91,7 +87,7 @@ func (s *ComponentVersionService) CheckComponentVersion(hostID uint, componentNa
 		return nil, err
 	}
 
-	client, err := s.hostService.createSSHClient(host.IP, host.Port, host.Username, host.Password, host.PrivateKey)
+	client, err := s.hostService.CreateSSHClient(host.IP, host.Port, host.Username, host.Password, host.PrivateKey)
 	if err != nil {
 		return nil, err
 	}
@@ -167,7 +163,7 @@ func (s *ComponentVersionService) detectInstalledVersion(client *ssh.Client, com
 func (s *ComponentVersionService) checkDockerVersion(client *ssh.Client, componentName string) (string, bool) {
 	// 检查容器是否存在
 	cmd := fmt.Sprintf("docker inspect %s --format='{{.Config.Image}}' 2>/dev/null", componentName)
-	output, err := s.hostService.executeSSHCommand(client, cmd)
+	output, err := s.hostService.ExecuteSSHCommand(client, cmd)
 	if err != nil {
 		return "", false
 	}
@@ -184,7 +180,7 @@ func (s *ComponentVersionService) checkDockerVersion(client *ssh.Client, compone
 	// 如果是 latest 标签，尝试获取实际版本
 	cmd = fmt.Sprintf("docker exec %s %s --version 2>/dev/null || docker exec %s %s -version 2>/dev/null", 
 		componentName, componentName, componentName, componentName)
-	output, err = s.hostService.executeSSHCommand(client, cmd)
+	output, err = s.hostService.ExecuteSSHCommand(client, cmd)
 	if err == nil {
 		if version := s.extractVersionFromOutput(output); version != "" {
 			return version, true
@@ -198,7 +194,7 @@ func (s *ComponentVersionService) checkDockerVersion(client *ssh.Client, compone
 func (s *ComponentVersionService) checkBinaryVersion(client *ssh.Client, componentName string) (string, bool) {
 	// 检查二进制文件是否存在
 	cmd := fmt.Sprintf("which %s", componentName)
-	_, err := s.hostService.executeSSHCommand(client, cmd)
+	_, err := s.hostService.ExecuteSSHCommand(client, cmd)
 	if err != nil {
 		return "", false
 	}
@@ -211,7 +207,7 @@ func (s *ComponentVersionService) checkBinaryVersion(client *ssh.Client, compone
 	}
 
 	for _, cmd := range versionCmds {
-		output, err := s.hostService.executeSSHCommand(client, cmd)
+		output, err := s.hostService.ExecuteSSHCommand(client, cmd)
 		if err == nil {
 			if version := s.extractVersionFromOutput(output); version != "" {
 				return version, true
@@ -226,14 +222,14 @@ func (s *ComponentVersionService) checkBinaryVersion(client *ssh.Client, compone
 func (s *ComponentVersionService) checkSystemdVersion(client *ssh.Client, componentName string) (string, bool) {
 	// 检查服务文件是否存在
 	cmd := fmt.Sprintf("systemctl list-unit-files %s.service", componentName)
-	output, err := s.hostService.executeSSHCommand(client, cmd)
+	output, err := s.hostService.ExecuteSSHCommand(client, cmd)
 	if err != nil || !strings.Contains(output, componentName) {
 		return "", false
 	}
 
 	// 从服务描述或执行文件中获取版本
 	cmd = fmt.Sprintf("systemctl show %s --property=ExecStart", componentName)
-	output, err = s.hostService.executeSSHCommand(client, cmd)
+	output, err = s.hostService.ExecuteSSHCommand(client, cmd)
 	if err == nil {
 		// 提取可执行文件路径
 		if strings.Contains(output, "ExecStart=") {
@@ -242,7 +238,7 @@ func (s *ComponentVersionService) checkSystemdVersion(client *ssh.Client, compon
 			
 			// 尝试获取版本
 			cmd = fmt.Sprintf("%s --version 2>/dev/null || %s -version 2>/dev/null", execPath, execPath)
-			versionOutput, err := s.hostService.executeSSHCommand(client, cmd)
+			versionOutput, err := s.hostService.ExecuteSSHCommand(client, cmd)
 			if err == nil {
 				if version := s.extractVersionFromOutput(versionOutput); version != "" {
 					return version, true
@@ -281,14 +277,14 @@ func (s *ComponentVersionService) extractVersionFromOutput(output string) string
 func (s *ComponentVersionService) checkServiceRunning(client *ssh.Client, componentName string) bool {
 	// 检查 Docker 容器
 	cmd := fmt.Sprintf("docker ps --filter name=%s --format '{{.Status}}'", componentName)
-	output, err := s.hostService.executeSSHCommand(client, cmd)
+	output, err := s.hostService.ExecuteSSHCommand(client, cmd)
 	if err == nil && strings.Contains(output, "Up") {
 		return true
 	}
 
 	// 检查 systemd 服务
 	cmd = fmt.Sprintf("systemctl is-active %s", componentName)
-	output, err = s.hostService.executeSSHCommand(client, cmd)
+	output, err = s.hostService.ExecuteSSHCommand(client, cmd)
 	if err == nil && strings.TrimSpace(output) == "active" {
 		return true
 	}
@@ -300,7 +296,7 @@ func (s *ComponentVersionService) checkServiceRunning(client *ssh.Client, compon
 func (s *ComponentVersionService) checkConfigBackup(client *ssh.Client, componentName string) bool {
 	backupDir := fmt.Sprintf("/opt/monitoring/backups/%s", componentName)
 	cmd := fmt.Sprintf("test -d %s && ls %s | wc -l", backupDir, backupDir)
-	output, err := s.hostService.executeSSHCommand(client, cmd)
+	output, err := s.hostService.ExecuteSSHCommand(client, cmd)
 	if err == nil {
 		count := strings.TrimSpace(output)
 		return count != "0"
@@ -483,7 +479,7 @@ func (s *ComponentVersionService) executeUpgradeAsync(task *ComponentUpgradeTask
 	}
 
 	// 创建 SSH 连接
-	client, err := s.hostService.createSSHClient(host.IP, host.Port, host.Username, host.Password, host.PrivateKey)
+	client, err := s.hostService.CreateSSHClient(host.IP, host.Port, host.Username, host.Password, host.PrivateKey)
 	if err != nil {
 		task.Status = "failed"
 		task.Error = fmt.Sprintf("Failed to connect to host: %v", err)
@@ -561,7 +557,7 @@ func (s *ComponentVersionService) executeUpgradeStep(client *ssh.Client, task *C
 // executePreCheck 执行升级前检查
 func (s *ComponentVersionService) executePreCheck(client *ssh.Client, task *ComponentUpgradeTask, step *UpgradeStep) error {
 	// 检查磁盘空间
-	output, err := s.hostService.executeSSHCommand(client, "df -h / | tail -1 | awk '{print $5}' | sed 's/%//'")
+	output, err := s.hostService.ExecuteSSHCommand(client, "df -h / | tail -1 | awk '{print $5}' | sed 's/%//'")
 	if err != nil {
 		return fmt.Errorf("failed to check disk space: %v", err)
 	}
@@ -572,7 +568,7 @@ func (s *ComponentVersionService) executePreCheck(client *ssh.Client, task *Comp
 	}
 	
 	// 检查内存
-	output, err = s.hostService.executeSSHCommand(client, "free | grep Mem | awk '{print ($3/$2) * 100.0}'")
+	output, err = s.hostService.ExecuteSSHCommand(client, "free | grep Mem | awk '{print ($3/$2) * 100.0}'")
 	if err != nil {
 		return fmt.Errorf("failed to check memory: %v", err)
 	}
@@ -588,7 +584,7 @@ func (s *ComponentVersionService) executeBackupConfig(client *ssh.Client, task *
 	
 	// 创建备份目录
 	cmd := fmt.Sprintf("mkdir -p %s", backupDir)
-	if _, err := s.hostService.executeSSHCommand(client, cmd); err != nil {
+	if _, err := s.hostService.ExecuteSSHCommand(client, cmd); err != nil {
 		return fmt.Errorf("failed to create backup directory: %v", err)
 	}
 	
@@ -597,7 +593,7 @@ func (s *ComponentVersionService) executeBackupConfig(client *ssh.Client, task *
 	for _, configPath := range configPaths {
 		cmd = fmt.Sprintf("test -f %s && cp %s %s/ || echo 'Config file %s not found'", 
 			configPath, configPath, backupDir, configPath)
-		output, err := s.hostService.executeSSHCommand(client, cmd)
+		output, err := s.hostService.ExecuteSSHCommand(client, cmd)
 		if err != nil {
 			return fmt.Errorf("failed to backup config %s: %v", configPath, err)
 		}
@@ -618,7 +614,7 @@ func (s *ComponentVersionService) executeBackupData(client *ssh.Client, task *Co
 	for _, dataPath := range dataPaths {
 		cmd := fmt.Sprintf("test -d %s && tar -czf %s/%s_data.tar.gz -C %s . || echo 'Data path %s not found'", 
 			dataPath, backupDir, task.ComponentName, dataPath, dataPath)
-		output, err := s.hostService.executeSSHCommand(client, cmd)
+		output, err := s.hostService.ExecuteSSHCommand(client, cmd)
 		if err != nil {
 			return fmt.Errorf("failed to backup data %s: %v", dataPath, err)
 		}
@@ -633,14 +629,14 @@ func (s *ComponentVersionService) executeBackupData(client *ssh.Client, task *Co
 func (s *ComponentVersionService) executeStopService(client *ssh.Client, task *ComponentUpgradeTask, step *UpgradeStep) error {
 	// 尝试停止 Docker 容器
 	cmd := fmt.Sprintf("docker stop %s 2>/dev/null || true", task.ComponentName)
-	output, err := s.hostService.executeSSHCommand(client, cmd)
+	output, err := s.hostService.ExecuteSSHCommand(client, cmd)
 	if err == nil {
 		step.Output += fmt.Sprintf("Docker container stopped: %s\n", output)
 	}
 	
 	// 尝试停止 systemd 服务
 	cmd = fmt.Sprintf("systemctl stop %s 2>/dev/null || true", task.ComponentName)
-	output, err = s.hostService.executeSSHCommand(client, cmd)
+	output, err = s.hostService.ExecuteSSHCommand(client, cmd)
 	if err == nil {
 		step.Output += fmt.Sprintf("Systemd service stopped: %s\n", output)
 	}
@@ -675,7 +671,7 @@ func (s *ComponentVersionService) upgradeDockerComponent(client *ssh.Client, tas
 	// 拉取新版本镜像
 	imageName := s.getComponentImageName(task.ComponentName, task.ToVersion)
 	cmd := fmt.Sprintf("docker pull %s", imageName)
-	output, err := s.hostService.executeSSHCommand(client, cmd)
+	output, err := s.hostService.ExecuteSSHCommand(client, cmd)
 	if err != nil {
 		return fmt.Errorf("failed to pull image %s: %v", imageName, err)
 	}
@@ -683,12 +679,12 @@ func (s *ComponentVersionService) upgradeDockerComponent(client *ssh.Client, tas
 	
 	// 删除旧容器
 	cmd = fmt.Sprintf("docker rm %s 2>/dev/null || true", task.ComponentName)
-	output, err = s.hostService.executeSSHCommand(client, cmd)
+	output, err = s.hostService.ExecuteSSHCommand(client, cmd)
 	step.Output += fmt.Sprintf("Old container removed: %s\n", output)
 	
 	// 使用新镜像创建容器
 	createCmd := s.generateDockerCreateCommand(task.ComponentName, imageName)
-	output, err = s.hostService.executeSSHCommand(client, createCmd)
+	output, err = s.hostService.ExecuteSSHCommand(client, createCmd)
 	if err != nil {
 		return fmt.Errorf("failed to create new container: %v", err)
 	}
@@ -704,7 +700,7 @@ func (s *ComponentVersionService) upgradeBinaryComponent(client *ssh.Client, tas
 	tempPath := fmt.Sprintf("/tmp/%s_%s", task.ComponentName, task.ToVersion)
 	
 	cmd := fmt.Sprintf("wget -O %s %s", tempPath, downloadURL)
-	output, err := s.hostService.executeSSHCommand(client, cmd)
+	output, err := s.hostService.ExecuteSSHCommand(client, cmd)
 	if err != nil {
 		return fmt.Errorf("failed to download binary: %v", err)
 	}
@@ -714,11 +710,11 @@ func (s *ComponentVersionService) upgradeBinaryComponent(client *ssh.Client, tas
 	currentPath := s.getComponentBinaryPath(task.ComponentName)
 	backupPath := fmt.Sprintf("%s.backup_%s", currentPath, time.Now().Format("20060102_150405"))
 	cmd = fmt.Sprintf("cp %s %s", currentPath, backupPath)
-	s.hostService.executeSSHCommand(client, cmd)
+	s.hostService.ExecuteSSHCommand(client, cmd)
 	
 	// 替换二进制文件
 	cmd = fmt.Sprintf("chmod +x %s && mv %s %s", tempPath, tempPath, currentPath)
-	output, err = s.hostService.executeSSHCommand(client, cmd)
+	output, err = s.hostService.ExecuteSSHCommand(client, cmd)
 	if err != nil {
 		return fmt.Errorf("failed to replace binary: %v", err)
 	}
@@ -736,7 +732,7 @@ func (s *ComponentVersionService) upgradeSystemdComponent(client *ssh.Client, ta
 	
 	// 重新加载 systemd
 	cmd := "systemctl daemon-reload"
-	output, err := s.hostService.executeSSHCommand(client, cmd)
+	output, err := s.hostService.ExecuteSSHCommand(client, cmd)
 	if err != nil {
 		return fmt.Errorf("failed to reload systemd: %v", err)
 	}
@@ -754,7 +750,7 @@ func (s *ComponentVersionService) executeMigrateConfig(client *ssh.Client, task 
 		return nil
 	}
 	
-	output, err := s.hostService.executeSSHCommand(client, migrationScript)
+	output, err := s.hostService.ExecuteSSHCommand(client, migrationScript)
 	if err != nil {
 		return fmt.Errorf("config migration failed: %v", err)
 	}
@@ -767,7 +763,7 @@ func (s *ComponentVersionService) executeMigrateConfig(client *ssh.Client, task 
 func (s *ComponentVersionService) executeStartService(client *ssh.Client, task *ComponentUpgradeTask, step *UpgradeStep) error {
 	// 尝试启动 Docker 容器
 	cmd := fmt.Sprintf("docker start %s 2>/dev/null || true", task.ComponentName)
-	output, err := s.hostService.executeSSHCommand(client, cmd)
+	output, err := s.hostService.ExecuteSSHCommand(client, cmd)
 	if err == nil && strings.Contains(output, task.ComponentName) {
 		step.Output += fmt.Sprintf("Docker container started: %s\n", output)
 		return nil
@@ -775,7 +771,7 @@ func (s *ComponentVersionService) executeStartService(client *ssh.Client, task *
 	
 	// 尝试启动 systemd 服务
 	cmd = fmt.Sprintf("systemctl start %s", task.ComponentName)
-	output, err = s.hostService.executeSSHCommand(client, cmd)
+	output, err = s.hostService.ExecuteSSHCommand(client, cmd)
 	if err != nil {
 		return fmt.Errorf("failed to start service: %v", err)
 	}
@@ -797,7 +793,7 @@ func (s *ComponentVersionService) executeHealthCheck(client *ssh.Client, task *C
 	// 执行组件特定的健康检查
 	healthCmd := s.getComponentHealthCheckCommand(task.ComponentName)
 	if healthCmd != "" {
-		output, err := s.hostService.executeSSHCommand(client, healthCmd)
+		output, err := s.hostService.ExecuteSSHCommand(client, healthCmd)
 		if err != nil {
 			return fmt.Errorf("health check failed: %v", err)
 		}
@@ -828,7 +824,7 @@ func (s *ComponentVersionService) executePostCheck(client *ssh.Client, task *Com
 	// 检查日志中是否有错误
 	logCmd := s.getComponentLogCommand(task.ComponentName)
 	if logCmd != "" {
-		output, err := s.hostService.executeSSHCommand(client, logCmd)
+		output, err := s.hostService.ExecuteSSHCommand(client, logCmd)
 		if err == nil {
 			if strings.Contains(strings.ToLower(output), "error") || strings.Contains(strings.ToLower(output), "fatal") {
 				step.Output += fmt.Sprintf("Warning: Found errors in logs: %s\n", output)
@@ -840,7 +836,7 @@ func (s *ComponentVersionService) executePostCheck(client *ssh.Client, task *Com
 	
 	// 清理临时文件
 	cleanupCmd := fmt.Sprintf("rm -f /tmp/%s_* 2>/dev/null || true", task.ComponentName)
-	s.hostService.executeSSHCommand(client, cleanupCmd)
+	s.hostService.ExecuteSSHCommand(client, cleanupCmd)
 	
 	step.Output += "Post-upgrade check completed successfully"
 	return nil
@@ -856,7 +852,7 @@ func (s *ComponentVersionService) rollbackUpgrade(client *ssh.Client, task *Comp
 	// 恢复配置文件
 	if configBackupPath, exists := task.BackupPaths["config"]; exists {
 		cmd := fmt.Sprintf("cp -r %s/* /etc/%s/ 2>/dev/null || true", configBackupPath, task.ComponentName)
-		s.hostService.executeSSHCommand(client, cmd)
+		s.hostService.ExecuteSSHCommand(client, cmd)
 		s.addUpgradeLog(task, "Config files restored from backup")
 	}
 	
@@ -864,10 +860,10 @@ func (s *ComponentVersionService) rollbackUpgrade(client *ssh.Client, task *Comp
 	binaryPath := s.getComponentBinaryPath(task.ComponentName)
 	backupPattern := fmt.Sprintf("%s.backup_*", binaryPath)
 	cmd := fmt.Sprintf("ls -t %s 2>/dev/null | head -1", backupPattern)
-	if output, err := s.hostService.executeSSHCommand(client, cmd); err == nil && strings.TrimSpace(output) != "" {
+	if output, err := s.hostService.ExecuteSSHCommand(client, cmd); err == nil && strings.TrimSpace(output) != "" {
 		latestBackup := strings.TrimSpace(output)
 		cmd = fmt.Sprintf("cp %s %s", latestBackup, binaryPath)
-		s.hostService.executeSSHCommand(client, cmd)
+		s.hostService.ExecuteSSHCommand(client, cmd)
 		s.addUpgradeLog(task, "Binary file restored from backup")
 	}
 	

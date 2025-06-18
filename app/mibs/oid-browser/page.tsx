@@ -18,7 +18,7 @@ import {
   Copy, 
   Download, 
   Filter,
-  Tree,
+  TreePine as Tree,
   List,
   Star,
   BookOpen,
