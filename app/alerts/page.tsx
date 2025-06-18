@@ -36,8 +36,34 @@ export default function AlertsPage() {
   const [severityFilter, setSeverityFilter] = useState("all")
   const [statusFilter, setStatusFilter] = useState("all")
   const [selectedAlert, setSelectedAlert] = useState<Alert | null>(null)
+  const [alerts, setAlerts] = useState<Alert[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
-  const alerts: Alert[] = [
+  // 获取真实告警数据
+  const fetchAlerts = async () => {
+    try {
+      setIsLoading(true)
+      const response = await fetch('/api/alerts')
+      if (response.ok) {
+        const data = await response.json()
+        setAlerts(data.alerts || [])
+      } else {
+        setAlerts([]) // 没有数据时显示空列表
+      }
+    } catch (error) {
+      console.error('Failed to fetch alerts:', error)
+      setAlerts([]) // 错误时显示空列表
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchAlerts()
+  }, [])
+
+  // 移除硬编码的假数据，改为空数组
+  const hardcodedAlerts: Alert[] = [
     {
       id: "ALT-001",
       title: "High CPU Usage",

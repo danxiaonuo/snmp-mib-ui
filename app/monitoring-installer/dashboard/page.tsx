@@ -142,18 +142,18 @@ const fetchComponentMetrics = async () => {
   }
 }
 
-// Generate mock time series data (作为后备)
-const generateTimeSeriesData = (points: number, baseValue: number, variance: number): MetricData[] => {
-  const data: MetricData[] = []
-  const now = new Date()
-  
-  for (let i = points - 1; i >= 0; i--) {
-    const timestamp = new Date(now.getTime() - i * 60000).toISOString() // 每分钟一个点
-    const value = Math.max(0, baseValue + (Math.random() - 0.5) * variance)
-    data.push({ timestamp, value })
+// 获取真实时序数据
+const fetchTimeSeriesData = async (componentId: string, metric: string): Promise<MetricData[]> => {
+  try {
+    const response = await fetch(`/api/monitoring/metrics/${componentId}/${metric}`)
+    if (response.ok) {
+      const data = await response.json()
+      return data.metrics || []
+    }
+  } catch (error) {
+    console.error('Failed to fetch time series data:', error)
   }
-  
-  return data
+  return [] // 没有数据时返回空数组
 }
 
 // Helper function to generate initial component metrics
@@ -192,24 +192,69 @@ const generateInitialComponentMetrics = (
 };
 
 
-// Initial system overview - some parts will be dynamic
-const INITIAL_SYSTEM_OVERVIEW: SystemOverview = {
-  totalComponents: Object.keys(COMPONENT_CONFIGS).length,
-  healthyComponents: 0, // Will be calculated
-  warningComponents: 0, // Will be calculated
-  criticalComponents: 0, // Will be calculated
-  totalAlerts: 0, // Can be summed from components or be a separate mock value
-  activeIncidents: 0, // Mock or derived
-  dataIngestionRate: 12345, // Mock value
-  queryRate: 2870, // Mock value
-  storageUsed: 210, // Mock value
-  storageTotal: 500, // Mock value
-  networkTraffic: 1150, // Mock value
-  uptime: '0d 0h 0m' // Initial uptime, can be updated
-};
+// 获取真实系统概览数据
+const fetchSystemOverview = async (): Promise<SystemOverview> => {
+  try {
+    const response = await fetch('/api/monitoring/overview')
+    if (response.ok) {
+      const data = await response.json()
+      return data.overview || {
+        totalComponents: 0,
+        healthyComponents: 0,
+        warningComponents: 0,
+        criticalComponents: 0,
+        totalAlerts: 0,
+        activeIncidents: 0,
+        dataIngestionRate: 0,
+        queryRate: 0,
+        storageUsed: 0,
+        storageTotal: 0,
+        networkTraffic: 0,
+        uptime: '0d 0h 0m'
+      }
+    }
+  } catch (error) {
+    console.error('Failed to fetch system overview:', error)
+  }
+  // 返回空数据而不是假数据
+  return {
+    totalComponents: 0,
+    healthyComponents: 0,
+    warningComponents: 0,
+    criticalComponents: 0,
+    totalAlerts: 0,
+    activeIncidents: 0,
+    dataIngestionRate: 0,
+    queryRate: 0,
+    storageUsed: 0,
+    storageTotal: 0,
+    networkTraffic: 0,
+    uptime: '0d 0h 0m'
+  }
+}
 
-// Original MOCK_COMPONENT_METRICS for the first 4 components (can be used by generateInitialComponentMetrics)
-const ORIGINAL_MOCK_COMPONENT_METRICS: ComponentMetrics[] = [
+// 移除所有MOCK数据，改为从API获取
+const [componentMetrics, setComponentMetrics] = useState<ComponentMetrics[]>([])
+const [systemOverview, setSystemOverview] = useState<SystemOverview | null>(null)
+
+// 获取真实组件指标数据
+const fetchComponentMetrics = async () => {
+  try {
+    const response = await fetch('/api/monitoring/components')
+    if (response.ok) {
+      const data = await response.json()
+      setComponentMetrics(data.components || [])
+    } else {
+      setComponentMetrics([]) // 无数据时显示空列表
+    }
+  } catch (error) {
+    console.error('Failed to fetch component metrics:', error)
+    setComponentMetrics([])
+  }
+}
+
+// 移除原来的MOCK数据定义
+const REMOVED_MOCK_COMPONENT_METRICS: ComponentMetrics[] = [
   {
     id: 'node-exporter', // This ID must match a key in COMPONENT_CONFIGS
     name: 'Node Exporter', // This will be overridden by COMPONENT_CONFIGS if logic is set up that way
