@@ -1,18 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git add:*)",
-      "Bash(git commit:*)",
-      "Bash(rm:*)",
-      "Bash(npm run type-check:*)",
-      "Bash(npm run lint)",
-      "Bash(ls:*)",
-      "Bash(docker-compose:*)",
-      "Bash(chmod:*)",
-      "Bash(bash:*)",
-      "Bash(/etc/opt/snmp-mib-ui-main/fix-git-and-pr.sh:*)",
-      "Bash(gh pr list:*)",
-      "Bash(/etc/opt/snmp-mib-ui-main/create-pr.sh:*)"
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:flashcat.cloud)"
     ],
     "deny": []
   }

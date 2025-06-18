@@ -32,6 +32,8 @@ import {
 } from "lucide-react"
 
 import { ConfigDeploymentFlow } from './components/ConfigDeploymentFlow'
+import { ServerConfigWizard } from '@/components/server-config-wizard'
+import { ALL_CONFIG_TEMPLATES, getTemplatesByType, renderConfigTemplate, ConfigTemplate } from '@/lib/config-templates'
 
 // Enhanced OID data structure with intelligence features
 interface EnhancedOID {
@@ -54,19 +56,16 @@ interface EnhancedOID {
 }
 
 export default function ConfigGenPage() {
-  const [selectedMib, setSelectedMib] = useState("")
-  const [selectedOids, setSelectedOids] = useState<string[]>([])
-  const [configType, setConfigType] = useState("snmp_exporter")
-  const [deviceTemplate, setDeviceTemplate] = useState("")
-  const [configName, setConfigName] = useState("")
+  const [configType, setConfigType] = useState("server_wizard")
+  const [selectedTemplate, setSelectedTemplate] = useState<ConfigTemplate | null>(null)
+  const [templateParameters, setTemplateParameters] = useState<Record<string, any>>({})
   const [generatedConfig, setGeneratedConfig] = useState("")
+  const [configName, setConfigName] = useState("")
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("all")
-  const [selectedComplexity, setSelectedComplexity] = useState("all")
-  const [sortBy, setSortBy] = useState("importance")
-  const [showRecommendedOnly, setShowRecommendedOnly] = useState(false)
   const [showDeploymentFlow, setShowDeploymentFlow] = useState(false)
+  
+  // 获取当前类型的模板
+  const availableTemplates = getTemplatesByType(configType)
 
   // 配置模板数据
   const configTemplates = [
@@ -1047,6 +1046,18 @@ ${oid.oid}
                         <span className="ml-2 font-medium">{selectedOids.length}</span>
                       </div>
                     </div>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="categraf" className="space-y-6">
+                  <div className="text-center py-8">
+                    <p className="text-muted-foreground">Categraf配置生成功能开发中...</p>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="prometheus" className="space-y-6">
+                  <div className="text-center py-8">
+                    <p className="text-muted-foreground">Prometheus配置生成功能开发中...</p>
                   </div>
                 </TabsContent>
               </Tabs>

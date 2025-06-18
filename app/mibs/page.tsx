@@ -6,6 +6,7 @@ import { useAutoRefresh } from "@/hooks/use-auto-refresh"
 import { useGlobalShortcuts, usePageShortcuts } from "@/hooks/use-keyboard-shortcuts"
 import { AutoRefreshIndicator } from "@/components/enhanced-ui/auto-refresh-indicator"
 import { DragDropZone, FileList } from "@/components/enhanced-ui/drag-drop-zone"
+import { FolderOpen, Archive } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -32,6 +33,9 @@ export default function MIBsPage() {
   const [uploadFiles, setUploadFiles] = useState<File[]>([])
   const [isViewDialogOpen, setIsViewDialogOpen] = useState(false)
   const [selectedMIB, setSelectedMIB] = useState<any>(null)
+  const [folderPath, setFolderPath] = useState("")
+  const [isProcessingZip, setIsProcessingZip] = useState(false)
+  const [zipProgress, setZipProgress] = useState(0)
 
   // 启用快捷键
   useGlobalShortcuts()
