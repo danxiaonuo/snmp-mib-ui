@@ -1,48 +1,103 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+const BACKEND_URL = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { templateId, hosts, config, parameters } = body
-
-    // 模拟配置部署逻辑
-    console.log('部署配置:', {
-      templateId,
-      hostCount: hosts.length,
-      configSize: config.length,
-      parameters
+    
+    // 根据配置类型转发到相应的后端API
+    const { configType, ...otherData } = body
+    
+    let backendEndpoint: string
+    switch (configType) {
+      case 'monitoring':
+        backendEndpoint = `${BACKEND_URL}/api/v1/config-deployment/monitoring`
+        break
+      case 'alerting':
+        backendEndpoint = `${BACKEND_URL}/api/v1/config-deployment/alerting`
+        break
+      case 'snmp':
+        backendEndpoint = `${BACKEND_URL}/api/v1/config-deployment/snmp`
+        break
+      default:
+        // 通用配置部署任务
+        backendEndpoint = `${BACKEND_URL}/api/v1/config-deployment/tasks`
+        break
+    }
+    
+    const backendResponse = await fetch(backendEndpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': request.headers.get('Authorization') || '',
+      },
+      body: JSON.stringify(body),
     })
 
-    // 这里应该实现实际的配置部署逻辑：
-    // 1. 验证主机连接性
-    // 2. 备份现有配置
-    // 3. 部署新配置
-    // 4. 验证配置有效性
-    // 5. 重启相关服务
+    const responseData = await backendResponse.json()
 
-    // 模拟部署过程
-    const deploymentResults = hosts.map((hostId: string) => ({
-      hostId,
-      status: 'success',
-      message: '配置部署成功',
-      timestamp: new Date().toISOString()
-    }))
-
-    return NextResponse.json({
-      success: true,
-      deploymentId: `deploy_${Date.now()}`,
-      results: deploymentResults,
-      summary: {
-        total: hosts.length,
-        successful: deploymentResults.filter(r => r.status === 'success').length,
-        failed: deploymentResults.filter(r => r.status === 'failed').length
-      }
+    return NextResponse.json(responseData, {
+      status: backendResponse.status,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      },
     })
   } catch (error) {
-    console.error('配置部署失败:', error)
+    console.error('Config deployment API error:', error)
     return NextResponse.json(
-      { success: false, error: '配置部署失败' },
+      { 
+        success: false, 
+        error: 'Failed to deploy configuration',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     )
   }
+}
+
+export async function GET(request: NextRequest) {
+  try {
+    // 获取配置部署模板
+    const backendResponse = await fetch(`${BACKEND_URL}/api/v1/config-deployment/templates`, {
+      method: 'GET',
+      headers: {
+        'Authorization': request.headers.get('Authorization') || '',
+      },
+    })
+
+    const responseData = await backendResponse.json()
+
+    return NextResponse.json(responseData, {
+      status: backendResponse.status,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      },
+    })
+  } catch (error) {
+    console.error('Config templates API error:', error)
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: 'Failed to get config templates',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 500 }
+    )
+  }
+}
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    },
+  })
 }
