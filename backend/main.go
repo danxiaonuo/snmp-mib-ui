@@ -86,6 +86,9 @@ func main() {
 	hostController := controllers.NewHostController(hostService)
 	deploymentController := controllers.NewDeploymentController(deploymentService, hostService)
 	configDeploymentController := controllers.NewConfigDeploymentController(configDeploymentService, hostService)
+	sshController := controllers.NewSSHController(hostService)
+	configValidationController := controllers.NewConfigValidationController()
+	alertDeploymentController := controllers.NewAlertDeploymentController(hostService, configDeploymentService)
 
 
 
@@ -206,6 +209,35 @@ func main() {
 			configDeploy.POST("/monitoring", configDeploymentController.DeployMonitoringConfig)
 			configDeploy.POST("/alerting", configDeploymentController.DeployAlertingConfig)
 			configDeploy.POST("/snmp", configDeploymentController.DeploySNMPConfig)
+		}
+
+		// SSH操作API
+		ssh := api.Group("/ssh")
+		{
+			ssh.POST("/test", sshController.TestSSHConnection)
+			ssh.POST("/execute", sshController.ExecuteSSHCommand)
+			ssh.POST("/upload", sshController.UploadFile)
+		}
+
+		// 配置验证API
+		validation := api.Group("/validation")
+		{
+			validation.POST("/prometheus", configValidationController.ValidatePrometheusConfig)
+			validation.POST("/alertmanager", configValidationController.ValidateAlertmanagerConfig)
+			validation.POST("/snmp-exporter", configValidationController.ValidateSNMPExporterConfig)
+			validation.POST("/categraf", configValidationController.ValidateCategrafConfig)
+			validation.POST("/vmalert", configValidationController.ValidateVMAlertConfig)
+			validation.POST("/promql", configValidationController.ValidatePromQL)
+			validation.POST("/yaml", configValidationController.ValidateYAMLSyntax)
+			validation.POST("/toml", configValidationController.ValidateTOMLSyntax)
+		}
+
+		// 增强告警部署API
+		alertDeployment := api.Group("/alert-deployment")
+		{
+			alertDeployment.POST("/deploy", alertDeploymentController.DeployAlertRules)
+			alertDeployment.POST("/deploy-mixed", alertDeploymentController.DeployToMixedSystems)
+			alertDeployment.GET("/predefined-rules", alertDeploymentController.GetPredefinedAlertRules)
 		}
 	}
 

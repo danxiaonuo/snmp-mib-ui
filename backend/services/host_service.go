@@ -333,21 +333,21 @@ func (s *HostService) gatherSystemInfo(host *models.Host, task *models.HostDisco
 	}
 
 	// 尝试 SSH 连接
-	client, err := s.createSSHClient(host.IP, host.Port, task.Username, password, privateKey)
+	client, err := s.CreateSSHClient(host.IP, host.Port, task.Username, password, privateKey)
 	if err != nil {
 		return
 	}
 	defer client.Close()
 
 	// 获取系统信息
-	if hostname, err := s.executeSSHCommand(client, "hostname"); err == nil {
+	if hostname, err := s.ExecuteSSHCommand(client, "hostname"); err == nil {
 		host.Hostname = strings.TrimSpace(hostname)
 		if host.Name == "" {
 			host.Name = host.Hostname
 		}
 	}
 
-	if osInfo, err := s.executeSSHCommand(client, "uname -a"); err == nil {
+	if osInfo, err := s.ExecuteSSHCommand(client, "uname -a"); err == nil {
 		parts := strings.Fields(osInfo)
 		if len(parts) >= 3 {
 			host.OS = parts[0]
@@ -359,21 +359,21 @@ func (s *HostService) gatherSystemInfo(host *models.Host, task *models.HostDisco
 	}
 
 	// 获取 CPU 信息
-	if cpuInfo, err := s.executeSSHCommand(client, "nproc"); err == nil {
+	if cpuInfo, err := s.ExecuteSSHCommand(client, "nproc"); err == nil {
 		if cores, err := strconv.Atoi(strings.TrimSpace(cpuInfo)); err == nil {
 			host.CPUCores = cores
 		}
 	}
 
 	// 获取内存信息 (MB)
-	if memInfo, err := s.executeSSHCommand(client, "free -m | grep '^Mem:' | awk '{print $2}'"); err == nil {
+	if memInfo, err := s.ExecuteSSHCommand(client, "free -m | grep '^Mem:' | awk '{print $2}'"); err == nil {
 		if memory, err := strconv.ParseInt(strings.TrimSpace(memInfo), 10, 64); err == nil {
 			host.Memory = memory
 		}
 	}
 
 	// 获取磁盘信息 (GB)
-	if diskInfo, err := s.executeSSHCommand(client, "df -BG / | tail -1 | awk '{print $2}' | sed 's/G//'"); err == nil {
+	if diskInfo, err := s.ExecuteSSHCommand(client, "df -BG / | tail -1 | awk '{print $2}' | sed 's/G//'"); err == nil {
 		if disk, err := strconv.ParseInt(strings.TrimSpace(diskInfo), 10, 64); err == nil {
 			host.Disk = disk
 		}
@@ -390,7 +390,7 @@ func (s *HostService) gatherSystemInfo(host *models.Host, task *models.HostDisco
 	}
 }
 
-func (s *HostService) createSSHClient(host string, port int, username, password, privateKey string) (*ssh.Client, error) {
+func (s *HostService) CreateSSHClient(host string, port int, username, password, privateKey string) (*ssh.Client, error) {
 	config := &ssh.ClientConfig{
 		User:            username,
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
@@ -412,7 +412,7 @@ func (s *HostService) createSSHClient(host string, port int, username, password,
 	return ssh.Dial("tcp", fmt.Sprintf("%s:%d", host, port), config)
 }
 
-func (s *HostService) executeSSHCommand(client *ssh.Client, command string) (string, error) {
+func (s *HostService) ExecuteSSHCommand(client *ssh.Client, command string) (string, error) {
 	session, err := client.NewSession()
 	if err != nil {
 		return "", err
@@ -482,7 +482,7 @@ func (s *HostService) TestHostConnection(id uint) (map[string]interface{}, error
 	}
 
 	if host.Username != "" {
-		client, err := s.createSSHClient(host.IP, host.Port, host.Username, host.Password, host.PrivateKey)
+		client, err := s.CreateSSHClient(host.IP, host.Port, host.Username, host.Password, host.PrivateKey)
 		if err != nil {
 			sshResult["message"] = fmt.Sprintf("SSH connection failed: %v", err)
 		} else {
