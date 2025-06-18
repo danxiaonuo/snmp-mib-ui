@@ -1,62 +1,134 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+const BACKEND_URL = process.env.BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { operationId, hosts, parameters } = body
-
-    // 模拟批量操作执行逻辑
-    console.log('执行批量操作:', {
-      operationId,
-      hostCount: hosts.length,
-      parameters
-    })
-
-    // 这里应该实现实际的批量操作逻辑：
-    // 1. 验证操作权限
-    // 2. 连接到目标主机
-    // 3. 执行指定操作
-    // 4. 收集执行结果
-    // 5. 记录操作日志
-
-    // 模拟执行结果
-    const executionResults = hosts.map((hostId: string) => {
-      // 模拟成功率（90%成功）
-      const success = Math.random() > 0.1
-      
-      return {
-        hostId,
-        host: `host-${hostId}`,
-        status: success ? 'success' : 'failed',
-        success,
-        message: success ? '操作执行成功' : '操作执行失败',
-        output: success ? 'Command executed successfully' : 'Error: Connection timeout',
-        timestamp: new Date().toISOString(),
-        duration: Math.floor(Math.random() * 30) + 5 // 5-35秒
-      }
-    })
-
-    // 生成操作摘要
-    const summary = {
-      total: hosts.length,
-      successful: executionResults.filter(r => r.success).length,
-      failed: executionResults.filter(r => !r.success).length,
-      operationId,
-      startTime: new Date().toISOString(),
-      estimatedCompletion: new Date(Date.now() + 60000).toISOString() // 1分钟后
+    const { operation, hostIds, components, configs, commands, ...otherData } = body
+    
+    const results = []
+    let overallSuccess = true
+    
+    switch (operation) {
+      case 'deploy_components':
+        // 批量组件部署
+        const deployResponse = await fetch(`${BACKEND_URL}/api/v1/deployment/batch`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': request.headers.get('Authorization') || '',
+          },
+          body: JSON.stringify({
+            host_ids: hostIds,
+            components: components
+          }),
+        })
+        
+        if (deployResponse.ok) {
+          const deployData = await deployResponse.json()
+          results.push({
+            operation: 'deploy_components',
+            success: true,
+            data: deployData
+          })
+        } else {
+          overallSuccess = false
+          results.push({
+            operation: 'deploy_components',
+            success: false,
+            error: 'Failed to deploy components'
+          })
+        }
+        break
+        
+      case 'ssh_commands':
+        // 批量SSH命令执行
+        for (const hostId of hostIds || []) {
+          // 获取主机信息
+          const hostResponse = await fetch(`${BACKEND_URL}/api/v1/hosts/${hostId}`, {
+            headers: {
+              'Authorization': request.headers.get('Authorization') || '',
+            },
+          })
+          
+          if (hostResponse.ok) {
+            const hostData = await hostResponse.json()
+            const host = hostData.data
+            
+            for (const command of commands || []) {
+              try {
+                const sshResponse = await fetch(`${BACKEND_URL}/api/v1/ssh/execute`, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': request.headers.get('Authorization') || '',
+                  },
+                  body: JSON.stringify({
+                    host: host.ip,
+                    port: host.port || 22,
+                    username: host.username,
+                    password: host.password,
+                    privateKey: host.private_key,
+                    command: command
+                  }),
+                })
+                
+                if (sshResponse.ok) {
+                  const sshData = await sshResponse.json()
+                  results.push({
+                    operation: 'ssh_command',
+                    host_id: hostId,
+                    host_ip: host.ip,
+                    command: command,
+                    success: sshData.success,
+                    stdout: sshData.stdout,
+                    stderr: sshData.stderr
+                  })
+                }
+              } catch (error) {
+                overallSuccess = false
+                results.push({
+                  operation: 'ssh_command',
+                  host_id: hostId,
+                  command: command,
+                  success: false,
+                  error: error instanceof Error ? error.message : 'Unknown error'
+                })
+              }
+            }
+          }
+        }
+        break
+        
+      default:
+        return NextResponse.json(
+          { 
+            success: false, 
+            error: 'Unsupported bulk operation'
+          },
+          { status: 400 }
+        )
     }
 
     return NextResponse.json({
-      success: true,
-      executionId: `exec_${Date.now()}`,
-      results: executionResults,
-      summary,
-      message: '批量操作已启动'
+      success: overallSuccess,
+      operation: operation,
+      results: results
+    }, {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      },
     })
   } catch (error) {
-    console.error('批量操作执行失败:', error)
+    console.error('Bulk operations API error:', error)
     return NextResponse.json(
-      { success: false, error: '批量操作执行失败' },
+      { 
+        success: false, 
+        error: 'Failed to execute bulk operations'
+      },
       { status: 500 }
     )
   }
