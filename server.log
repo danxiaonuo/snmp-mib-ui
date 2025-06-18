@@ -6395,3 +6395,93 @@ Translations not loaded for language: en
   syscall: 'open',
   path: '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'
 }
+ ⨯ [Error: EACCES: permission denied, open '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'
+}
+[Error: EACCES: permission denied, open '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'
+}
+[Error: EACCES: permission denied, open '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'
+}
+ ⨯ [Error: EACCES: permission denied, open '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'
+}
+[Error: EACCES: permission denied, open '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'
+}
+[Error: EACCES: permission denied, open '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'
+}
+ ⨯ [Error: EACCES: permission denied, open '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'
+}
+[Error: EACCES: permission denied, open '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'
+}
+[Error: EACCES: permission denied, open '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'
+}
+ ⨯ [Error: EACCES: permission denied, open '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'
+}
+[Error: EACCES: permission denied, open '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'
+}
+[Error: EACCES: permission denied, open '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'
+}
+ ⨯ [Error: EACCES: permission denied, open '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'
+}
+[Error: EACCES: permission denied, open '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'
+}
+[Error: EACCES: permission denied, open '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'] {
+  errno: -13,
+  code: 'EACCES',
+  syscall: 'open',
+  path: '/etc/opt/snmp-mib-ui-main/.next/static/chunks/app/layout.js'
+}

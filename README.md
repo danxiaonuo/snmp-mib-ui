@@ -1,371 +1,274 @@
-# 🌐 企业级SNMP监控平台
+# 🌐 SNMP 网络监控平台
 
 <div align="center">
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Next.js](https://img.shields.io/badge/Next.js-15+-black.svg)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-15-black.svg)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
+[![Go](https://img.shields.io/badge/Go-1.23-00ADD8.svg)](https://golang.org/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg)](https://www.docker.com/)
 [![Production Ready](https://img.shields.io/badge/Production-Ready-success.svg)](#)
-[![Real Data](https://img.shields.io/badge/Real-Data%20Only-brightgreen.svg)](#)
 
 **[🇨🇳 中文](README.md) | [🇺🇸 English](README_EN.md)**
 
 </div>
 
-> 🚀 **生产就绪的真实SNMP网络监控解决方案** - 基于Next.js 15构建的现代化企业级监控平台
+> 🚀 **企业级SNMP网络设备监控和管理平台** - 基于现代化技术栈构建的生产级解决方案
 
 ## ✨ 核心特色
 
-### 🎯 **100%真实数据监控**
-- ✅ **零模拟数据** - 所有数据来自真实SNMP设备查询
-- ✅ **官方标准配置** - 完全符合snmp-exporter和categraf官方规范
-- ✅ **实际设备发现** - 真实网络扫描和设备识别
-- ✅ **真实配置部署** - 实际文件操作和远程部署
+### 🎯 **完整的监控功能**
+- 📊 **设备发现与管理** - 自动发现和管理网络设备
+- 📈 **实时监控** - 基于SNMP协议的实时数据采集
+- 🚨 **智能告警** - 灵活的告警规则和通知系统
+- 📁 **MIB管理** - 完整的MIB文件管理和OID浏览
+- ⚙️ **配置生成** - 自动生成监控配置文件
 
-### 🚀 **生产级功能完整性**
-- 📊 **增强的OID库管理** - 完整的厂商特定OID支持 (Cisco, H3C, 华为)
-- 🔄 **配置版本管理** - Git风格的版本控制和配置对比
-- 🏭 **批量设备管理** - 支持并行/顺序/滚动部署策略
-- 📡 **实时监控预览** - WebSocket实时数据流和多厂商模板
-- 🚨 **智能告警规则** - 自动优化和Prometheus/VMAlert集成
-- 🔒 **安全合规扫描** - 全面的配置安全检查和自动修复
-- ⚡ **性能基准测试** - 自动化性能测试和优化建议
-- 🎛️ **系统集成管理** - 工作流自动化和系统健康监控
+### 🏭 **企业级特性**
+- 🔐 **多用户支持** - 完整的用户权限管理系统
+- 🌐 **多语言界面** - 支持中文和英文
+- 📱 **响应式设计** - 完美支持桌面和移动设备
+- 🎨 **现代化UI** - 基于最新设计规范的用户界面
+- 🚀 **高性能** - 优化的数据库查询和缓存策略
 
-## 🎛️ 系统架构
+### 🔧 **技术栈**
+- **前端**: Next.js 15 + React 19 + TypeScript + Tailwind CSS
+- **后端**: Go 1.23 + Gin + GORM + PostgreSQL
+- **缓存**: Redis
+- **部署**: Docker + Docker Compose
+- **监控**: Prometheus + Grafana (可选)
 
-### 📁 核心功能模块
-
-```
-Enhanced Features/
-├── 📊 enhanced-oid-manager.ts          # OID数据库和厂商映射
-├── 🔄 config-version-manager.ts        # Git风格配置版本控制  
-├── 🏭 batch-device-manager.ts          # 自动设备发现和批量管理
-├── 📡 real-time-monitoring-preview.ts  # WebSocket实时监控
-├── 🚨 advanced-alert-rules-manager.ts  # 智能告警规则引擎
-├── 🔒 config-compliance-scanner.ts     # 安全合规扫描系统
-├── ⚡ performance-benchmark-optimizer.ts # 性能测试和优化
-├── 🎛️ system-integration-manager.ts    # 系统集成和健康监控
-├── 🎨 enhanced-frontend-components.tsx # 完整React组件库
-└── 🔌 api-integration-routes.ts        # 统一API路由系统
-```
-
-### 🌐 系统访问地址
-
-| 功能模块 | 访问地址 | 说明 |
-|---------|---------|------|
-| 🏠 **主仪表板** | http://localhost:3000/dashboard | 增强的系统监控仪表板 |
-| 🔧 **设备管理** | http://localhost:3000/devices | 真实设备发现和管理 |
-| 📡 **实时监控** | http://localhost:3000/monitoring | WebSocket实时数据监控 |
-| ⚡ **性能分析** | http://localhost:3000/performance | 性能基准测试和优化 |
-| 🔒 **安全合规** | http://localhost:3000/compliance | 配置安全扫描和合规 |
-| 🩺 **系统健康** | http://localhost:3000/api/system/health | 系统健康状态API |
-
-## 🚀 快速部署
+## 🚀 快速开始
 
 ### 📋 系统要求
 
-- **操作系统**: Ubuntu 20.04+ / CentOS 8+ / Debian 11+
-- **内存**: 最低4GB，推荐8GB+
-- **存储**: 最低50GB可用空间
-- **Node.js**: 18.0+
-- **依赖**: SNMP工具、ssh2、js-yaml、toml、ws
+- **操作系统**: Linux / macOS / Windows
+- **内存**: 4GB+ (推荐8GB)
+- **存储**: 20GB+ 可用空间
+- **软件**: Docker 20.10+ 和 Docker Compose 2.0+
 
 ### ⚡ 一键部署
 
 ```bash
 # 1. 克隆项目
-git clone <your-repository-url>
-cd snmp-mib-ui-main
+git clone https://github.com/your-username/snmp-mib-ui.git
+cd snmp-mib-ui
 
-# 2. 安装系统依赖
-sudo apt-get update
-sudo apt-get install -y snmp snmp-mibs-downloader net-tools curl wget git
-sudo apt-get install -y python3 python3-pip nodejs npm
-sudo apt-get install -y prometheus grafana
+# 2. 一键部署 (推荐)
+./deploy.sh
 
-# 3. 安装Node.js依赖
-npm install --legacy-peer-deps ssh2 js-yaml toml ws @types/ssh2 @types/ws
-
-# 4. 启动系统
-npm run dev
-
-# 🎉 部署完成！
-open http://localhost:3000/dashboard
+# 3. 或使用生产级部署
+./scripts/production-deployment.sh
 ```
 
-### 📊 功能验证
+### 🔧 手动部署
 
 ```bash
-# 系统健康检查
-curl -X GET http://localhost:3000/api/system/health
+# 1. 复制环境配置
+cp .env.example .env
 
-# 设备管理测试
-curl -X GET http://localhost:3000/api/devices/list
+# 2. 启动服务
+docker-compose up -d
 
-# 监控会话测试  
-curl -X GET http://localhost:3000/api/monitoring/sessions
+# 3. 等待服务就绪 (约2-3分钟)
+docker-compose logs -f
 
-# 告警规则测试
-curl -X GET http://localhost:3000/api/alerts/rules
-
-# 合规扫描测试
-curl -X GET http://localhost:3000/api/compliance/rules
-
-# 性能基准测试
-curl -X GET http://localhost:3000/api/performance/benchmarks
+# 4. 访问系统
+open http://localhost:3000
 ```
 
-## 📖 核心功能详解
+### 📱 访问地址
 
-### 🔍 **真实设备发现系统**
+部署完成后，您可以通过以下地址访问系统：
 
-```typescript
-// 自动设备发现
-const devices = await batchDeviceManager.discoverDevices(
-  "192.168.1.1-50",    // IP范围
-  "public",            // SNMP Community
-  "2c"                 // SNMP版本
-);
+| 服务 | 地址 | 说明 |
+|------|------|------|
+| 🌐 **Web界面** | http://localhost:3000 | 主要管理界面 |
+| 🔌 **API接口** | http://localhost:8080 | RESTful API |
+| 🏥 **健康检查** | http://localhost:3000/api/health | 系统状态检查 |
 
-// 真实设备测试
-const result = await realTimeMonitoringPreview.testDeviceMetrics(
-  deviceId,
-  deviceConfig,
-  templateId
-);
-```
+## 📖 功能介绍
 
-### 📊 **配置版本管理**
+### 🎛️ 核心功能模块
 
-```typescript
-// Git风格版本控制
-const version = await configVersionManager.createVersion(
-  configName,
-  "snmp_exporter",    // 配置类型
-  configContent,
-  "admin",            // 作者
-  "Production config" // 描述
-);
+#### 📊 设备管理 (`/devices`)
+- **设备发现**: 自动扫描和发现网络中的SNMP设备
+- **设备注册**: 手动添加设备和批量导入
+- **状态监控**: 实时显示设备在线状态和关键指标
+- **分组管理**: 按网段、类型或用途对设备进行分组
 
-// 配置差异对比
-const comparison = await configVersionManager.compareVersions(
-  fromVersionId,
-  toVersionId
-);
-```
+#### 📁 MIB管理 (`/mibs`)
+- **文件上传**: 支持拖拽上传MIB文件
+- **解析验证**: 自动解析MIB文件并验证语法
+- **OID浏览**: 树形结构浏览OID对象
+- **搜索功能**: 快速搜索MIB对象和描述
 
-### 🏭 **批量设备部署**
+#### ⚙️ 配置生成 (`/config-gen`)
+- **SNMP Exporter**: 生成Prometheus SNMP Exporter配置
+- **Categraf**: 生成Categraf监控配置
+- **模板管理**: 预定义和自定义配置模板
+- **批量生成**: 支持批量设备配置生成
 
-```typescript
-// 批量配置部署
-const job = await batchDeviceManager.deployConfigBatch(
-  { deviceIds: ["device_001", "device_002"] },
-  "snmp_exporter",
-  configVersionId,
-  {
-    mode: "parallel",         // 并行部署
-    batchSize: 10,           // 批次大小
-    rollbackOnFailure: true, // 失败回滚
-    maxFailureRate: 0.1      // 最大失败率
-  }
-);
-```
+#### 🚨 告警管理 (`/alert-rules`)
+- **规则编辑**: 可视化的告警规则编辑器
+- **多种通知**: 邮件、短信、Webhook等通知方式
+- **告警历史**: 完整的告警记录和统计
+- **抑制规则**: 智能的告警抑制和聚合
 
-### 📡 **实时监控系统**
+#### 🛠️ 监控安装 (`/monitoring-installer`)
+- **智能安装**: 自动检测和安装监控组件
+- **远程部署**: SSH远程部署到目标主机
+- **状态检查**: 实时监控安装进度和组件状态
+- **配置管理**: 统一管理监控配置文件
 
-```typescript
-// WebSocket实时监控
-const session = await realTimeMonitoringPreview.createMonitoringSession(
-  deviceIds,
-  templateId,
-  customOids,
-  {
-    enableAlerts: true,
-    exportFormat: "prometheus"
-  }
-);
-```
+#### 🔧 工具集 (`/tools`)
+- **SNMP浏览器**: 实时查询SNMP设备数据
+- **批量操作**: 批量设备配置和管理
+- **配置对比**: 配置文件版本对比和差异分析
+- **性能测试**: 设备响应性能测试工具
 
-### 🔒 **安全合规扫描**
+### 🎨 用户界面特性
 
-```typescript
-// 配置安全扫描
-const report = await configComplianceScanner.scanConfiguration(
-  "/etc/snmp_exporter/snmp.yml",
-  "production_security",
-  { autoFix: false }
-);
-```
+- **🌓 主题切换**: 支持明亮和暗黑主题
+- **📱 移动优化**: 完美的移动端体验
+- **🔍 智能搜索**: 全局搜索和快速导航
+- **📊 数据可视化**: 丰富的图表和仪表板
+- **⌨️ 快捷键**: 完整的键盘快捷键支持
 
-### ⚡ **性能基准测试**
+## 🏗️ 架构设计
 
-```typescript
-// 性能测试
-const result = await performanceBenchmarkOptimizer.runBenchmark(
-  "snmp_performance_test"
-);
-
-// 优化建议
-const optimizations = performanceBenchmarkOptimizer.getOptimizations();
-```
-
-## 🏗️ 技术架构
-
-### 🎯 **技术栈**
-- **前端**: Next.js 15 + React 19 + TypeScript + Tailwind CSS
-- **后端**: Node.js + RESTful API + WebSocket
-- **监控**: 支持snmp-exporter + categraf + Prometheus + Grafana
-- **数据库**: 文件系统存储 + JSON配置
-- **实时通信**: WebSocket + 事件驱动
-- **部署**: SSH + 远程配置管理
-
-### 📁 **项目结构**
+### 📁 项目结构
 
 ```
-snmp-mib-ui-main/
-├── lib/enhanced/                    # 🎯 核心功能库
-│   ├── enhanced-oid-manager.ts      # OID数据库管理
-│   ├── config-version-manager.ts    # 配置版本控制
-│   ├── batch-device-manager.ts      # 批量设备管理
-│   ├── real-time-monitoring-preview.ts  # 实时监控
-│   ├── advanced-alert-rules-manager.ts  # 告警规则
-│   ├── config-compliance-scanner.ts     # 合规扫描
-│   ├── performance-benchmark-optimizer.ts  # 性能测试
-│   └── system-integration-manager.ts       # 系统集成
-├── components/enhanced/             # 🎨 前端组件
-│   └── enhanced-frontend-components.tsx
-├── app/api/enhanced/               # 🔌 API路由
-│   └── api-integration-routes.ts
-├── app/{dashboard,devices,monitoring,performance,compliance}/ # 📱 页面
-└── /etc/snmp-configs/              # 💾 数据存储
-    ├── versions/                   # 配置版本
-    ├── devices/                    # 设备管理
-    ├── alerts/                     # 告警规则
-    ├── compliance/                 # 合规检查
-    └── performance/                # 性能测试
+snmp-mib-ui/
+├── app/                    # Next.js 应用目录
+│   ├── api/               # API 路由
+│   ├── components/        # React 组件
+│   ├── devices/           # 设备管理页面
+│   ├── mibs/              # MIB管理页面
+│   ├── config-gen/        # 配置生成页面
+│   └── ...
+├── backend/               # Go 后端服务
+│   ├── controllers/       # 控制器
+│   ├── models/           # 数据模型
+│   ├── services/         # 业务逻辑
+│   └── utils/            # 工具函数
+├── components/            # 共享组件
+├── lib/                  # 工具库
+├── types/                # TypeScript 类型定义
+├── docker-compose.yml    # Docker 编排文件
+├── deploy.sh            # 一键部署脚本
+└── README.md            # 项目文档
 ```
 
-## 🌟 生产特性
+### 🌐 技术架构
 
-### ✅ **真实数据保证**
-- 🚫 **零模拟数据** - 所有设备数据来自真实SNMP查询
-- 📡 **真实监控指标** - 实际设备数据采集和展示
-- 🏭 **标准配置** - 完全符合snmp-exporter和categraf官方规范
-- 🚀 **实际部署** - 真实的SSH文件操作和远程部署
-
-### 🛡️ **企业级可靠性**
-- 🔄 **完整错误处理** - 全面的异常处理和恢复机制
-- 📝 **详细日志记录** - 系统操作和监控日志
-- 🔒 **安全权限控制** - 细粒度访问控制
-- ⚡ **高性能设计** - 支持大规模设备监控
-
-### 🎛️ **运维友好**
-- 🤖 **自动化工作流** - 预定义的运维自动化任务
-- 📊 **系统健康监控** - 实时系统状态和性能监控
-- 🔧 **智能优化建议** - 自动化性能优化建议
-- 📈 **容量规划** - 系统资源使用分析
-
-## 📊 API接口文档
-
-### 🌐 **核心API端点**
-
-```bash
-# 系统管理
-GET    /api/system/health           # 系统健康状态
-GET    /api/system/config           # 系统配置
-POST   /api/system/workflows        # 执行工作流
-
-# 设备管理
-GET    /api/devices/list            # 设备列表
-POST   /api/devices/discover        # 设备发现
-POST   /api/devices/deploy          # 配置部署
-POST   /api/devices/test            # 设备测试
-
-# 配置管理
-GET    /api/config/versions         # 配置版本
-POST   /api/config/compare          # 配置对比
-POST   /api/config/validate         # 配置验证
-
-# 监控管理
-GET    /api/monitoring/sessions     # 监控会话
-POST   /api/monitoring/test         # 监控测试
-GET    /api/monitoring/templates    # 监控模板
-
-# 告警管理
-GET    /api/alerts/rules            # 告警规则
-POST   /api/alerts/deploy           # 规则部署
-GET    /api/alerts/optimize         # 优化建议
-
-# 合规管理
-POST   /api/compliance/scan         # 合规扫描
-GET    /api/compliance/rules        # 合规规则
-GET    /api/compliance/reports      # 合规报告
-
-# 性能管理
-GET    /api/performance/benchmarks  # 性能基准
-POST   /api/performance/run         # 运行测试
-GET    /api/performance/optimizations  # 优化建议
+```mermaid
+graph TB
+    A[Web Browser] --> B[Next.js Frontend]
+    B --> C[Go Backend API]
+    C --> D[PostgreSQL Database]
+    C --> E[Redis Cache]
+    C --> F[SNMP Devices]
+    
+    G[Docker Compose] --> B
+    G --> C
+    G --> D
+    G --> E
+    
+    H[Monitoring Stack] --> I[Prometheus]
+    H --> J[Grafana]
+    H --> K[VictoriaMetrics]
 ```
 
 ## 🔧 配置说明
 
-### 🌍 **环境配置**
+### 🌍 环境变量
 
 ```bash
-# 系统配置文件: /etc/snmp-configs/system.json
-{
-  "environment": "production",
-  "features": {
-    "autoDiscovery": true,
-    "realTimeMonitoring": true,
-    "autoAlerts": true,
-    "complianceScanning": true,
-    "performanceTesting": true,
-    "autoOptimization": false
-  },
-  "thresholds": {
-    "deviceTimeout": 300,
-    "alertLatency": 1000,
-    "complianceScore": 80,
-    "performanceScore": 70
-  }
-}
+# 数据库配置
+DATABASE_URL=postgresql://user:pass@localhost:5432/snmp_platform
+POSTGRES_DB=snmp_platform
+POSTGRES_USER=snmp_user
+POSTGRES_PASSWORD=your_password
+
+# Redis配置
+REDIS_URL=redis://localhost:6379
+
+# 应用配置
+NEXT_PUBLIC_API_URL=http://localhost:8080
+JWT_SECRET=your-super-secret-jwt-key
+API_PORT=8080
+
+# SNMP配置
+SNMP_DEFAULT_COMMUNITY=public
+SNMP_DEFAULT_VERSION=2c
+SNMP_TIMEOUT=5s
 ```
 
-### 📡 **SNMP配置示例**
+### 🐳 Docker配置
+
+主要服务端口配置：
 
 ```yaml
-# snmp_exporter配置 (符合官方标准)
-modules:
-  cisco_switch:
-    walk:
-      - 1.3.6.1.2.1.1.1.0      # sysDescr
-      - 1.3.6.1.2.1.1.3.0      # sysUpTime
-      - 1.3.6.1.2.1.2.2.1.2    # ifDescr
-      - 1.3.6.1.2.1.2.2.1.8    # ifOperStatus
-    auth:
-      community: public
-      version: 2
+services:
+  frontend:     # 前端服务
+    ports: ["3000:3000"]
+  backend:      # 后端API
+    ports: ["8080:8080"]
+  postgres:     # 数据库
+    ports: ["5432:5432"]
+  redis:        # 缓存
+    ports: ["6379:6379"]
 ```
+
+## 📊 监控集成
+
+### 🔗 支持的监控系统
+
+- **Prometheus + SNMP Exporter**: 原生支持
+- **Categraf**: 完整集成
+- **VictoriaMetrics**: 推荐的时序数据库
+- **Grafana**: 可视化仪表板
+- **Zabbix**: 通过配置导出支持
+
+### 📈 监控指标
+
+- **设备指标**: CPU、内存、网络接口流量
+- **系统指标**: 应用性能、响应时间、错误率
+- **业务指标**: 设备在线率、告警统计
+- **基础设施**: 数据库性能、缓存命中率
 
 ## 🔒 安全特性
 
-- 🔐 **配置验证** - 严格的配置语法和安全检查
-- 🛡️ **权限控制** - 基于角色的访问控制
-- 📝 **操作审计** - 完整的操作日志记录
-- 🔒 **数据加密** - 敏感数据加密存储
-- 🚨 **安全扫描** - 自动化安全漏洞检测
+- **认证授权**: JWT令牌 + 会话管理
+- **权限控制**: 基于角色的访问控制(RBAC)
+- **数据加密**: 传输和存储数据加密
+- **安全审计**: 完整的操作日志记录
+- **输入验证**: 严格的输入参数验证
+- **SQL注入防护**: ORM框架安全查询
+
+## 📚 文档
+
+- **[部署指南](docs/deployment.md)**: 详细的部署说明
+- **[API文档](docs/api.md)**: 完整的API接口文档
+- **[开发指南](docs/development.md)**: 开发环境搭建
+- **[用户手册](docs/user-guide.md)**: 功能使用说明
+- **[常见问题](docs/faq.md)**: 常见问题解答
 
 ## 🤝 贡献指南
 
-### 🐛 **问题反馈**
-- 通过GitHub Issues提交Bug报告
-- 通过GitHub Discussions讨论新功能
-- 提供详细的复现步骤和环境信息
+我们欢迎社区贡献！请查看 [CONTRIBUTING.md](CONTRIBUTING.md) 了解详情。
 
-### 🔄 **开发流程**
-1. Fork 项目仓库
+### 🐛 问题报告
+
+- **Bug报告**: 通过 GitHub Issues 提交
+- **功能建议**: 通过 GitHub Discussions 讨论
+- **安全问题**: 请通过私有渠道联系
+
+### 🔄 开发流程
+
+1. Fork 项目
 2. 创建功能分支 (`git checkout -b feature/AmazingFeature`)
 3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
 4. 推送到分支 (`git push origin feature/AmazingFeature`)
@@ -373,28 +276,30 @@ modules:
 
 ## 📄 许可证
 
-本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
+本项目基于 MIT 许可证开源 - 查看 [LICENSE](LICENSE) 文件了解详情。
 
 ## 🙏 致谢
 
-感谢以下开源项目和标准的支持：
+感谢以下开源项目的支持：
 
-- [Next.js](https://nextjs.org/) - React全栈框架
-- [SNMP Exporter](https://github.com/prometheus/snmp_exporter) - Prometheus SNMP导出器
-- [Categraf](https://github.com/flashcatcloud/categraf) - 现代化监控代理
-- [TypeScript](https://www.typescriptlang.org/) - 类型安全的JavaScript
-- [Tailwind CSS](https://tailwindcss.com/) - 实用优先的CSS框架
+- [Next.js](https://nextjs.org/) - React 全栈框架
+- [Go](https://golang.org/) - 高性能后端语言
+- [PostgreSQL](https://postgresql.org/) - 关系型数据库
+- [Redis](https://redis.io/) - 内存数据库
+- [Tailwind CSS](https://tailwindcss.com/) - CSS 框架
+
+## 📞 联系方式
+
+- **项目主页**: [GitHub Repository](https://github.com/your-username/snmp-mib-ui)
+- **技术支持**: 通过 GitHub Issues 获取帮助
+- **文档**: 查看 docs 目录下的详细文档
 
 ---
 
 <div align="center">
 
-**🎯 特色亮点**
+**⭐ 如果这个项目对您有帮助，请给我们一个 Star！**
 
-✅ **100%真实数据** ✅ **官方标准配置** ✅ **生产就绪** ✅ **企业级功能**
-
-**⭐ 如果这个项目对您有帮助，请给我们一个Star！**
-
-**🚀 现代化企业级SNMP监控平台 - 真正的生产级解决方案**
+**🚀 SNMP网络监控平台 - 让网络监控变得简单高效**
 
 </div>
