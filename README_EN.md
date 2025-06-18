@@ -13,21 +13,29 @@
 
 </div>
 
-> 🚀 **Enterprise-grade SNMP network device monitoring and management platform** - Production-ready solution built with modern technology stack
+> 🚀 **Enterprise-grade SNMP network device monitoring and management platform** - Production-ready solution that actually captures real device data, built with modern technology stack
 
 ## ✨ Key Features
 
 ### 🎯 **Complete Monitoring Functions**
-- 📊 **Device Discovery & Management** - Automatically discover and manage network devices
-- 📈 **Real-time Monitoring** - Real-time data collection based on SNMP protocol
-- 🚨 **Intelligent Alerting** - Flexible alert rules and notification system
-- 📁 **MIB Management** - Complete MIB file management and OID browsing
-- ⚙️ **Configuration Generation** - Automatically generate monitoring configuration files
+- 📊 **Device Discovery & Management** - Auto-discover network devices with support for Cisco, Huawei, H3C and other major vendors
+- 📈 **Real-time Monitoring** - SNMP-based real-time data collection, supports v1/v2c/v3
+- 🚨 **Intelligent Alerting** - Multi-system alert deployment for Prometheus, VMAlert, and Alertmanager
+- 📁 **MIB Management** - Complete MIB file management and OID browser
+- ⚙️ **Configuration Automation** - Auto-generate SNMP Exporter, Categraf, VictoriaMetrics configurations
 
-### 🏭 **Enterprise Features**
+### 🏭 **Production-grade Features**
 - 🔐 **Multi-user Support** - Complete user permission management system
 - 🌐 **Multi-language Interface** - Support for Chinese and English
 - 📱 **Responsive Design** - Perfect support for desktop and mobile devices
+- 🎨 **Modern UI** - Built with latest design specifications
+- 🚀 **High Performance** - Optimized database queries and Redis caching
+
+### 🛠️ **DevOps Integration**
+- 🐳 **Containerized Deployment** - Complete Docker Compose one-click deployment
+- 🔄 **Automated Operations** - SSH remote configuration deployment and component management
+- 📊 **Monitoring Components** - Integrated Node Exporter, SNMP Exporter, Categraf, etc.
+- 🔧 **Batch Operations** - Support for batch device management and configuration deployment
 - 🎨 **Modern UI** - User interface based on latest design specifications
 - 🚀 **High Performance** - Optimized database queries and caching strategies
 
