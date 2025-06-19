@@ -95,12 +95,14 @@ start_services() {
 wait_for_services() {
     log_info "等待服务启动完成..."
     
-    # 等待健康检查
+    # 等待后端API就绪
     local max_attempts=60
     local attempt=0
     
+    log_info "检查后端API..."
     while [ $attempt -lt $max_attempts ]; do
-        if curl -s http://localhost:8080/health > /dev/null 2>&1; then
+        if curl -s http://localhost:17880/health > /dev/null 2>&1; then
+            log_success "后端API已就绪"
             break
         fi
         attempt=$((attempt + 1))
@@ -110,10 +112,29 @@ wait_for_services() {
     echo ""
     
     if [ $attempt -eq $max_attempts ]; then
-        log_warning "服务启动超时，请检查日志"
-    else
-        log_success "所有服务已就绪"
+        log_error "后端API启动超时"
+        return 1
     fi
+    
+    # 等待前端就绪
+    log_info "检查前端服务..."
+    attempt=0
+    while [ $attempt -lt 30 ]; do
+        if curl -s --max-time 3 http://localhost:12300/ > /dev/null 2>&1; then
+            log_success "前端服务已就绪"
+            break
+        fi
+        attempt=$((attempt + 1))
+        echo -n "."
+        sleep 3
+    done
+    echo ""
+    
+    if [ $attempt -eq 30 ]; then
+        log_warning "前端服务响应较慢，但可能正常运行"
+    fi
+    
+    log_success "所有服务已启动完成"
 }
 
 # 显示访问信息
@@ -124,16 +145,19 @@ show_access_info() {
     echo "======================================"
     echo ""
     echo "📱 服务访问地址："
-    echo "  🌐 Web 界面:      http://localhost:3000"
-    echo "  🔧 后端 API:      http://localhost:8080"
+    echo "  🌐 Web 界面:      http://localhost:12300"
+    echo "  🔧 后端 API:      http://localhost:17880"
+    echo ""
+    echo "🌍 外网访问配置："
+    echo "  如需外网访问，请运行: ./setup-external-access.sh"
     echo "  📊 Grafana:       http://localhost:3001 (admin/admin)"
     echo "  📈 VictoriaMetrics: http://localhost:8428"
     echo "  🚨 Alertmanager:  http://localhost:9093"
     echo ""
     echo "🔧 管理命令："
-    echo "  查看状态: docker-compose ps"
-    echo "  查看日志: docker-compose logs -f"
-    echo "  停止服务: docker-compose down"
+    echo "  查看状态: docker compose ps"
+    echo "  查看日志: docker compose logs -f"
+    echo "  停止服务: docker compose down"
     echo ""
     echo "📖 更多信息请查看 README.md"
     echo "======================================"
