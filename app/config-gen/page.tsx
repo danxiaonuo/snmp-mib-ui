@@ -63,6 +63,7 @@ export default function ConfigGenPage() {
   const [configName, setConfigName] = useState("")
   const [isPreviewOpen, setIsPreviewOpen] = useState(false)
   const [showDeploymentFlow, setShowDeploymentFlow] = useState(false)
+  const [deviceTemplate, setDeviceTemplate] = useState("generic")
   
   // 获取当前类型的模板
   const availableTemplates = getTemplatesByType(configType)

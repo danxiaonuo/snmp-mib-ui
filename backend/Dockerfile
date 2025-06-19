@@ -28,8 +28,8 @@ RUN go build -a -installsuffix cgo \
     -ldflags='-w -s -extldflags "-static"' \
     -o main .
 
-# Compress binary
-RUN upx --best --lzma main
+# Skip binary compression for better compatibility
+# RUN upx --best --lzma main
 
 # Development stage
 FROM alpine:latest AS development
