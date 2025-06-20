@@ -39,7 +39,8 @@
       "Bash(time docker build:*)",
       "Bash(timeout 300 docker-compose build --no-cache frontend)",
       "Bash(time curl:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(git remote get-url:*)"
     ],
     "deny": []
   }
