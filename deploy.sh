@@ -26,20 +26,73 @@ log_error() {
     echo -e "${RED}[ERROR]${NC} $1"
 }
 
+# 自动安装 Docker
+install_docker() {
+    log_info "安装 Docker..."
+    
+    # 检测操作系统
+    if command -v apt-get &> /dev/null; then
+        # Ubuntu/Debian
+        log_info "检测到 Ubuntu/Debian 系统，正在安装 Docker..."
+        sudo apt-get update
+        sudo apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+        sudo apt-get update
+        sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+        sudo systemctl start docker
+        sudo systemctl enable docker
+        sudo usermod -aG docker $USER
+    elif command -v yum &> /dev/null; then
+        # CentOS/RHEL
+        log_info "检测到 CentOS/RHEL 系统，正在安装 Docker..."
+        sudo yum install -y yum-utils
+        sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+        sudo yum install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+        sudo systemctl start docker
+        sudo systemctl enable docker
+        sudo usermod -aG docker $USER
+    else
+        log_error "不支持的操作系统，请手动安装 Docker"
+        exit 1
+    fi
+    
+    log_success "Docker 安装完成"
+}
+
+# 安装 Docker Compose (如果需要)
+install_docker_compose() {
+    log_info "安装 Docker Compose..."
+    
+    # 下载最新版本的 Docker Compose
+    sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    sudo chmod +x /usr/local/bin/docker-compose
+    
+    log_success "Docker Compose 安装完成"
+}
+
 # 检查系统要求
 check_requirements() {
     log_info "检查系统要求..."
     
     # 检查 Docker
     if ! command -v docker &> /dev/null; then
-        log_error "Docker 未安装，请先安装 Docker"
-        exit 1
+        log_warning "Docker 未安装，正在自动安装..."
+        install_docker
+        log_info "请重新运行此脚本以应用用户组更改"
+        exit 0
+    fi
+    
+    # 检查 Docker 服务状态
+    if ! sudo systemctl is-active --quiet docker; then
+        log_info "启动 Docker 服务..."
+        sudo systemctl start docker
     fi
     
     # 检查 Docker Compose
     if ! command -v docker-compose &> /dev/null && ! docker compose version &> /dev/null; then
-        log_error "Docker Compose 未安装，请先安装 Docker Compose"
-        exit 1
+        log_warning "Docker Compose 未安装，正在自动安装..."
+        install_docker_compose
     fi
     
     # 检查内存
@@ -116,22 +169,33 @@ wait_for_services() {
         return 1
     fi
     
-    # 等待前端就绪
-    log_info "检查前端服务..."
+    # 等待前端就绪 (增加等待时间，考虑构建过程)
+    log_info "检查前端服务（前端构建可能需要几分钟时间）..."
     attempt=0
-    while [ $attempt -lt 30 ]; do
-        if curl -s --max-time 3 http://localhost:12300/ > /dev/null 2>&1; then
+    max_frontend_attempts=100  # 5分钟等待时间
+    
+    while [ $attempt -lt $max_frontend_attempts ]; do
+        if curl -s --max-time 5 http://localhost:12300/ > /dev/null 2>&1; then
             log_success "前端服务已就绪"
             break
         fi
         attempt=$((attempt + 1))
-        echo -n "."
+        
+        # 每30秒显示一次进度提示
+        if [ $((attempt % 10)) -eq 0 ]; then
+            echo ""
+            log_info "前端正在构建中，已等待 $((attempt * 3)) 秒..."
+        else
+            echo -n "."
+        fi
         sleep 3
     done
     echo ""
     
-    if [ $attempt -eq 30 ]; then
-        log_warning "前端服务响应较慢，但可能正常运行"
+    if [ $attempt -eq $max_frontend_attempts ]; then
+        log_error "前端服务启动超时，请检查服务状态"
+        docker-compose logs frontend
+        return 1
     fi
     
     log_success "所有服务已启动完成"
