@@ -18,6 +18,8 @@ func CORS() gin.HandlerFunc {
 			"http://localhost:3001",
 			"http://127.0.0.1:3000",
 			"http://127.0.0.1:3001",
+			"http://localhost:12300",
+			"http://127.0.0.1:12300",
 		}
 		
 		// 检查是否为允许的源
@@ -145,6 +147,8 @@ func DefaultCORSConfig() CORSConfig {
 			"http://localhost:3001",
 			"http://127.0.0.1:3000",
 			"http://127.0.0.1:3001",
+			"http://localhost:12300",
+			"http://127.0.0.1:12300",
 		},
 		AllowMethods: []string{
 			"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH",

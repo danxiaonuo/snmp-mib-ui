@@ -14,10 +14,10 @@ class ApiClient {
     // In container environment, use backend service name
     // In development, use localhost
     if (typeof window === 'undefined') {
-      // Server-side rendering
-      this.baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://mib-backend:8080/api/v1"
+      // Server-side rendering - use service name inside container
+      this.baseUrl = "http://backend:8080/api/v1"
     } else {
-      // Client-side
+      // Client-side - use public URL in browser
       this.baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:17880/api/v1"
     }
   }

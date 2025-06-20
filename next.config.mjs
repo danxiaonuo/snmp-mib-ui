@@ -1,16 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Basic configuration only
+  // Minimal configuration for development
   experimental: {
     optimizePackageImports: ['lucide-react'],
   },
   
-  // Environment variables
-  env: {
-    CUSTOM_KEY: process.env.CUSTOM_KEY,
-  },
-  
-  // TypeScript and ESLint ignore errors for dev
+  // TypeScript and ESLint ignore errors for development
   typescript: {
     ignoreBuildErrors: true,
   },
