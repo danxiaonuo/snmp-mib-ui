@@ -365,6 +365,10 @@ create_pull_request() {
     # 检查是否跳过PR创建
     if [ "$SKIP_PR_CREATION" = true ]; then
         log_warning "跳过PR创建（在主分支上）"
+        echo ""
+        log_info "💡 如果需要创建PR，请先创建并切换到新分支："
+        echo "   git checkout -b feature/your-feature-name"
+        echo "   然后重新运行此脚本"
         return 0
     fi
     
@@ -479,7 +483,17 @@ Ready for production deployment! 🎯"
     log_info "手动创建 PR 指导："
     
     # 清理URL以供显示
-    CLEAN_REPO_URL=$(git remote get-url origin | sed 's/\.git$//' | sed 's/git@github\.com:/https:\/\/github\.com\//' | sed 's/https:\/\/[^@]*@/https:\/\//')
+    CURRENT_REMOTE=$(git remote get-url origin)
+    if [[ "$CURRENT_REMOTE" == git@github.com:* ]]; then
+        # SSH格式转换为HTTPS
+        CLEAN_REPO_URL=$(echo "$CURRENT_REMOTE" | sed 's/git@github\.com:/https:\/\/github\.com\//' | sed 's/\.git$//')
+    elif [[ "$CURRENT_REMOTE" == https://* ]]; then
+        # HTTPS格式，移除认证信息
+        CLEAN_REPO_URL=$(echo "$CURRENT_REMOTE" | sed 's/https:\/\/[^@]*@/https:\/\//' | sed 's/\.git$//')
+    else
+        # 其他格式，尝试基本清理
+        CLEAN_REPO_URL=$(echo "$CURRENT_REMOTE" | sed 's/\.git$//')
+    fi
     
     echo ""
     echo "🔗 1. 访问以下URL创建PR:"
