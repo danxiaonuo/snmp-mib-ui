@@ -49,7 +49,7 @@ func main() {
 
 	// Middleware
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:12300", "http://mib-frontend:3000", "https://yourdomain.com", "*"},
+		AllowOrigins:     []string{"http://localhost:12300", "http://frontend:3000", "http://mibweb-frontend:3000", "https://yourdomain.com", "*"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization", "X-Requested-With"},
 		ExposeHeaders:    []string{"Content-Length"},
