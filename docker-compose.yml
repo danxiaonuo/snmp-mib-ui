@@ -80,11 +80,8 @@ services:
     deploy:
       resources:
         limits:
-          memory: 3G
-          cpus: '3.0'
-        reservations:
           memory: 1.5G
-          cpus: '2.0'
+          cpus: '1.5'
 
   # Go 后端 API
   backend:
@@ -112,14 +109,12 @@ services:
     networks:
       - mibweb-network
     restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          memory: 2G
-          cpus: '2.0'
-        reservations:
-          memory: 1G
-          cpus: '1.0'
+    # 暂时移除资源限制以避免兼容性问题
+    # deploy:
+    #   resources:
+    #     limits:
+    #       memory: 1G
+    #       cpus: '0.5'
 
   # Nginx 反向代理 (临时禁用)
   # nginx:

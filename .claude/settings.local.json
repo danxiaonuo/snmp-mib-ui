@@ -37,7 +37,9 @@
       "Bash(timeout 30s docker build -f Dockerfile.no-network -t test-no-network .)",
       "Bash(timeout 20s docker build -f Dockerfile.no-network -t test-no-network .)",
       "Bash(time docker build:*)",
-      "Bash(timeout 300 docker-compose build --no-cache frontend)"
+      "Bash(timeout 300 docker-compose build --no-cache frontend)",
+      "Bash(time curl:*)",
+      "Bash(rm:*)"
     ],
     "deny": []
   }
