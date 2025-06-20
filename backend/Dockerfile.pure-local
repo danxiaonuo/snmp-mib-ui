@@ -1,0 +1,44 @@
+# 纯本地构建Dockerfile - 最小化网络依赖
+# 使用包含基础工具的镜像，减少安装步骤
+FROM alpine:latest
+
+# 设置环境变量（无网络需求）
+ENV TZ=Asia/Shanghai \
+    ENVIRONMENT=production \
+    PORT=8080 \
+    GIN_MODE=release
+
+# 创建用户和目录（无网络需求）
+RUN addgroup -g 1001 -S appgroup \
+    && adduser -u 1001 -S appuser -G appgroup \
+    && mkdir -p /app/uploads /app/mibs /var/log/mibweb \
+    && chown -R appuser:appgroup /app /var/log/mibweb
+
+# 仅安装绝对必需的运行时依赖（最小化网络下载）
+# 如果你愿意接受没有curl/wget的健康检查，可以完全跳过这一步
+RUN apk add --no-cache ca-certificates && rm -rf /var/cache/apk/*
+
+WORKDIR /app
+
+# 复制本地构建的二进制文件（无网络需求）
+COPY --chown=appuser:appgroup mib-platform ./main
+
+# 复制配置文件（无网络需求）
+COPY --chown=appuser:appgroup config/ ./config/ 2>/dev/null || true
+COPY --chown=appuser:appgroup migrations/ ./migrations/ 2>/dev/null || true
+
+# 设置权限（无网络需求）
+RUN chmod +x ./main
+
+# 切换用户
+USER appuser
+
+# 暴露端口
+EXPOSE 8080
+
+# 简化的健康检查（避免需要curl/wget）
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD ./main --health-check 2>/dev/null || nc -z localhost 8080 || exit 1
+
+# 启动应用
+CMD ["./main"]

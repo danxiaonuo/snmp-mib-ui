@@ -1,0 +1,45 @@
+# 使用本地构建产物的后端 Dockerfile
+FROM debian:bookworm-slim
+
+# 安装运行时依赖
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    tzdata \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# 设置时区
+ENV TZ=Asia/Shanghai
+
+# 创建非root用户
+RUN groupadd -g 1001 appgroup && \
+    useradd -u 1001 -g appgroup -s /bin/bash -m appuser
+
+WORKDIR /app
+
+# 复制本地已编译的二进制文件
+COPY mib-platform /app/mib-platform
+
+# 复制配置文件和其他必要文件
+COPY config/ /app/config/
+COPY migrations/ /app/migrations/
+
+# 创建必要的目录
+RUN mkdir -p /app/uploads /app/mibs /var/log/mibweb
+
+# 设置执行权限和所有者
+RUN chmod +x /app/mib-platform && \
+    chown -R appuser:appgroup /app /var/log/mibweb
+
+# 切换到非root用户
+USER appuser
+
+# 暴露端口
+EXPOSE 8080
+
+# 健康检查
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:8080/health || exit 1
+
+# 启动应用
+CMD ["/app/mib-platform"]

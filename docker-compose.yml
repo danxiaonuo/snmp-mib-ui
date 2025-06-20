@@ -46,13 +46,13 @@ services:
   frontend:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: ${FRONTEND_DOCKERFILE:-Dockerfile.production}
     container_name: mibweb-frontend
     ports:
       - "12300:12300"
     environment:
-      - NODE_ENV=development
-      - DEBUG=*
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
       - DATABASE_URL=postgresql://netmon_user:netmon_pass_2024@postgres:5432/network_monitor
       - REDIS_URL=redis://:redis_pass_2024@redis:6379
       - NEXTAUTH_SECRET=mibweb_secret_key_2024_very_secure
@@ -68,8 +68,6 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-      backend:
-        condition: service_started
     networks:
       - mibweb-network
     restart: unless-stopped
@@ -82,16 +80,20 @@ services:
     deploy:
       resources:
         limits:
-          memory: 512M
+          memory: 3G
+          cpus: '3.0'
         reservations:
-          memory: 256M
+          memory: 1.5G
+          cpus: '2.0'
 
   # Go 后端 API
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile
-      target: production
+      dockerfile: ${BACKEND_DOCKERFILE:-Dockerfile.optimized}
+      args:
+        USE_LOCAL_BUILD: ${USE_LOCAL_BUILD:-true}
+        GO_VERSION: ${GO_VERSION:-1.23.10}
     container_name: mibweb-backend
     ports:
       - "17880:8080"
@@ -113,9 +115,11 @@ services:
     deploy:
       resources:
         limits:
-          memory: 256M
+          memory: 2G
+          cpus: '2.0'
         reservations:
-          memory: 128M
+          memory: 1G
+          cpus: '1.0'
 
   # Nginx 反向代理 (临时禁用)
   # nginx:

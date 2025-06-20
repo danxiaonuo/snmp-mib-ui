@@ -65,6 +65,14 @@ export default function ConfigGenPage() {
   const [showDeploymentFlow, setShowDeploymentFlow] = useState(false)
   const [deviceTemplate, setDeviceTemplate] = useState("generic")
   
+  // OID 选择相关状态
+  const [selectedOids, setSelectedOids] = useState<string[]>([])
+  const [searchTerm, setSearchTerm] = useState("")
+  const [selectedCategory, setSelectedCategory] = useState("all")
+  const [selectedComplexity, setSelectedComplexity] = useState("all")
+  const [showRecommendedOnly, setShowRecommendedOnly] = useState(false)
+  const [sortBy, setSortBy] = useState("importance")
+  
   // 获取当前类型的模板
   const availableTemplates = getTemplatesByType(configType)
 

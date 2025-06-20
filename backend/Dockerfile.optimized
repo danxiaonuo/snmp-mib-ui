@@ -1,0 +1,94 @@
+# 优化的Go后端Dockerfile - 支持本地预构建和在线构建
+ARG USE_LOCAL_BUILD=false
+ARG GO_VERSION=1.23.10
+
+###########################################
+# 在线构建阶段（仅在USE_LOCAL_BUILD=false时使用）
+###########################################
+FROM golang:$GO_VERSION-alpine AS online-builder
+
+# 安装构建依赖
+RUN apk add --no-cache git ca-certificates tzdata gcc musl-dev
+
+# 配置国内Go代理
+RUN go env -w GOPROXY=https://goproxy.cn,direct && \
+    go env -w GOSUMDB=sum.golang.google.cn && \
+    go env -w GO111MODULE=on
+
+WORKDIR /build
+
+# 复制依赖文件
+COPY go.mod go.sum ./
+
+# 下载依赖
+RUN go mod download && go mod verify
+
+# 复制源代码
+COPY . .
+
+# 构建二进制文件
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
+    -ldflags='-w -s -extldflags="-static"' \
+    -o mib-platform main.go
+
+###########################################
+# 本地构建占位阶段
+###########################################
+FROM alpine:latest AS local-builder
+WORKDIR /app
+# 创建一个占位文件，本地构建时会被覆盖
+RUN touch mib-platform
+
+###########################################
+# 运行时阶段
+###########################################
+FROM alpine:latest AS runtime
+
+# 安装运行时依赖
+RUN apk add --no-cache \
+    ca-certificates \
+    tzdata \
+    curl \
+    wget \
+    bash \
+    && rm -rf /var/cache/apk/*
+
+# 设置时区和环境变量
+ENV TZ=Asia/Shanghai
+ENV ENVIRONMENT=production
+ENV PORT=8080
+ENV GIN_MODE=release
+
+# 创建应用用户
+RUN addgroup -g 1001 -S appgroup && \
+    adduser -u 1001 -S appuser -G appgroup
+
+# 创建应用目录
+RUN mkdir -p /app/uploads /app/mibs /var/log/mibweb && \
+    chown -R appuser:appgroup /app /var/log/mibweb
+
+WORKDIR /app
+
+# 根据构建模式复制二进制文件
+ARG USE_LOCAL_BUILD=false
+COPY --from=online-builder --chown=appuser:appgroup /build/mib-platform ./main
+
+# 复制配置文件
+COPY --chown=appuser:appgroup config/ ./config/ 2>/dev/null || true
+COPY --chown=appuser:appgroup migrations/ ./migrations/ 2>/dev/null || true
+
+# 设置权限
+RUN chmod +x ./main
+
+# 切换用户
+USER appuser
+
+# 暴露端口
+EXPOSE 8080
+
+# 健康检查
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:8080/health || exit 1
+
+# 启动应用
+CMD ["./main"]

@@ -1,0 +1,39 @@
+# 无网络构建Dockerfile - 使用已缓存的基础镜像
+FROM alpine:latest
+
+# 设置环境变量
+ENV TZ=Asia/Shanghai \
+    ENVIRONMENT=production \
+    PORT=8080 \
+    GIN_MODE=release
+
+# 只做文件操作，不安装任何包（避免网络请求）
+RUN addgroup -g 1001 -S appgroup \
+    && adduser -u 1001 -S appuser -G appgroup \
+    && mkdir -p /app/uploads /app/mibs /var/log/mibweb \
+    && chown -R appuser:appgroup /app /var/log/mibweb
+
+WORKDIR /app
+
+# 复制本地构建的二进制文件
+COPY --chown=appuser:appgroup mib-platform ./main
+
+# 复制配置文件（如果存在）
+COPY --chown=appuser:appgroup config/ ./config/
+COPY --chown=appuser:appgroup migrations/ ./migrations/
+
+# 设置权限
+RUN chmod +x ./main
+
+# 切换用户
+USER appuser
+
+# 暴露端口
+EXPOSE 8080
+
+# 健康检查 - 使用wget检查HTTP端点
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider --timeout=5 http://localhost:8080/health || exit 1
+
+# 启动应用
+CMD ["./main"]

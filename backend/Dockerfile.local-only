@@ -1,0 +1,50 @@
+# 本地构建专用Dockerfile - 只复制已构建的二进制文件
+FROM alpine:latest
+
+# 安装运行时依赖
+RUN apk add --no-cache \
+    ca-certificates \
+    tzdata \
+    curl \
+    wget \
+    bash \
+    && rm -rf /var/cache/apk/*
+
+# 设置时区和环境变量
+ENV TZ=Asia/Shanghai
+ENV ENVIRONMENT=production
+ENV PORT=8080
+ENV GIN_MODE=release
+
+# 创建应用用户（安全最佳实践）
+RUN addgroup -g 1001 -S appgroup && \
+    adduser -u 1001 -S appuser -G appgroup
+
+# 创建应用目录并设置权限
+RUN mkdir -p /app/uploads /app/mibs /var/log/mibweb && \
+    chown -R appuser:appgroup /app /var/log/mibweb
+
+WORKDIR /app
+
+# 复制本地构建的二进制文件
+COPY --chown=appuser:appgroup mib-platform ./main
+
+# 复制配置文件和必要文件（如果存在）
+COPY --chown=appuser:appgroup config/ ./config/ 2>/dev/null || true
+COPY --chown=appuser:appgroup migrations/ ./migrations/ 2>/dev/null || true
+
+# 设置二进制文件权限
+RUN chmod +x ./main
+
+# 切换到非root用户
+USER appuser
+
+# 暴露端口
+EXPOSE 8080
+
+# 健康检查
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:8080/health || exit 1
+
+# 启动应用
+CMD ["./main"]
