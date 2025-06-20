@@ -71,6 +71,21 @@ install_docker_compose() {
     log_success "Docker Compose 安装完成"
 }
 
+# 配置Docker镜像源
+configure_docker_mirrors() {
+    log_info "配置Docker镜像源..."
+    
+    # 使用dkturbo一键配置镜像源
+    if docker run --rm --name=dkturbo -v /etc/docker:/etc/docker -v /opt:/opt -e MODE=registry -e REGISTRY=auto --pid=host --privileged registry.cn-shenzhen.aliyuncs.com/cp0204/dkturbo:main; then
+        log_success "Docker镜像源配置完成"
+        # 重启Docker服务以应用配置
+        sudo systemctl restart docker
+        sleep 3
+    else
+        log_warning "镜像源配置失败，使用默认配置"
+    fi
+}
+
 # 检查系统要求
 check_requirements() {
     log_info "检查系统要求..."
@@ -88,6 +103,9 @@ check_requirements() {
         log_info "启动 Docker 服务..."
         sudo systemctl start docker
     fi
+    
+    # 配置Docker镜像源
+    configure_docker_mirrors
     
     # 检查 Docker Compose
     if ! command -v docker-compose &> /dev/null && ! docker compose version &> /dev/null; then
