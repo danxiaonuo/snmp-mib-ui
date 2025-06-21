@@ -4,6 +4,9 @@ FROM node:20-alpine AS base
 # 安装必要的系统依赖
 RUN apk add --no-cache libc6-compat curl bash && rm -rf /var/cache/apk/*
 
+# 安装pnpm
+RUN npm install -g pnpm
+
 WORKDIR /app
 
 # 复制依赖文件
@@ -11,19 +14,19 @@ COPY package*.json ./
 COPY pnpm-lock.yaml* ./
 
 # 安装依赖
-RUN npm ci --only=production --silent && npm cache clean --force
+RUN pnpm install --no-frozen-lockfile && pnpm store prune
 
 # 复制源代码
 COPY . .
 
-# 生产环境变量
-ENV NODE_ENV=production
+# 开发环境变量（暂时）
+ENV NODE_ENV=development
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=12300
 ENV HOSTNAME="0.0.0.0"
 
-# 构建应用
-RUN npm run build
+# 暂时跳过构建，使用开发模式
+# RUN pnpm run build
 
 # 清理不必要的文件
 RUN rm -rf .next/cache && \
@@ -37,5 +40,5 @@ EXPOSE 12300
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
     CMD curl -f http://localhost:12300/api/health || curl -f http://localhost:12300/ || exit 1
 
-# 启动应用
-CMD ["npm", "start"]
+# 启动应用（开发模式）
+CMD ["pnpm", "dev"]

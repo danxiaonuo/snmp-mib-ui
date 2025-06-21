@@ -452,6 +452,12 @@ start_services() {
         fi
     fi
     
+    # 强制本地构建模式（避免在线构建）
+    if [ "$USE_LOCAL_BUILD" = "true" ]; then
+        export BACKEND_DOCKERFILE=Dockerfile.no-network
+        log_info "强制使用无网络Dockerfile: $BACKEND_DOCKERFILE"
+    fi
+    
     export GO_VERSION=1.23.10
     
     # 显示构建信息
