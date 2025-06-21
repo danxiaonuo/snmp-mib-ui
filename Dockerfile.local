@@ -10,7 +10,13 @@ RUN apk add --no-cache \
 
 WORKDIR /app
 
-# 直接复制所有本地文件(包括已安装的node_modules)
+# 复制package文件
+COPY package.json package-lock.json* ./
+
+# 安装依赖
+RUN npm ci --legacy-peer-deps
+
+# 复制其他文件
 COPY . .
 
 # 设置环境变量

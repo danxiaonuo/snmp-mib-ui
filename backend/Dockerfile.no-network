@@ -31,9 +31,9 @@ USER appuser
 # 暴露端口
 EXPOSE 8080
 
-# 健康检查 - 使用wget检查HTTP端点
-HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-    CMD wget --no-verbose --tries=1 --spider --timeout=5 http://localhost:8080/health || exit 1
+# 健康检查 - 禁用健康检查以避免网络依赖
+# HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+#     CMD nc -z localhost 8080 || exit 1
 
 # 启动应用
 CMD ["./main"]
