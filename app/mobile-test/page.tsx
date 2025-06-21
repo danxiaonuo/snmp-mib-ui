@@ -1,5 +1,8 @@
 "use client"
 
+// 禁用静态生成，因为需要客户端API
+export const dynamic = 'force-dynamic'
+
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"

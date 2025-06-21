@@ -1,5 +1,8 @@
 "use client"
 
+// 禁用静态生成，需要客户端API
+export const dynamic = 'force-dynamic'
+
 import React, { useState, useEffect } from 'react'
 import { useLanguage } from '@/contexts/language-context'
 import { COMPONENT_CONFIGS } from '../components/ComponentDetails' // Added
@@ -222,23 +225,51 @@ const fetchSystemOverview = async (): Promise<SystemOverview> => {
   }
 }
 
-// 移除所有MOCK数据，改为从API获取
-const [componentMetrics, setComponentMetrics] = useState<ComponentMetrics[]>([])
-const [systemOverview, setSystemOverview] = useState<SystemOverview | null>(null)
+// 生成时序数据的工具函数
+const generateTimeSeriesData = (count: number, base: number, variance: number): MetricData[] => {
+  const data: MetricData[] = []
+  const now = Date.now()
+  for (let i = count - 1; i >= 0; i--) {
+    data.push({
+      timestamp: new Date(now - i * 60 * 1000).toISOString(),
+      value: Math.max(0, base + (Math.random() - 0.5) * variance)
+    })
+  }
+  return data
+}
 
-// 获取真实组件指标数据
+// 初始系统概览数据
+const INITIAL_SYSTEM_OVERVIEW: SystemOverview = {
+  totalComponents: Object.keys(COMPONENT_CONFIGS || {}).length,
+  healthyComponents: 0,
+  warningComponents: 0,
+  criticalComponents: 0,
+  totalAlerts: 0,
+  activeIncidents: 0,
+  dataIngestionRate: 0,
+  queryRate: 0,
+  storageUsed: 0,
+  storageTotal: 100,
+  networkTraffic: 0,
+  uptime: '0d 0h 0m'
+}
+
+// 原始MOCK数据用于初始化
+const ORIGINAL_MOCK_COMPONENT_METRICS: ComponentMetrics[] = []
+
+// 获取真实组件指标数据的工具函数
 const fetchComponentMetrics = async () => {
   try {
     const response = await fetch('/api/monitoring/components')
     if (response.ok) {
       const data = await response.json()
-      setComponentMetrics(data.components || [])
+      return data.components || []
     } else {
-      setComponentMetrics([]) // 无数据时显示空列表
+      return [] // 无数据时显示空列表
     }
   } catch (error) {
     console.error('Failed to fetch component metrics:', error)
-    setComponentMetrics([])
+    return []
   }
 }
 

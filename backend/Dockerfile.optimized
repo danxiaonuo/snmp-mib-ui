@@ -1,11 +1,7 @@
-# 优化的Go后端Dockerfile - 支持本地预构建和在线构建
-ARG USE_LOCAL_BUILD=false
+# 优化的Go后端Dockerfile - 在线构建模式
 ARG GO_VERSION=1.23.10
 
-###########################################
-# 在线构建阶段（仅在USE_LOCAL_BUILD=false时使用）
-###########################################
-FROM golang:$GO_VERSION-alpine AS online-builder
+FROM golang:$GO_VERSION-alpine AS builder
 
 # 安装构建依赖
 RUN apk add --no-cache git ca-certificates tzdata gcc musl-dev
@@ -32,17 +28,9 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
     -o mib-platform main.go
 
 ###########################################
-# 本地构建占位阶段
-###########################################
-FROM alpine:latest AS local-builder
-WORKDIR /app
-# 创建一个占位文件，本地构建时会被覆盖
-RUN touch mib-platform
-
-###########################################
 # 运行时阶段
 ###########################################
-FROM alpine:latest AS runtime
+FROM alpine:latest
 
 # 安装运行时依赖
 RUN apk add --no-cache \
@@ -69,9 +57,8 @@ RUN mkdir -p /app/uploads /app/mibs /var/log/mibweb && \
 
 WORKDIR /app
 
-# 根据构建模式复制二进制文件
-ARG USE_LOCAL_BUILD=false
-COPY --from=online-builder --chown=appuser:appgroup /build/mib-platform ./main
+# 复制二进制文件
+COPY --from=builder --chown=appuser:appgroup /build/mib-platform ./main
 
 # 复制配置文件
 COPY --chown=appuser:appgroup config/ ./config/ 2>/dev/null || true
