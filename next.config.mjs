@@ -1,30 +1,78 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Minimal configuration for development
-  experimental: {
-    optimizePackageImports: ['lucide-react'],
-  },
-  
-  // 禁用静态生成避免构建错误
+  // Optimized for pure binary deployment
   output: 'standalone',
-  trailingSlash: false,
   
-  // 强制所有页面为动态
+  // Skip static generation for problematic pages
   generateStaticParams: false,
   
-  // TypeScript and ESLint ignore errors for development
+  // Production optimizations
+  compress: true,
+  poweredByHeader: false,
+  
+  // Disable features not needed for binary deployment
+  trailingSlash: false,
+  reactStrictMode: true,
+  
+  // Temporary build settings
   typescript: {
     ignoreBuildErrors: true,
   },
-  
   eslint: {
     ignoreDuringBuilds: true,
   },
   
-  // 暂时忽略所有构建错误
-  onDemandEntries: {
-    maxInactiveAge: 25 * 1000,
-    pagesBufferLength: 2,
+  // Build optimizations
+  experimental: {
+    optimizePackageImports: [
+      '@radix-ui/react-icons',
+      'lucide-react',
+    ],
+    turbo: {
+      rules: {
+        '*.svg': ['@svgr/webpack'],
+      },
+    },
+  },
+  
+  // Enable static optimization where possible
+  generateBuildId: async () => {
+    return process.env.BUILD_ID || 'standalone-build'
+  },
+  
+  // Minimize bundle size
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+    reactRemoveProperties: process.env.NODE_ENV === 'production',
+  },
+  
+  // Webpack optimizations for smaller bundle
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        net: false,
+        tls: false,
+      }
+    }
+    
+    // Optimize bundle splitting
+    config.optimization = {
+      ...config.optimization,
+      splitChunks: {
+        chunks: 'all',
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
+          },
+        },
+      },
+    }
+    
+    return config
   },
 }
 
