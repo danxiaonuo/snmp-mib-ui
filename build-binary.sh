@@ -19,6 +19,7 @@ mkdir -p dist
 
 # Copy standalone build
 cp -r .next/standalone/* dist/
+mkdir -p dist/.next
 cp -r .next/static dist/.next/static
 cp -r public dist/public
 

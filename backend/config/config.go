@@ -42,7 +42,7 @@ func Load() *Config {
 	
 	return &Config{
 		Environment:   getEnv("ENVIRONMENT", "development"),
-		Port:          getEnv("SERVER_PORT", "8080"),
+		Port:          getEnv("SERVER_PORT", "17880"),
 		DatabaseURL:   getEnv("DATABASE_URL", databaseURL),
 		RedisURL:      getEnv("REDIS_URL", redisURL),
 		JWTSecret:     getEnv("JWT_SECRET", "your-secret-key"),

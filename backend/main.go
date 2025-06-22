@@ -361,9 +361,12 @@ func main() {
 	routes.RegisterAlertRulesRoutes(router, alertRulesController)
 
 	// Start server
-	port := os.Getenv("PORT")
+	port := os.Getenv("SERVER_PORT")
 	if port == "" {
-		port = "8080"
+		port = os.Getenv("PORT")
+		if port == "" {
+			port = "17880"
+		}
 	}
 
 	log.Printf("Server starting on port %s", port)

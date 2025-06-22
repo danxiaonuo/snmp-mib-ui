@@ -23,19 +23,9 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>("en")
   const [isInitialized, setIsInitialized] = useState(false)
-  // State for loaded translations
-  const [loadedTranslations, setLoadedTranslations] = useState<{ [key in Language]?: Translations }>({})
-
-  useEffect(() => {
-    const savedLanguage = localStorage.getItem("language") as Language
-    if (savedLanguage && (savedLanguage === "en" || savedLanguage === "zh")) {
-      setLanguage(savedLanguage)
-    }
-    setIsInitialized(true)
-
-    // Simulate fetching translations
-    // In a real app, you would fetch these from /locales/en/common.json and /locales/zh/common.json
-    // For this subtask, we'll use the content read previously.
+  // State for loaded translations - Initialize immediately with embedded translations
+  const [loadedTranslations, setLoadedTranslations] = useState<{ [key in Language]?: Translations }>(() => {
+    // Immediately available translations for SSR
     const enTranslations = {
       "navigation": {
         "dashboard": "Dashboard",
@@ -234,11 +224,18 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       "success": "操作成功"
     };
 
-    setLoadedTranslations({
+    return {
       en: enTranslations as unknown as Translations,
       zh: zhTranslations as unknown as Translations,
-    });
+    };
+  })
 
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem("language") as Language
+    if (savedLanguage && (savedLanguage === "en" || savedLanguage === "zh")) {
+      setLanguage(savedLanguage)
+    }
+    setIsInitialized(true)
   }, [])
 
   const changeLanguage = (lang: Language) => {
@@ -251,21 +248,36 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }
 
   const t = (key: string): string => {
-    if (!isInitialized || !loadedTranslations[language]) {
-      // Fallback if translations are not loaded for the current language
-      console.error(`Translations not loaded for language: ${language}`);
+    // Always ensure we have translations loaded, even if not initialized
+    const currentTranslations = loadedTranslations[language] || loadedTranslations["en"];
+    
+    if (!currentTranslations) {
+      // If no translations loaded, return a fallback or the key
       return key;
     }
 
     const keys = key.split('.');
-    let current: string | Translations | undefined = loadedTranslations[language];
+    let current: string | Translations | undefined = currentTranslations;
 
     for (const k of keys) {
       if (typeof current === 'object' && current !== null && k in current) {
         current = current[k];
       } else {
-        // Key not found
-        console.warn(`Translation key not found: ${key} for language: ${language}`);
+        // Key not found, try to fallback to English if not already trying English
+        if (language !== 'en' && loadedTranslations["en"]) {
+          let fallbackCurrent: string | Translations | undefined = loadedTranslations["en"];
+          const fallbackKeys = key.split('.');
+          for (const fk of fallbackKeys) {
+            if (typeof fallbackCurrent === 'object' && fallbackCurrent !== null && fk in fallbackCurrent) {
+              fallbackCurrent = fallbackCurrent[fk];
+            } else {
+              return key; // Return key if even English fallback fails
+            }
+          }
+          if (typeof fallbackCurrent === 'string') {
+            return fallbackCurrent;
+          }
+        }
         return key;
       }
     }
@@ -273,8 +285,6 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     if (typeof current === 'string') {
       return current;
     } else {
-      // This case should ideally not happen if keys always point to strings
-      console.warn(`Translation key did not resolve to a string: ${key} for language: ${language}`);
       return key;
     }
   }

@@ -43,7 +43,25 @@
       "Bash(git remote get-url:*)",
       "Bash(find:*)",
       "Bash(./build-binary.sh:*)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "Bash(export ENVIRONMENT=production)",
+      "Bash(export SERVER_PORT=17880)",
+      "Bash(export DB_HOST=localhost)",
+      "Bash(export DB_PORT=5432)",
+      "Bash(export DB_USER=netmon_user)",
+      "Bash(export DB_PASSWORD=netmon_secure_password)",
+      "Bash(export DB_NAME=network_monitor)",
+      "Bash(export REDIS_HOST=localhost)",
+      "Bash(export REDIS_PORT=6379)",
+      "Bash(export REDIS_PASSWORD=redis_secure_password)",
+      "Bash(go build:*)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(./deploy-production.sh:*)",
+      "Bash(--name snmp-redis )",
+      "Bash(-p 6379:6379 )",
+      "Bash(redis:7-alpine)",
+      "Bash(rg:*)"
     ],
     "deny": []
   }

@@ -1,0 +1,49 @@
+[Unit]
+Description=SNMP MIB Platform Backend API Service  
+Documentation=https://github.com/your-username/snmp-mib-ui
+After=network.target docker.service
+Requires=docker.service
+PartOf=snmp-mib-platform.target
+
+[Service]
+Type=simple
+User=snmp-mib
+Group=snmp-mib
+WorkingDirectory=/opt/snmp-mib-ui/backend
+Environment=SERVER_PORT=17880
+Environment=DB_HOST=localhost
+Environment=DB_PORT=5432
+Environment=DB_USER=netmon_user
+Environment=DB_PASSWORD=production_db_pass
+Environment=DB_NAME=network_monitor
+Environment=REDIS_ADDR=localhost:6379
+Environment=REDIS_PASSWORD=
+Environment=REDIS_DB=0
+Environment=GIN_MODE=release
+ExecStart=/opt/snmp-mib-ui/backend/mib-platform
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=snmp-mib-backend
+
+# 健康检查
+ExecStartPost=/bin/bash -c 'sleep 5 && curl -f http://localhost:17880/api/v1/health || exit 1'
+
+# 安全设置
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/snmp-mib-ui/backend/logs
+ReadWritePaths=/opt/snmp-mib-ui/backend/uploads
+
+# 资源限制
+LimitNOFILE=65536
+MemoryMax=1G
+CPUQuota=100%
+
+[Install]
+WantedBy=snmp-mib-platform.target
+WantedBy=multi-user.target
