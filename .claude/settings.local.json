@@ -41,7 +41,9 @@
       "Bash(time curl:*)",
       "Bash(rm:*)",
       "Bash(git remote get-url:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(./build-binary.sh:*)",
+      "Bash(mv:*)"
     ],
     "deny": []
   }

@@ -10,9 +10,10 @@ import { LanguageProvider } from "@/contexts/language-context"
 import { Toaster } from "@/components/ui/toaster"
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
-import { MobileNav } from "@/components/mobile-nav"
-import { LanguageSwitcher } from "@/components/language-switcher"
+import { SimpleMobileNav } from "@/components/simple-mobile-nav"
+import { SimpleLanguageSwitcher } from "@/components/simple-language-switcher"
 import { EnhancedLayout } from "@/components/enhanced-ui/enhanced-layout"
+import { SimplifiedLayout } from "@/components/enhanced-ui/simplified-layout"
 import { PWARegister } from "@/components/pwa-register"
 import { MobileOptimizations } from "@/components/mobile-optimizations"
 import { QuickActions } from "@/components/enhanced-ui/quick-actions"
@@ -126,7 +127,7 @@ export default function RootLayout({
                 <header className="flex h-16 shrink-0 items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-700 px-6 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-slate-900/60 sticky top-0 z-50">
                   <div className="flex items-center gap-3">
                     <SidebarTrigger className="hidden md:flex" />
-                    <MobileNav />
+                    <SimpleMobileNav />
                     <div className="flex items-center gap-2">
                       <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
                         <span className="text-white font-bold text-sm">M</span>
@@ -139,14 +140,15 @@ export default function RootLayout({
                   <div className="flex items-center gap-2">
                     <NotificationCenter />
                     <QuickActions />
-                    <LanguageSwitcher />
+                    <SimpleLanguageSwitcher />
                   </div>
                 </header>
                 <main className="flex-1 overflow-auto p-6">
                   <div className="max-w-7xl mx-auto">
-                    <EnhancedLayout>
+                    {/* Use SimplifiedLayout for better cross-platform compatibility */}
+                    <SimplifiedLayout>
                       {children}
-                    </EnhancedLayout>
+                    </SimplifiedLayout>
                   </div>
                 </main>
                 <PerformanceMonitor />
