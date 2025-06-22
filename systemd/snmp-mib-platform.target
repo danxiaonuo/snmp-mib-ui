@@ -1,0 +1,9 @@
+[Unit]
+Description=SNMP MIB Platform Services
+Documentation=https://github.com/your-username/snmp-mib-ui
+After=docker.service network.target
+Requires=docker.service
+AllowIsolate=yes
+
+[Install]
+WantedBy=multi-user.target

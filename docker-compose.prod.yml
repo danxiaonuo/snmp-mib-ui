@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  # PostgreSQL 数据库
+  postgres:
+    image: postgres:15-alpine
+    container_name: snmp-postgres
+    environment:
+      POSTGRES_DB: network_monitor
+      POSTGRES_USER: netmon_user
+      POSTGRES_PASSWORD: netmon_secure_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U netmon_user -d network_monitor"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis 缓存
+  redis:
+    image: redis:7-alpine
+    container_name: snmp-redis
+    command: redis-server --requirepass redis_secure_password
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "redis_secure_password", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Go 后端服务
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: snmp-backend
+    environment:
+      - ENVIRONMENT=production
+      - SERVER_PORT=17880
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=netmon_user
+      - DB_PASSWORD=netmon_secure_password
+      - DB_NAME=network_monitor
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=redis_secure_password
+      - JWT_SECRET=your-production-jwt-secret-key-here
+    ports:
+      - "17880:17880"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    volumes:
+      - ./uploads:/app/uploads
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:17880/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  default:
+    name: snmp-network

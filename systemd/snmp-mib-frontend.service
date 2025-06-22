@@ -1,0 +1,40 @@
+[Unit]
+Description=SNMP MIB Platform Frontend Service
+Documentation=https://github.com/your-username/snmp-mib-ui
+After=network.target snmp-mib-backend.service
+Wants=snmp-mib-backend.service
+PartOf=snmp-mib-platform.target
+
+[Service]
+Type=simple
+User=snmp-mib
+Group=snmp-mib
+WorkingDirectory=/opt/snmp-mib-ui
+Environment=NODE_ENV=production
+Environment=PORT=12300
+Environment=HOSTNAME=0.0.0.0
+Environment=NEXT_PUBLIC_API_URL=http://localhost:17880/api/v1
+ExecStart=/usr/bin/npm run start
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=snmp-mib-frontend
+
+# 安全设置
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/snmp-mib-ui/logs
+ReadWritePaths=/opt/snmp-mib-ui/.next
+
+# 资源限制
+LimitNOFILE=65536
+MemoryMax=512M
+CPUQuota=50%
+
+[Install]
+WantedBy=snmp-mib-platform.target
+WantedBy=multi-user.target
