@@ -1,10 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Optimized for pure binary deployment
-  output: 'standalone',
-  
-  // Skip static generation for problematic pages
-  generateStaticParams: false,
+  // Optimized for development and production
+  // output: 'standalone', // Disabled for now
   
   // Production optimizations
   compress: true,

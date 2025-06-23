@@ -7,9 +7,9 @@ PartOf=snmp-mib-platform.target
 
 [Service]
 Type=simple
-User=snmp-mib
-Group=snmp-mib
-WorkingDirectory=/opt/snmp-mib-ui
+User=root
+Group=root
+WorkingDirectory=/etc/opt/snmp-mib-ui
 Environment=NODE_ENV=production
 Environment=PORT=12300
 Environment=HOSTNAME=0.0.0.0
@@ -27,8 +27,8 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
-ReadWritePaths=/opt/snmp-mib-ui/logs
-ReadWritePaths=/opt/snmp-mib-ui/.next
+ReadWritePaths=/etc/opt/snmp-mib-ui/logs
+ReadWritePaths=/etc/opt/snmp-mib-ui/.next
 
 # 资源限制
 LimitNOFILE=65536

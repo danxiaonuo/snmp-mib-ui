@@ -1,15 +1,14 @@
 [Unit]
 Description=SNMP MIB Platform Backend API Service  
 Documentation=https://github.com/your-username/snmp-mib-ui
-After=network.target docker.service
-Requires=docker.service
+After=network.target
 PartOf=snmp-mib-platform.target
 
 [Service]
 Type=simple
-User=snmp-mib
-Group=snmp-mib
-WorkingDirectory=/opt/snmp-mib-ui/backend
+User=root
+Group=root
+WorkingDirectory=/etc/opt/snmp-mib-ui
 Environment=SERVER_PORT=17880
 Environment=DB_HOST=localhost
 Environment=DB_PORT=5432
@@ -20,7 +19,7 @@ Environment=REDIS_ADDR=localhost:6379
 Environment=REDIS_PASSWORD=
 Environment=REDIS_DB=0
 Environment=GIN_MODE=release
-ExecStart=/opt/snmp-mib-ui/backend/mib-platform
+ExecStart=/etc/opt/snmp-mib-ui/backend/mib-platform
 ExecReload=/bin/kill -HUP $MAINPID
 Restart=always
 RestartSec=10
@@ -36,8 +35,8 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
-ReadWritePaths=/opt/snmp-mib-ui/backend/logs
-ReadWritePaths=/opt/snmp-mib-ui/backend/uploads
+ReadWritePaths=/etc/opt/snmp-mib-ui/backend/logs
+ReadWritePaths=/etc/opt/snmp-mib-ui/backend/uploads
 
 # 资源限制
 LimitNOFILE=65536

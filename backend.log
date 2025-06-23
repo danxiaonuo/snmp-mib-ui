@@ -1,129 +1,136 @@
+2025/06/23 16:45:22 No .env file found
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[16.525ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'mibs' AND table_type = 'BASE TABLE'
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[21.112ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'mibs' AND table_type = 'BASE TABLE'
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[17.227ms] [34;1m[rows:0][0m CREATE TABLE "mibs" ("id" bigserial,"name" text NOT NULL,"filename" text NOT NULL,"file_path" text NOT NULL,"version" text,"description" text,"author" text,"status" text DEFAULT 'uploaded',"parsed_at" timestamptz,"error_msg" text,"file_size" bigint,"size" bigint,"checksum" text,"uploaded_at" timestamptz,"created_at" timestamptz,"updated_at" timestamptz,"deleted_at" timestamptz,PRIMARY KEY ("id"))
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[17.010ms] [34;1m[rows:0][0m CREATE TABLE "mibs" ("id" bigserial,"name" text NOT NULL,"filename" text NOT NULL,"file_path" text NOT NULL,"version" text,"description" text,"author" text,"status" text DEFAULT 'uploaded',"parsed_at" timestamptz,"error_msg" text,"file_size" bigint,"size" bigint,"checksum" text,"uploaded_at" timestamptz,"created_at" timestamptz,"updated_at" timestamptz,"deleted_at" timestamptz,PRIMARY KEY ("id"))
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[5.451ms] [34;1m[rows:0][0m CREATE INDEX IF NOT EXISTS "idx_mibs_deleted_at" ON "mibs" ("deleted_at")
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[3.085ms] [34;1m[rows:0][0m CREATE INDEX IF NOT EXISTS "idx_mibs_deleted_at" ON "mibs" ("deleted_at")
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[1.741ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'o_ids' AND table_type = 'BASE TABLE'
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.836ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'o_ids' AND table_type = 'BASE TABLE'
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[12.578ms] [34;1m[rows:0][0m CREATE TABLE "o_ids" ("id" bigserial,"mib_id" bigint NOT NULL,"name" text NOT NULL,"o_id" text NOT NULL,"o_id_string" text NOT NULL,"type" text,"access" text,"status" text,"description" text,"syntax" text,"units" text,"parent_o_id" text,"created_at" timestamptz,"updated_at" timestamptz,"deleted_at" timestamptz,PRIMARY KEY ("id"),CONSTRAINT "fk_mibs_o_ids" FOREIGN KEY ("mib_id") REFERENCES "mibs"("id"))
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[11.656ms] [34;1m[rows:0][0m CREATE TABLE "o_ids" ("id" bigserial,"mib_id" bigint NOT NULL,"name" text NOT NULL,"o_id" text NOT NULL,"o_id_string" text NOT NULL,"type" text,"access" text,"status" text,"description" text,"syntax" text,"units" text,"parent_o_id" text,"created_at" timestamptz,"updated_at" timestamptz,"deleted_at" timestamptz,PRIMARY KEY ("id"),CONSTRAINT "fk_mibs_o_ids" FOREIGN KEY ("mib_id") REFERENCES "mibs"("id"))
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[4.544ms] [34;1m[rows:0][0m CREATE INDEX IF NOT EXISTS "idx_o_ids_deleted_at" ON "o_ids" ("deleted_at")
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[3.134ms] [34;1m[rows:0][0m CREATE INDEX IF NOT EXISTS "idx_o_ids_deleted_at" ON "o_ids" ("deleted_at")
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[1.664ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'device_templates' AND table_type = 'BASE TABLE'
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.832ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'device_templates' AND table_type = 'BASE TABLE'
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[9.094ms] [34;1m[rows:0][0m CREATE TABLE "device_templates" ("id" bigserial,"name" text NOT NULL,"type" text NOT NULL,"vendor" text,"description" text,"o_ids" text[],"config" jsonb,"created_at" timestamptz,"updated_at" timestamptz,"deleted_at" timestamptz,PRIMARY KEY ("id"))
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[7.165ms] [34;1m[rows:0][0m CREATE TABLE "device_templates" ("id" bigserial,"name" text NOT NULL,"type" text NOT NULL,"vendor" text,"description" text,"o_ids" text[],"config" jsonb,"created_at" timestamptz,"updated_at" timestamptz,"deleted_at" timestamptz,PRIMARY KEY ("id"))
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[3.740ms] [34;1m[rows:0][0m CREATE INDEX IF NOT EXISTS "idx_device_templates_deleted_at" ON "device_templates" ("deleted_at")
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[4.123ms] [34;1m[rows:0][0m CREATE INDEX IF NOT EXISTS "idx_device_templates_deleted_at" ON "device_templates" ("deleted_at")
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[1.592ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'devices' AND table_type = 'BASE TABLE'
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.372ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'devices' AND table_type = 'BASE TABLE'
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[10.616ms] [34;1m[rows:0][0m CREATE TABLE "devices" ("id" bigserial,"name" text NOT NULL,"hostname" text,"ip_address" text NOT NULL,"port" bigint DEFAULT 161,"type" text,"vendor" text,"model" text,"location" text,"description" text,"status" text DEFAULT 'unknown',"last_seen" timestamptz,"template_id" bigint,"created_at" timestamptz,"updated_at" timestamptz,"deleted_at" timestamptz,PRIMARY KEY ("id"),CONSTRAINT "fk_devices_template" FOREIGN KEY ("template_id") REFERENCES "device_templates"("id"))
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[7.107ms] [34;1m[rows:0][0m CREATE TABLE "devices" ("id" bigserial,"name" text NOT NULL,"hostname" text,"ip_address" text NOT NULL,"port" bigint DEFAULT 161,"type" text,"vendor" text,"model" text,"location" text,"description" text,"status" text DEFAULT 'unknown',"last_seen" timestamptz,"template_id" bigint,"created_at" timestamptz,"updated_at" timestamptz,"deleted_at" timestamptz,PRIMARY KEY ("id"),CONSTRAINT "fk_devices_template" FOREIGN KEY ("template_id") REFERENCES "device_templates"("id"))
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[5.100ms] [34;1m[rows:0][0m CREATE INDEX IF NOT EXISTS "idx_devices_deleted_at" ON "devices" ("deleted_at")
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[6.904ms] [34;1m[rows:0][0m CREATE INDEX IF NOT EXISTS "idx_devices_deleted_at" ON "devices" ("deleted_at")
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[1.598ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'device_template_mibs' AND table_type = 'BASE TABLE'
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[2.170ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'device_template_mibs' AND table_type = 'BASE TABLE'
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[7.836ms] [34;1m[rows:0][0m CREATE TABLE "device_template_mibs" ("device_template_id" bigint,"mib_id" bigint,PRIMARY KEY ("device_template_id","mib_id"),CONSTRAINT "fk_device_template_mibs_device_template" FOREIGN KEY ("device_template_id") REFERENCES "device_templates"("id"),CONSTRAINT "fk_device_template_mibs_mib" FOREIGN KEY ("mib_id") REFERENCES "mibs"("id"))
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[4.749ms] [34;1m[rows:0][0m CREATE TABLE "device_template_mibs" ("device_template_id" bigint,"mib_id" bigint,PRIMARY KEY ("device_template_id","mib_id"),CONSTRAINT "fk_device_template_mibs_device_template" FOREIGN KEY ("device_template_id") REFERENCES "device_templates"("id"),CONSTRAINT "fk_device_template_mibs_mib" FOREIGN KEY ("mib_id") REFERENCES "mibs"("id"))
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[1.935ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'config_templates' AND table_type = 'BASE TABLE'
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.382ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'config_templates' AND table_type = 'BASE TABLE'
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[9.758ms] [34;1m[rows:0][0m CREATE TABLE "config_templates" ("id" bigserial,"name" text NOT NULL,"type" text NOT NULL,"description" text,"template" text,"variables" jsonb,"is_default" boolean DEFAULT false,"created_at" timestamptz,"updated_at" timestamptz,"deleted_at" timestamptz,PRIMARY KEY ("id"))
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[8.424ms] [34;1m[rows:0][0m CREATE TABLE "config_templates" ("id" bigserial,"name" text NOT NULL,"type" text NOT NULL,"description" text,"template" text,"variables" jsonb,"is_default" boolean DEFAULT false,"created_at" timestamptz,"updated_at" timestamptz,"deleted_at" timestamptz,PRIMARY KEY ("id"))
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[4.142ms] [34;1m[rows:0][0m CREATE INDEX IF NOT EXISTS "idx_config_templates_deleted_at" ON "config_templates" ("deleted_at")
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[2.446ms] [34;1m[rows:0][0m CREATE INDEX IF NOT EXISTS "idx_config_templates_deleted_at" ON "config_templates" ("deleted_at")
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[0.373ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'configs' AND table_type = 'BASE TABLE'
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.415ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'configs' AND table_type = 'BASE TABLE'
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[15.100ms] [34;1m[rows:0][0m CREATE TABLE "configs" ("id" bigserial,"name" text NOT NULL,"type" text NOT NULL,"content" text,"file_path" text,"device_id" bigint,"template_id" bigint,"status" text DEFAULT 'draft',"version" text,"created_at" timestamptz,"updated_at" timestamptz,"deleted_at" timestamptz,PRIMARY KEY ("id"),CONSTRAINT "fk_configs_device" FOREIGN KEY ("device_id") REFERENCES "devices"("id"),CONSTRAINT "fk_configs_template" FOREIGN KEY ("template_id") REFERENCES "config_templates"("id"))
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[7.814ms] [34;1m[rows:0][0m CREATE TABLE "configs" ("id" bigserial,"name" text NOT NULL,"type" text NOT NULL,"content" text,"file_path" text,"device_id" bigint,"template_id" bigint,"status" text DEFAULT 'draft',"version" text,"created_at" timestamptz,"updated_at" timestamptz,"deleted_at" timestamptz,PRIMARY KEY ("id"),CONSTRAINT "fk_configs_device" FOREIGN KEY ("device_id") REFERENCES "devices"("id"),CONSTRAINT "fk_configs_template" FOREIGN KEY ("template_id") REFERENCES "config_templates"("id"))
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[3.489ms] [34;1m[rows:0][0m CREATE INDEX IF NOT EXISTS "idx_configs_deleted_at" ON "configs" ("deleted_at")
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[4.249ms] [34;1m[rows:0][0m CREATE INDEX IF NOT EXISTS "idx_configs_deleted_at" ON "configs" ("deleted_at")
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[1.035ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'config_versions' AND table_type = 'BASE TABLE'
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.516ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'config_versions' AND table_type = 'BASE TABLE'
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[11.629ms] [34;1m[rows:0][0m CREATE TABLE "config_versions" ("id" bigserial,"config_id" bigint NOT NULL,"version" text NOT NULL,"content" text,"changes" text,"created_by" text,"created_at" timestamptz,"deleted_at" timestamptz,PRIMARY KEY ("id"),CONSTRAINT "fk_configs_versions" FOREIGN KEY ("config_id") REFERENCES "configs"("id"))
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[6.399ms] [34;1m[rows:0][0m CREATE TABLE "config_versions" ("id" bigserial,"config_id" bigint NOT NULL,"version" text NOT NULL,"content" text,"changes" text,"created_by" text,"created_at" timestamptz,"deleted_at" timestamptz,PRIMARY KEY ("id"),CONSTRAINT "fk_configs_versions" FOREIGN KEY ("config_id") REFERENCES "configs"("id"))
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[4.191ms] [34;1m[rows:0][0m CREATE INDEX IF NOT EXISTS "idx_config_versions_deleted_at" ON "config_versions" ("deleted_at")
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[4.991ms] [34;1m[rows:0][0m CREATE INDEX IF NOT EXISTS "idx_config_versions_deleted_at" ON "config_versions" ("deleted_at")
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[0.467ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'snmp_credentials' AND table_type = 'BASE TABLE'
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.544ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'snmp_credentials' AND table_type = 'BASE TABLE'
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[10.655ms] [34;1m[rows:0][0m CREATE TABLE "snmp_credentials" ("id" bigserial,"device_id" bigint NOT NULL,"version" text NOT NULL,"community" text,"username" text,"auth_proto" text,"auth_key" text,"priv_proto" text,"priv_key" text,"created_at" timestamptz,"updated_at" timestamptz,"deleted_at" timestamptz,PRIMARY KEY ("id"),CONSTRAINT "fk_devices_credentials" FOREIGN KEY ("device_id") REFERENCES "devices"("id"))
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[6.873ms] [34;1m[rows:0][0m CREATE TABLE "snmp_credentials" ("id" bigserial,"device_id" bigint NOT NULL,"version" text NOT NULL,"community" text,"username" text,"auth_proto" text,"auth_key" text,"priv_proto" text,"priv_key" text,"created_at" timestamptz,"updated_at" timestamptz,"deleted_at" timestamptz,PRIMARY KEY ("id"),CONSTRAINT "fk_devices_credentials" FOREIGN KEY ("device_id") REFERENCES "devices"("id"))
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[4.133ms] [34;1m[rows:0][0m CREATE INDEX IF NOT EXISTS "idx_snmp_credentials_deleted_at" ON "snmp_credentials" ("deleted_at")
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[2.161ms] [34;1m[rows:0][0m CREATE INDEX IF NOT EXISTS "idx_snmp_credentials_deleted_at" ON "snmp_credentials" ("deleted_at")
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[0.489ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'settings' AND table_type = 'BASE TABLE'
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.599ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'settings' AND table_type = 'BASE TABLE'
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[9.921ms] [34;1m[rows:0][0m CREATE TABLE "settings" ("key" text,"value" text,"type" text DEFAULT 'string',"category" text,"description" text,"is_public" boolean DEFAULT false,"created_at" timestamptz,"updated_at" timestamptz,"deleted_at" timestamptz,PRIMARY KEY ("key"))
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[7.702ms] [34;1m[rows:0][0m CREATE TABLE "settings" ("key" text,"value" text,"type" text DEFAULT 'string',"category" text,"description" text,"is_public" boolean DEFAULT false,"created_at" timestamptz,"updated_at" timestamptz,"deleted_at" timestamptz,PRIMARY KEY ("key"))
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[3.978ms] [34;1m[rows:0][0m CREATE INDEX IF NOT EXISTS "idx_settings_deleted_at" ON "settings" ("deleted_at")
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[2.249ms] [34;1m[rows:0][0m CREATE INDEX IF NOT EXISTS "idx_settings_deleted_at" ON "settings" ("deleted_at")
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[0.456ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND table_type = 'BASE TABLE'
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.837ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND table_type = 'BASE TABLE'
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[12.802ms] [34;1m[rows:0][0m CREATE TABLE "hosts" ("id" bigserial,"name" varchar(255) NOT NULL,"ip" varchar(45) NOT NULL,"port" bigint DEFAULT 22,"os" varchar(100),"os_version" varchar(100),"arch" varchar(50),"status" varchar(20) DEFAULT 'unknown',"last_seen" timestamptz,"username" varchar(100),"auth_type" varchar(20) DEFAULT 'password',"password" varchar(255),"private_key" text,"cpu_cores" bigint,"memory" bigint,"disk" bigint,"hostname" varchar(255),"mac_address" varchar(17),"tags" text,"group" varchar(100),"location" varchar(255),"discovery_method" varchar(50),"discovered_at" timestamptz,"created_at" timestamptz,"updated_at" timestamptz,"deleted_at" timestamptz,PRIMARY KEY ("id"))
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[8.113ms] [34;1m[rows:0][0m CREATE TABLE "hosts" ("id" bigserial,"name" varchar(255) NOT NULL,"ip" varchar(45) NOT NULL,"port" bigint DEFAULT 22,"os" varchar(100),"os_version" varchar(100),"arch" varchar(50),"status" varchar(20) DEFAULT 'unknown',"last_seen" timestamptz,"username" varchar(100),"auth_type" varchar(20) DEFAULT 'password',"password" varchar(255),"private_key" text,"cpu_cores" bigint,"memory" bigint,"disk" bigint,"hostname" varchar(255),"mac_address" varchar(17),"tags" text,"group" varchar(100),"location" varchar(255),"discovery_method" varchar(50),"discovered_at" timestamptz,"created_at" timestamptz,"updated_at" timestamptz,"deleted_at" timestamptz,PRIMARY KEY ("id"))
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[5.676ms] [34;1m[rows:0][0m CREATE INDEX IF NOT EXISTS "idx_hosts_deleted_at" ON "hosts" ("deleted_at")
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[3.784ms] [34;1m[rows:0][0m CREATE INDEX IF NOT EXISTS "idx_hosts_deleted_at" ON "hosts" ("deleted_at")
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[4.048ms] [34;1m[rows:0][0m CREATE UNIQUE INDEX IF NOT EXISTS "idx_hosts_ip" ON "hosts" ("ip")
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[2.103ms] [34;1m[rows:0][0m CREATE UNIQUE INDEX IF NOT EXISTS "idx_hosts_ip" ON "hosts" ("ip")
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[0.478ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_components' AND table_type = 'BASE TABLE'
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.565ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_components' AND table_type = 'BASE TABLE'
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[14.104ms] [34;1m[rows:0][0m CREATE TABLE "host_components" ("id" bigserial,"host_id" bigint NOT NULL,"component_name" varchar(100) NOT NULL,"component_type" varchar(50),"version" varchar(50),"status" varchar(20) DEFAULT 'unknown',"port" bigint,"config_path" varchar(500),"deploy_method" varchar(50),"deployed_at" timestamptz,"created_at" timestamptz,"updated_at" timestamptz,"deleted_at" timestamptz,PRIMARY KEY ("id"),CONSTRAINT "fk_hosts_components" FOREIGN KEY ("host_id") REFERENCES "hosts"("id"))
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[6.494ms] [34;1m[rows:0][0m CREATE TABLE "host_components" ("id" bigserial,"host_id" bigint NOT NULL,"component_name" varchar(100) NOT NULL,"component_type" varchar(50),"version" varchar(50),"status" varchar(20) DEFAULT 'unknown',"port" bigint,"config_path" varchar(500),"deploy_method" varchar(50),"deployed_at" timestamptz,"created_at" timestamptz,"updated_at" timestamptz,"deleted_at" timestamptz,PRIMARY KEY ("id"),CONSTRAINT "fk_hosts_components" FOREIGN KEY ("host_id") REFERENCES "hosts"("id"))
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[4.179ms] [34;1m[rows:0][0m CREATE INDEX IF NOT EXISTS "idx_host_components_deleted_at" ON "host_components" ("deleted_at")
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[5.322ms] [34;1m[rows:0][0m CREATE INDEX IF NOT EXISTS "idx_host_components_deleted_at" ON "host_components" ("deleted_at")
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[0.452ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_discovery_tasks' AND table_type = 'BASE TABLE'
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.602ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_discovery_tasks' AND table_type = 'BASE TABLE'
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[11.543ms] [34;1m[rows:0][0m CREATE TABLE "host_discovery_tasks" ("id" bigserial,"name" varchar(255) NOT NULL,"ip_range" varchar(100) NOT NULL,"ports" varchar(255),"timeout" bigint DEFAULT 5,"username" varchar(100),"password" varchar(255),"private_key" text,"status" varchar(20) DEFAULT 'pending',"progress" bigint DEFAULT 0,"total_hosts" bigint DEFAULT 0,"found_hosts" bigint DEFAULT 0,"online_hosts" bigint DEFAULT 0,"started_at" timestamptz,"completed_at" timestamptz,"created_at" timestamptz,"updated_at" timestamptz,"deleted_at" timestamptz,PRIMARY KEY ("id"))
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[7.522ms] [34;1m[rows:0][0m CREATE TABLE "host_discovery_tasks" ("id" bigserial,"name" varchar(255) NOT NULL,"ip_range" varchar(100) NOT NULL,"ports" varchar(255),"timeout" bigint DEFAULT 5,"username" varchar(100),"password" varchar(255),"private_key" text,"status" varchar(20) DEFAULT 'pending',"progress" bigint DEFAULT 0,"total_hosts" bigint DEFAULT 0,"found_hosts" bigint DEFAULT 0,"online_hosts" bigint DEFAULT 0,"started_at" timestamptz,"completed_at" timestamptz,"created_at" timestamptz,"updated_at" timestamptz,"deleted_at" timestamptz,PRIMARY KEY ("id"))
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[4.049ms] [34;1m[rows:0][0m CREATE INDEX IF NOT EXISTS "idx_host_discovery_tasks_deleted_at" ON "host_discovery_tasks" ("deleted_at")
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[2.575ms] [34;1m[rows:0][0m CREATE INDEX IF NOT EXISTS "idx_host_discovery_tasks_deleted_at" ON "host_discovery_tasks" ("deleted_at")
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[0.564ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_credentials' AND table_type = 'BASE TABLE'
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.703ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_credentials' AND table_type = 'BASE TABLE'
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[10.507ms] [34;1m[rows:0][0m CREATE TABLE "host_credentials" ("id" bigserial,"name" varchar(255) NOT NULL,"description" text,"username" varchar(100) NOT NULL,"auth_type" varchar(20) NOT NULL,"password" varchar(255),"private_key" text,"passphrase" varchar(255),"ip_ranges" text,"tags" text,"created_at" timestamptz,"updated_at" timestamptz,"deleted_at" timestamptz,PRIMARY KEY ("id"))
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[7.828ms] [34;1m[rows:0][0m CREATE TABLE "host_credentials" ("id" bigserial,"name" varchar(255) NOT NULL,"description" text,"username" varchar(100) NOT NULL,"auth_type" varchar(20) NOT NULL,"password" varchar(255),"private_key" text,"passphrase" varchar(255),"ip_ranges" text,"tags" text,"created_at" timestamptz,"updated_at" timestamptz,"deleted_at" timestamptz,PRIMARY KEY ("id"))
 
-2025/06/22 22:40:00 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
-[0m[33m[4.138ms] [34;1m[rows:0][0m CREATE INDEX IF NOT EXISTS "idx_host_credentials_deleted_at" ON "host_credentials" ("deleted_at")
-2025/06/22 22:40:00 Database connected and migrated successfully
-2025/06/22 22:40:00 Redis connected successfully
-2025/06/22 22:40:00 Server starting on port 8080
+2025/06/23 16:45:22 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[2.627ms] [34;1m[rows:0][0m CREATE INDEX IF NOT EXISTS "idx_host_credentials_deleted_at" ON "host_credentials" ("deleted_at")
+2025/06/23 16:45:22 Database connected and migrated successfully
+2025/06/23 16:45:22 Redis connected successfully
+2025/06/23 16:45:22 Server starting on port 17880
+127.0.0.1 - [Mon, 23 Jun 2025 16:46:29 CST] "GET /api/v1/health HTTP/1.1 200 63.544µs "curl/7.81.0" "
+[GIN] 2025/06/23 - 16:46:29 | 200 |     147.749µs |       127.0.0.1 | GET      "/api/v1/health"
+127.0.0.1 - [Mon, 23 Jun 2025 16:46:44 CST] "HEAD /api/v1/health HTTP/1.1 404 751ns "curl/7.81.0" "
+[GIN] 2025/06/23 - 16:46:44 | 404 |     124.686µs |       127.0.0.1 | HEAD     "/api/v1/health"
+127.0.0.1 - [Mon, 23 Jun 2025 16:46:57 CST] "GET /api/v1/health HTTP/1.1 200 37.397µs "curl/7.81.0" "
+[GIN] 2025/06/23 - 16:46:57 | 200 |     108.544µs |       127.0.0.1 | GET      "/api/v1/health"

@@ -2,13 +2,12 @@
 > snmp-mib-platform@2.0.0 start
 > next start -p 12300 -H 0.0.0.0
 
-   ▲ Next.js 15.2.4
-   - Local:        http://localhost:12300
-   - Network:      http://0.0.0.0:12300
-
- ✓ Starting...
- ⚠ Invalid next.config.mjs options detected: 
- ⚠     Unrecognized key(s) in object: 'generateStaticParams'
- ⚠ See more info here: https://nextjs.org/docs/messages/invalid-next-config
- ⚠ "next start" does not work with "output: standalone" configuration. Use "node .next/standalone/server.js" instead.
- ✓ Ready in 973ms
+ ⨯ Failed to start server
+Error: listen EADDRINUSE: address already in use 0.0.0.0:12300
+    at <unknown> (Error: listen EADDRINUSE: address already in use 0.0.0.0:12300) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 12300
+}
