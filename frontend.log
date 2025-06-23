@@ -1,1 +1,17 @@
+<<<<<<< HEAD
 node: /root/.local/share/acli/plugin/rovodev/lib/libstdc++.so.6: version `GLIBCXX_3.4.32' not found (required by /lib/x86_64-linux-gnu/libnode.so.109)
+=======
+
+> snmp-mib-platform@2.0.0 start
+> next start -p 12300 -H 0.0.0.0
+
+ ⨯ Failed to start server
+Error: listen EADDRINUSE: address already in use 0.0.0.0:12300
+    at <unknown> (Error: listen EADDRINUSE: address already in use 0.0.0.0:12300) {
+  code: 'EADDRINUSE',
+  errno: -98,
+  syscall: 'listen',
+  address: '0.0.0.0',
+  port: 12300
+}
+>>>>>>> 15e95b75bc9966f74fe921db8b4c82b9ae529082

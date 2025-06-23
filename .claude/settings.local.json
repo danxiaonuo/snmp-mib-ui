@@ -68,7 +68,8 @@
       "Bash(./stop-services.sh:*)",
       "Bash(timeout:*)",
       "Bash(unset:*)",
-      "Bash(export ENVIRONMENT=production SERVER_PORT=17880 JWT_SECRET=test-secret)"
+      "Bash(export ENVIRONMENT=production SERVER_PORT=17880 JWT_SECRET=test-secret)",
+      "Bash(./start-optimized.sh:*)"
     ],
     "deny": []
   }

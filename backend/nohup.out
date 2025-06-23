@@ -1,0 +1,1006 @@
+2025/06/23 13:11:12 No .env file found
+
+2025/06/23 13:11:12 [35m/etc/opt/snmp-mib-ui/backend/database/database.go:15
+[0m[31m[error] [0mfailed to initialize database, got error failed to connect to `host=localhost user=netmon_user database=network_monitor`: failed SASL auth (FATAL: password authentication failed for user "netmon_user" (SQLSTATE 28P01))
+2025/06/23 13:11:12 Failed to connect to database:failed to connect to `host=localhost user=netmon_user database=network_monitor`: failed SASL auth (FATAL: password authentication failed for user "netmon_user" (SQLSTATE 28P01))
+exit status 1
+🚀 启动SNMP监控平台后端服务...
+📊 端口: 17880
+💾 数据库: localhost:5432
+🔄 Redis: localhost:6379
+2025/06/23 13:11:36 No .env file found
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[15.114ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'mibs' AND table_type = 'BASE TABLE'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.016ms] [34;1m[rows:1][0m SELECT CURRENT_DATABASE()
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[19.128ms] [34;1m[rows:-][0m SELECT c.column_name, c.is_nullable = 'YES', c.udt_name, c.character_maximum_length, c.numeric_precision, c.numeric_precision_radix, c.numeric_scale, c.datetime_precision, 8 * typlen, c.column_default, pd.description, c.identity_increment FROM information_schema.columns AS c JOIN pg_type AS pgt ON c.udt_name = pgt.typname LEFT JOIN pg_catalog.pg_description as pd ON pd.objsubid = c.ordinal_position AND pd.objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = c.table_name AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = c.table_schema)) where table_catalog = 'network_monitor' AND table_schema = CURRENT_SCHEMA() AND table_name = 'mibs'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.701ms] [34;1m[rows:-][0m SELECT * FROM "mibs" LIMIT 1
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[16.678ms] [34;1m[rows:-][0m SELECT constraint_name FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'mibs' AND constraint_type = 'UNIQUE'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[14.184ms] [34;1m[rows:-][0m SELECT c.column_name, constraint_name, constraint_type FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'mibs'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[2.186ms] [34;1m[rows:-][0m SELECT a.attname as column_name, format_type(a.atttypid, a.atttypmod) AS data_type
+		FROM pg_attribute a JOIN pg_class b ON a.attrelid = b.oid AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA())
+		WHERE a.attnum > 0 -- hide internal columns
+		AND NOT a.attisdropped -- hide deleted columns
+		AND b.relname = 'mibs'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[9.572ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'mibs' AND column_name = 'id') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'mibs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[5.995ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'mibs' AND column_name = 'name') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'mibs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[3.914ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'mibs' AND column_name = 'filename') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'mibs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[5.507ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'mibs' AND column_name = 'file_path') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'mibs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[3.383ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'mibs' AND column_name = 'version') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'mibs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[3.252ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'mibs' AND column_name = 'description') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'mibs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.906ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'mibs' AND column_name = 'author') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'mibs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.926ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'mibs' AND column_name = 'status') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'mibs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.598ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'mibs' AND column_name = 'parsed_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'mibs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.794ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'mibs' AND column_name = 'error_msg') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'mibs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.769ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'mibs' AND column_name = 'file_size') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'mibs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.744ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'mibs' AND column_name = 'size') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'mibs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[3.397ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'mibs' AND column_name = 'checksum') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'mibs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.939ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'mibs' AND column_name = 'uploaded_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'mibs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.929ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'mibs' AND column_name = 'created_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'mibs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.759ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'mibs' AND column_name = 'updated_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'mibs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.675ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'mibs' AND column_name = 'deleted_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'mibs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[3.295ms] [34;1m[rows:1][0m SELECT count(*) FROM pg_indexes WHERE tablename = 'mibs' AND indexname = 'idx_mibs_deleted_at' AND schemaname = CURRENT_SCHEMA()
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.082ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'o_ids' AND table_type = 'BASE TABLE'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.215ms] [34;1m[rows:1][0m SELECT CURRENT_DATABASE()
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[8.773ms] [34;1m[rows:-][0m SELECT c.column_name, c.is_nullable = 'YES', c.udt_name, c.character_maximum_length, c.numeric_precision, c.numeric_precision_radix, c.numeric_scale, c.datetime_precision, 8 * typlen, c.column_default, pd.description, c.identity_increment FROM information_schema.columns AS c JOIN pg_type AS pgt ON c.udt_name = pgt.typname LEFT JOIN pg_catalog.pg_description as pd ON pd.objsubid = c.ordinal_position AND pd.objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = c.table_name AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = c.table_schema)) where table_catalog = 'network_monitor' AND table_schema = CURRENT_SCHEMA() AND table_name = 'o_ids'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.199ms] [34;1m[rows:-][0m SELECT * FROM "o_ids" LIMIT 1
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[10.511ms] [34;1m[rows:-][0m SELECT constraint_name FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'o_ids' AND constraint_type = 'UNIQUE'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[11.831ms] [34;1m[rows:-][0m SELECT c.column_name, constraint_name, constraint_type FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'o_ids'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.747ms] [34;1m[rows:-][0m SELECT a.attname as column_name, format_type(a.atttypid, a.atttypmod) AS data_type
+		FROM pg_attribute a JOIN pg_class b ON a.attrelid = b.oid AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA())
+		WHERE a.attnum > 0 -- hide internal columns
+		AND NOT a.attisdropped -- hide deleted columns
+		AND b.relname = 'o_ids'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.665ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'o_ids' AND column_name = 'id') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'o_ids' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.578ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'o_ids' AND column_name = 'mib_id') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'o_ids' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.531ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'o_ids' AND column_name = 'name') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'o_ids' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.253ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'o_ids' AND column_name = 'o_id') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'o_ids' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[2.402ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'o_ids' AND column_name = 'o_id_string') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'o_ids' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.852ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'o_ids' AND column_name = 'type') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'o_ids' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.671ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'o_ids' AND column_name = 'access') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'o_ids' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.766ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'o_ids' AND column_name = 'status') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'o_ids' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.521ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'o_ids' AND column_name = 'description') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'o_ids' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.780ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'o_ids' AND column_name = 'syntax') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'o_ids' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.556ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'o_ids' AND column_name = 'units') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'o_ids' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.594ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'o_ids' AND column_name = 'parent_o_id') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'o_ids' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.599ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'o_ids' AND column_name = 'created_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'o_ids' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.561ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'o_ids' AND column_name = 'updated_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'o_ids' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.580ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'o_ids' AND column_name = 'deleted_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'o_ids' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[2.162ms] [34;1m[rows:1][0m SELECT count(*) FROM INFORMATION_SCHEMA.table_constraints WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'o_ids' AND constraint_name = 'fk_mibs_o_ids'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.164ms] [34;1m[rows:1][0m SELECT count(*) FROM pg_indexes WHERE tablename = 'o_ids' AND indexname = 'idx_o_ids_deleted_at' AND schemaname = CURRENT_SCHEMA()
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.025ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'device_templates' AND table_type = 'BASE TABLE'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.396ms] [34;1m[rows:1][0m SELECT CURRENT_DATABASE()
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[9.566ms] [34;1m[rows:-][0m SELECT c.column_name, c.is_nullable = 'YES', c.udt_name, c.character_maximum_length, c.numeric_precision, c.numeric_precision_radix, c.numeric_scale, c.datetime_precision, 8 * typlen, c.column_default, pd.description, c.identity_increment FROM information_schema.columns AS c JOIN pg_type AS pgt ON c.udt_name = pgt.typname LEFT JOIN pg_catalog.pg_description as pd ON pd.objsubid = c.ordinal_position AND pd.objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = c.table_name AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = c.table_schema)) where table_catalog = 'network_monitor' AND table_schema = CURRENT_SCHEMA() AND table_name = 'device_templates'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.890ms] [34;1m[rows:-][0m SELECT * FROM "device_templates" LIMIT 1
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[11.410ms] [34;1m[rows:-][0m SELECT constraint_name FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'device_templates' AND constraint_type = 'UNIQUE'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[10.129ms] [34;1m[rows:-][0m SELECT c.column_name, constraint_name, constraint_type FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'device_templates'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.761ms] [34;1m[rows:-][0m SELECT a.attname as column_name, format_type(a.atttypid, a.atttypmod) AS data_type
+		FROM pg_attribute a JOIN pg_class b ON a.attrelid = b.oid AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA())
+		WHERE a.attnum > 0 -- hide internal columns
+		AND NOT a.attisdropped -- hide deleted columns
+		AND b.relname = 'device_templates'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.666ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'device_templates' AND column_name = 'id') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'device_templates' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.515ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'device_templates' AND column_name = 'name') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'device_templates' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[3.077ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'device_templates' AND column_name = 'type') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'device_templates' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.547ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'device_templates' AND column_name = 'vendor') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'device_templates' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.085ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'device_templates' AND column_name = 'description') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'device_templates' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.818ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'device_templates' AND column_name = 'o_ids') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'device_templates' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.722ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'device_templates' AND column_name = 'config') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'device_templates' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.726ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'device_templates' AND column_name = 'created_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'device_templates' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.612ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'device_templates' AND column_name = 'updated_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'device_templates' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.664ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'device_templates' AND column_name = 'deleted_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'device_templates' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.636ms] [34;1m[rows:1][0m SELECT count(*) FROM pg_indexes WHERE tablename = 'device_templates' AND indexname = 'idx_device_templates_deleted_at' AND schemaname = CURRENT_SCHEMA()
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.101ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'devices' AND table_type = 'BASE TABLE'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.207ms] [34;1m[rows:1][0m SELECT CURRENT_DATABASE()
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[8.107ms] [34;1m[rows:-][0m SELECT c.column_name, c.is_nullable = 'YES', c.udt_name, c.character_maximum_length, c.numeric_precision, c.numeric_precision_radix, c.numeric_scale, c.datetime_precision, 8 * typlen, c.column_default, pd.description, c.identity_increment FROM information_schema.columns AS c JOIN pg_type AS pgt ON c.udt_name = pgt.typname LEFT JOIN pg_catalog.pg_description as pd ON pd.objsubid = c.ordinal_position AND pd.objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = c.table_name AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = c.table_schema)) where table_catalog = 'network_monitor' AND table_schema = CURRENT_SCHEMA() AND table_name = 'devices'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.051ms] [34;1m[rows:-][0m SELECT * FROM "devices" LIMIT 1
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[9.667ms] [34;1m[rows:-][0m SELECT constraint_name FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'devices' AND constraint_type = 'UNIQUE'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[12.919ms] [34;1m[rows:-][0m SELECT c.column_name, constraint_name, constraint_type FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'devices'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.986ms] [34;1m[rows:-][0m SELECT a.attname as column_name, format_type(a.atttypid, a.atttypmod) AS data_type
+		FROM pg_attribute a JOIN pg_class b ON a.attrelid = b.oid AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA())
+		WHERE a.attnum > 0 -- hide internal columns
+		AND NOT a.attisdropped -- hide deleted columns
+		AND b.relname = 'devices'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.699ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'devices' AND column_name = 'id') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'devices' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.649ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'devices' AND column_name = 'name') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'devices' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.823ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'devices' AND column_name = 'hostname') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'devices' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.875ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'devices' AND column_name = 'ip_address') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'devices' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.172ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'devices' AND column_name = 'port') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'devices' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.748ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'devices' AND column_name = 'type') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'devices' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.764ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'devices' AND column_name = 'vendor') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'devices' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.594ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'devices' AND column_name = 'model') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'devices' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.663ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'devices' AND column_name = 'location') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'devices' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.710ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'devices' AND column_name = 'description') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'devices' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.835ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'devices' AND column_name = 'status') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'devices' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.665ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'devices' AND column_name = 'last_seen') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'devices' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.613ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'devices' AND column_name = 'template_id') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'devices' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.770ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'devices' AND column_name = 'created_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'devices' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.534ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'devices' AND column_name = 'updated_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'devices' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.473ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'devices' AND column_name = 'deleted_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'devices' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.769ms] [34;1m[rows:1][0m SELECT count(*) FROM INFORMATION_SCHEMA.table_constraints WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'devices' AND constraint_name = 'fk_devices_template'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.073ms] [34;1m[rows:1][0m SELECT count(*) FROM pg_indexes WHERE tablename = 'devices' AND indexname = 'idx_devices_deleted_at' AND schemaname = CURRENT_SCHEMA()
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[3.629ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'device_template_mibs' AND table_type = 'BASE TABLE'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.091ms] [34;1m[rows:1][0m SELECT CURRENT_DATABASE()
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[5.937ms] [34;1m[rows:-][0m SELECT c.column_name, c.is_nullable = 'YES', c.udt_name, c.character_maximum_length, c.numeric_precision, c.numeric_precision_radix, c.numeric_scale, c.datetime_precision, 8 * typlen, c.column_default, pd.description, c.identity_increment FROM information_schema.columns AS c JOIN pg_type AS pgt ON c.udt_name = pgt.typname LEFT JOIN pg_catalog.pg_description as pd ON pd.objsubid = c.ordinal_position AND pd.objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = c.table_name AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = c.table_schema)) where table_catalog = 'network_monitor' AND table_schema = CURRENT_SCHEMA() AND table_name = 'device_template_mibs'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.781ms] [34;1m[rows:-][0m SELECT * FROM "device_template_mibs" LIMIT 1
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[10.212ms] [34;1m[rows:-][0m SELECT constraint_name FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'device_template_mibs' AND constraint_type = 'UNIQUE'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[9.010ms] [34;1m[rows:-][0m SELECT c.column_name, constraint_name, constraint_type FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'device_template_mibs'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.872ms] [34;1m[rows:-][0m SELECT a.attname as column_name, format_type(a.atttypid, a.atttypmod) AS data_type
+		FROM pg_attribute a JOIN pg_class b ON a.attrelid = b.oid AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA())
+		WHERE a.attnum > 0 -- hide internal columns
+		AND NOT a.attisdropped -- hide deleted columns
+		AND b.relname = 'device_template_mibs'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.697ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'device_template_mibs' AND column_name = 'device_template_id') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'device_template_mibs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.553ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'device_template_mibs' AND column_name = 'mib_id') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'device_template_mibs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[4.548ms] [34;1m[rows:1][0m SELECT count(*) FROM INFORMATION_SCHEMA.table_constraints WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'device_template_mibs' AND constraint_name = 'fk_device_template_mibs_device_template'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[2.352ms] [34;1m[rows:1][0m SELECT count(*) FROM INFORMATION_SCHEMA.table_constraints WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'device_template_mibs' AND constraint_name = 'fk_device_template_mibs_mib'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.300ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'config_templates' AND table_type = 'BASE TABLE'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.457ms] [34;1m[rows:1][0m SELECT CURRENT_DATABASE()
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[6.546ms] [34;1m[rows:-][0m SELECT c.column_name, c.is_nullable = 'YES', c.udt_name, c.character_maximum_length, c.numeric_precision, c.numeric_precision_radix, c.numeric_scale, c.datetime_precision, 8 * typlen, c.column_default, pd.description, c.identity_increment FROM information_schema.columns AS c JOIN pg_type AS pgt ON c.udt_name = pgt.typname LEFT JOIN pg_catalog.pg_description as pd ON pd.objsubid = c.ordinal_position AND pd.objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = c.table_name AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = c.table_schema)) where table_catalog = 'network_monitor' AND table_schema = CURRENT_SCHEMA() AND table_name = 'config_templates'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[2.481ms] [34;1m[rows:-][0m SELECT * FROM "config_templates" LIMIT 1
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[8.837ms] [34;1m[rows:-][0m SELECT constraint_name FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'config_templates' AND constraint_type = 'UNIQUE'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[13.033ms] [34;1m[rows:-][0m SELECT c.column_name, constraint_name, constraint_type FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'config_templates'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.869ms] [34;1m[rows:-][0m SELECT a.attname as column_name, format_type(a.atttypid, a.atttypmod) AS data_type
+		FROM pg_attribute a JOIN pg_class b ON a.attrelid = b.oid AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA())
+		WHERE a.attnum > 0 -- hide internal columns
+		AND NOT a.attisdropped -- hide deleted columns
+		AND b.relname = 'config_templates'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.928ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'config_templates' AND column_name = 'id') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'config_templates' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.822ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'config_templates' AND column_name = 'name') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'config_templates' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.736ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'config_templates' AND column_name = 'type') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'config_templates' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.748ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'config_templates' AND column_name = 'description') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'config_templates' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.600ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'config_templates' AND column_name = 'template') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'config_templates' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.557ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'config_templates' AND column_name = 'variables') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'config_templates' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.514ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'config_templates' AND column_name = 'is_default') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'config_templates' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.768ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'config_templates' AND column_name = 'created_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'config_templates' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[2.191ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'config_templates' AND column_name = 'updated_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'config_templates' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.636ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'config_templates' AND column_name = 'deleted_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'config_templates' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.540ms] [34;1m[rows:1][0m SELECT count(*) FROM pg_indexes WHERE tablename = 'config_templates' AND indexname = 'idx_config_templates_deleted_at' AND schemaname = CURRENT_SCHEMA()
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.020ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'configs' AND table_type = 'BASE TABLE'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.394ms] [34;1m[rows:1][0m SELECT CURRENT_DATABASE()
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.943ms] [34;1m[rows:-][0m SELECT c.column_name, c.is_nullable = 'YES', c.udt_name, c.character_maximum_length, c.numeric_precision, c.numeric_precision_radix, c.numeric_scale, c.datetime_precision, 8 * typlen, c.column_default, pd.description, c.identity_increment FROM information_schema.columns AS c JOIN pg_type AS pgt ON c.udt_name = pgt.typname LEFT JOIN pg_catalog.pg_description as pd ON pd.objsubid = c.ordinal_position AND pd.objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = c.table_name AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = c.table_schema)) where table_catalog = 'network_monitor' AND table_schema = CURRENT_SCHEMA() AND table_name = 'configs'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.741ms] [34;1m[rows:-][0m SELECT * FROM "configs" LIMIT 1
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.434ms] [34;1m[rows:-][0m SELECT constraint_name FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'configs' AND constraint_type = 'UNIQUE'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.287ms] [34;1m[rows:-][0m SELECT c.column_name, constraint_name, constraint_type FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'configs'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.275ms] [34;1m[rows:-][0m SELECT a.attname as column_name, format_type(a.atttypid, a.atttypmod) AS data_type
+		FROM pg_attribute a JOIN pg_class b ON a.attrelid = b.oid AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA())
+		WHERE a.attnum > 0 -- hide internal columns
+		AND NOT a.attisdropped -- hide deleted columns
+		AND b.relname = 'configs'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.629ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'configs' AND column_name = 'id') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'configs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.525ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'configs' AND column_name = 'name') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'configs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.545ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'configs' AND column_name = 'type') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'configs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.739ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'configs' AND column_name = 'content') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'configs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.708ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'configs' AND column_name = 'file_path') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'configs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.988ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'configs' AND column_name = 'device_id') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'configs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[2.562ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'configs' AND column_name = 'template_id') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'configs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.965ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'configs' AND column_name = 'status') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'configs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.703ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'configs' AND column_name = 'version') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'configs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.650ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'configs' AND column_name = 'created_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'configs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.626ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'configs' AND column_name = 'updated_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'configs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.548ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'configs' AND column_name = 'deleted_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'configs' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[2.039ms] [34;1m[rows:1][0m SELECT count(*) FROM INFORMATION_SCHEMA.table_constraints WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'configs' AND constraint_name = 'fk_configs_device'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.809ms] [34;1m[rows:1][0m SELECT count(*) FROM INFORMATION_SCHEMA.table_constraints WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'configs' AND constraint_name = 'fk_configs_template'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.146ms] [34;1m[rows:1][0m SELECT count(*) FROM pg_indexes WHERE tablename = 'configs' AND indexname = 'idx_configs_deleted_at' AND schemaname = CURRENT_SCHEMA()
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.710ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'config_versions' AND table_type = 'BASE TABLE'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.235ms] [34;1m[rows:1][0m SELECT CURRENT_DATABASE()
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[4.516ms] [34;1m[rows:-][0m SELECT c.column_name, c.is_nullable = 'YES', c.udt_name, c.character_maximum_length, c.numeric_precision, c.numeric_precision_radix, c.numeric_scale, c.datetime_precision, 8 * typlen, c.column_default, pd.description, c.identity_increment FROM information_schema.columns AS c JOIN pg_type AS pgt ON c.udt_name = pgt.typname LEFT JOIN pg_catalog.pg_description as pd ON pd.objsubid = c.ordinal_position AND pd.objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = c.table_name AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = c.table_schema)) where table_catalog = 'network_monitor' AND table_schema = CURRENT_SCHEMA() AND table_name = 'config_versions'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.868ms] [34;1m[rows:-][0m SELECT * FROM "config_versions" LIMIT 1
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.302ms] [34;1m[rows:-][0m SELECT constraint_name FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'config_versions' AND constraint_type = 'UNIQUE'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.698ms] [34;1m[rows:-][0m SELECT c.column_name, constraint_name, constraint_type FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'config_versions'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.425ms] [34;1m[rows:-][0m SELECT a.attname as column_name, format_type(a.atttypid, a.atttypmod) AS data_type
+		FROM pg_attribute a JOIN pg_class b ON a.attrelid = b.oid AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA())
+		WHERE a.attnum > 0 -- hide internal columns
+		AND NOT a.attisdropped -- hide deleted columns
+		AND b.relname = 'config_versions'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.749ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'config_versions' AND column_name = 'id') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'config_versions' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.814ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'config_versions' AND column_name = 'config_id') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'config_versions' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.875ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'config_versions' AND column_name = 'version') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'config_versions' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.633ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'config_versions' AND column_name = 'content') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'config_versions' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.616ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'config_versions' AND column_name = 'changes') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'config_versions' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.561ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'config_versions' AND column_name = 'created_by') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'config_versions' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.661ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'config_versions' AND column_name = 'created_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'config_versions' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.617ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'config_versions' AND column_name = 'deleted_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'config_versions' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.474ms] [34;1m[rows:1][0m SELECT count(*) FROM INFORMATION_SCHEMA.table_constraints WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'config_versions' AND constraint_name = 'fk_configs_versions'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.352ms] [34;1m[rows:1][0m SELECT count(*) FROM pg_indexes WHERE tablename = 'config_versions' AND indexname = 'idx_config_versions_deleted_at' AND schemaname = CURRENT_SCHEMA()
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.293ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'snmp_credentials' AND table_type = 'BASE TABLE'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.177ms] [34;1m[rows:1][0m SELECT CURRENT_DATABASE()
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[4.110ms] [34;1m[rows:-][0m SELECT c.column_name, c.is_nullable = 'YES', c.udt_name, c.character_maximum_length, c.numeric_precision, c.numeric_precision_radix, c.numeric_scale, c.datetime_precision, 8 * typlen, c.column_default, pd.description, c.identity_increment FROM information_schema.columns AS c JOIN pg_type AS pgt ON c.udt_name = pgt.typname LEFT JOIN pg_catalog.pg_description as pd ON pd.objsubid = c.ordinal_position AND pd.objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = c.table_name AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = c.table_schema)) where table_catalog = 'network_monitor' AND table_schema = CURRENT_SCHEMA() AND table_name = 'snmp_credentials'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.646ms] [34;1m[rows:-][0m SELECT * FROM "snmp_credentials" LIMIT 1
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.595ms] [34;1m[rows:-][0m SELECT constraint_name FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'snmp_credentials' AND constraint_type = 'UNIQUE'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.413ms] [34;1m[rows:-][0m SELECT c.column_name, constraint_name, constraint_type FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'snmp_credentials'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.302ms] [34;1m[rows:-][0m SELECT a.attname as column_name, format_type(a.atttypid, a.atttypmod) AS data_type
+		FROM pg_attribute a JOIN pg_class b ON a.attrelid = b.oid AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA())
+		WHERE a.attnum > 0 -- hide internal columns
+		AND NOT a.attisdropped -- hide deleted columns
+		AND b.relname = 'snmp_credentials'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.580ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'snmp_credentials' AND column_name = 'id') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'snmp_credentials' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.572ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'snmp_credentials' AND column_name = 'device_id') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'snmp_credentials' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.571ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'snmp_credentials' AND column_name = 'version') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'snmp_credentials' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.528ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'snmp_credentials' AND column_name = 'community') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'snmp_credentials' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.619ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'snmp_credentials' AND column_name = 'username') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'snmp_credentials' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.163ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'snmp_credentials' AND column_name = 'auth_proto') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'snmp_credentials' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.495ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'snmp_credentials' AND column_name = 'auth_key') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'snmp_credentials' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.535ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'snmp_credentials' AND column_name = 'priv_proto') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'snmp_credentials' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.510ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'snmp_credentials' AND column_name = 'priv_key') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'snmp_credentials' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.536ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'snmp_credentials' AND column_name = 'created_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'snmp_credentials' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.524ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'snmp_credentials' AND column_name = 'updated_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'snmp_credentials' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.962ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'snmp_credentials' AND column_name = 'deleted_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'snmp_credentials' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.932ms] [34;1m[rows:1][0m SELECT count(*) FROM INFORMATION_SCHEMA.table_constraints WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'snmp_credentials' AND constraint_name = 'fk_devices_credentials'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.492ms] [34;1m[rows:1][0m SELECT count(*) FROM pg_indexes WHERE tablename = 'snmp_credentials' AND indexname = 'idx_snmp_credentials_deleted_at' AND schemaname = CURRENT_SCHEMA()
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.366ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'settings' AND table_type = 'BASE TABLE'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.225ms] [34;1m[rows:1][0m SELECT CURRENT_DATABASE()
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.710ms] [34;1m[rows:-][0m SELECT c.column_name, c.is_nullable = 'YES', c.udt_name, c.character_maximum_length, c.numeric_precision, c.numeric_precision_radix, c.numeric_scale, c.datetime_precision, 8 * typlen, c.column_default, pd.description, c.identity_increment FROM information_schema.columns AS c JOIN pg_type AS pgt ON c.udt_name = pgt.typname LEFT JOIN pg_catalog.pg_description as pd ON pd.objsubid = c.ordinal_position AND pd.objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = c.table_name AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = c.table_schema)) where table_catalog = 'network_monitor' AND table_schema = CURRENT_SCHEMA() AND table_name = 'settings'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.743ms] [34;1m[rows:-][0m SELECT * FROM "settings" LIMIT 1
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.179ms] [34;1m[rows:-][0m SELECT constraint_name FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'settings' AND constraint_type = 'UNIQUE'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.203ms] [34;1m[rows:-][0m SELECT c.column_name, constraint_name, constraint_type FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'settings'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.312ms] [34;1m[rows:-][0m SELECT a.attname as column_name, format_type(a.atttypid, a.atttypmod) AS data_type
+		FROM pg_attribute a JOIN pg_class b ON a.attrelid = b.oid AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA())
+		WHERE a.attnum > 0 -- hide internal columns
+		AND NOT a.attisdropped -- hide deleted columns
+		AND b.relname = 'settings'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.573ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'settings' AND column_name = 'key') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'settings' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.645ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'settings' AND column_name = 'value') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'settings' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.535ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'settings' AND column_name = 'type') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'settings' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.577ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'settings' AND column_name = 'category') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'settings' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.585ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'settings' AND column_name = 'description') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'settings' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.577ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'settings' AND column_name = 'is_public') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'settings' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.530ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'settings' AND column_name = 'created_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'settings' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.499ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'settings' AND column_name = 'updated_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'settings' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.516ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'settings' AND column_name = 'deleted_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'settings' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.363ms] [34;1m[rows:1][0m SELECT count(*) FROM pg_indexes WHERE tablename = 'settings' AND indexname = 'idx_settings_deleted_at' AND schemaname = CURRENT_SCHEMA()
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.440ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND table_type = 'BASE TABLE'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.279ms] [34;1m[rows:1][0m SELECT CURRENT_DATABASE()
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[5.269ms] [34;1m[rows:-][0m SELECT c.column_name, c.is_nullable = 'YES', c.udt_name, c.character_maximum_length, c.numeric_precision, c.numeric_precision_radix, c.numeric_scale, c.datetime_precision, 8 * typlen, c.column_default, pd.description, c.identity_increment FROM information_schema.columns AS c JOIN pg_type AS pgt ON c.udt_name = pgt.typname LEFT JOIN pg_catalog.pg_description as pd ON pd.objsubid = c.ordinal_position AND pd.objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = c.table_name AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = c.table_schema)) where table_catalog = 'network_monitor' AND table_schema = CURRENT_SCHEMA() AND table_name = 'hosts'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.334ms] [34;1m[rows:-][0m SELECT * FROM "hosts" LIMIT 1
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[2.668ms] [34;1m[rows:-][0m SELECT constraint_name FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'hosts' AND constraint_type = 'UNIQUE'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[2.253ms] [34;1m[rows:-][0m SELECT c.column_name, constraint_name, constraint_type FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'hosts'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.364ms] [34;1m[rows:-][0m SELECT a.attname as column_name, format_type(a.atttypid, a.atttypmod) AS data_type
+		FROM pg_attribute a JOIN pg_class b ON a.attrelid = b.oid AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA())
+		WHERE a.attnum > 0 -- hide internal columns
+		AND NOT a.attisdropped -- hide deleted columns
+		AND b.relname = 'hosts'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.614ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND column_name = 'id') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'hosts' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.575ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND column_name = 'name') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'hosts' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m
+[0m[33m[0.200ms] [34;1m[rows:1][0m SELECT CURRENT_DATABASE()
+
+2025/06/23 13:11:36 [32m
+[0m[33m[4.106ms] [34;1m[rows:-][0m SELECT c.column_name, c.is_nullable = 'YES', c.udt_name, c.character_maximum_length, c.numeric_precision, c.numeric_precision_radix, c.numeric_scale, c.datetime_precision, 8 * typlen, c.column_default, pd.description, c.identity_increment FROM information_schema.columns AS c JOIN pg_type AS pgt ON c.udt_name = pgt.typname LEFT JOIN pg_catalog.pg_description as pd ON pd.objsubid = c.ordinal_position AND pd.objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = c.table_name AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = c.table_schema)) where table_catalog = 'network_monitor' AND table_schema = CURRENT_SCHEMA() AND table_name = 'hosts'
+
+2025/06/23 13:11:36 [32m
+[0m[33m[0.477ms] [34;1m[rows:-][0m SELECT * FROM "hosts" LIMIT 1
+
+2025/06/23 13:11:36 [32m
+[0m[33m[2.120ms] [34;1m[rows:-][0m SELECT constraint_name FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'hosts' AND constraint_type = 'UNIQUE'
+
+2025/06/23 13:11:36 [32m
+[0m[33m[2.668ms] [34;1m[rows:-][0m SELECT c.column_name, constraint_name, constraint_type FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'hosts'
+
+2025/06/23 13:11:36 [32m
+[0m[33m[0.561ms] [34;1m[rows:-][0m SELECT a.attname as column_name, format_type(a.atttypid, a.atttypmod) AS data_type
+		FROM pg_attribute a JOIN pg_class b ON a.attrelid = b.oid AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA())
+		WHERE a.attnum > 0 -- hide internal columns
+		AND NOT a.attisdropped -- hide deleted columns
+		AND b.relname = 'hosts'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[2.862ms] [34;1m[rows:0][0m ALTER TABLE "hosts" ALTER COLUMN "ip" TYPE varchar(45) USING "ip"::varchar(45)
+
+2025/06/23 13:11:36 [32m
+[0m[33m[0.471ms] [34;1m[rows:1][0m SELECT count(*) FROM pg_indexes WHERE tablename = 'hosts' AND indexname = 'idx_hosts_ip' AND schemaname = CURRENT_SCHEMA()
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.661ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND column_name = 'ip') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'hosts' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.596ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND column_name = 'port') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'hosts' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.539ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND column_name = 'os') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'hosts' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.597ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND column_name = 'os_version') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'hosts' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.633ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND column_name = 'arch') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'hosts' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.220ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND column_name = 'status') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'hosts' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[3.002ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND column_name = 'last_seen') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'hosts' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.916ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND column_name = 'username') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'hosts' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.744ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND column_name = 'auth_type') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'hosts' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.955ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND column_name = 'password') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'hosts' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.708ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND column_name = 'private_key') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'hosts' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.629ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND column_name = 'cpu_cores') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'hosts' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.587ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND column_name = 'memory') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'hosts' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.512ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND column_name = 'disk') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'hosts' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.674ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND column_name = 'hostname') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'hosts' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.614ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND column_name = 'mac_address') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'hosts' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.535ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND column_name = 'tags') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'hosts' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.474ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND column_name = 'group') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'hosts' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.465ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND column_name = 'location') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'hosts' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.459ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND column_name = 'discovery_method') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'hosts' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.469ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND column_name = 'discovered_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'hosts' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.505ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND column_name = 'created_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'hosts' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.481ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND column_name = 'updated_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'hosts' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.531ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'hosts' AND column_name = 'deleted_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'hosts' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.386ms] [34;1m[rows:1][0m SELECT count(*) FROM pg_indexes WHERE tablename = 'hosts' AND indexname = 'idx_hosts_ip' AND schemaname = CURRENT_SCHEMA()
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.809ms] [34;1m[rows:1][0m SELECT count(*) FROM pg_indexes WHERE tablename = 'hosts' AND indexname = 'idx_hosts_deleted_at' AND schemaname = CURRENT_SCHEMA()
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.838ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_components' AND table_type = 'BASE TABLE'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.455ms] [34;1m[rows:1][0m SELECT CURRENT_DATABASE()
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.995ms] [34;1m[rows:-][0m SELECT c.column_name, c.is_nullable = 'YES', c.udt_name, c.character_maximum_length, c.numeric_precision, c.numeric_precision_radix, c.numeric_scale, c.datetime_precision, 8 * typlen, c.column_default, pd.description, c.identity_increment FROM information_schema.columns AS c JOIN pg_type AS pgt ON c.udt_name = pgt.typname LEFT JOIN pg_catalog.pg_description as pd ON pd.objsubid = c.ordinal_position AND pd.objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = c.table_name AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = c.table_schema)) where table_catalog = 'network_monitor' AND table_schema = CURRENT_SCHEMA() AND table_name = 'host_components'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.330ms] [34;1m[rows:-][0m SELECT * FROM "host_components" LIMIT 1
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.369ms] [34;1m[rows:-][0m SELECT constraint_name FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'host_components' AND constraint_type = 'UNIQUE'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.370ms] [34;1m[rows:-][0m SELECT c.column_name, constraint_name, constraint_type FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'host_components'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.407ms] [34;1m[rows:-][0m SELECT a.attname as column_name, format_type(a.atttypid, a.atttypmod) AS data_type
+		FROM pg_attribute a JOIN pg_class b ON a.attrelid = b.oid AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA())
+		WHERE a.attnum > 0 -- hide internal columns
+		AND NOT a.attisdropped -- hide deleted columns
+		AND b.relname = 'host_components'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.665ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_components' AND column_name = 'id') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_components' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.611ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_components' AND column_name = 'host_id') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_components' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.537ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_components' AND column_name = 'component_name') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_components' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.542ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_components' AND column_name = 'component_type') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_components' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.528ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_components' AND column_name = 'version') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_components' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.509ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_components' AND column_name = 'status') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_components' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.520ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_components' AND column_name = 'port') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_components' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.523ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_components' AND column_name = 'config_path') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_components' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.524ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_components' AND column_name = 'deploy_method') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_components' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.025ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_components' AND column_name = 'deployed_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_components' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[2.822ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_components' AND column_name = 'created_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_components' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[2.212ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_components' AND column_name = 'updated_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_components' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.272ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_components' AND column_name = 'deleted_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_components' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.296ms] [34;1m[rows:1][0m SELECT count(*) FROM INFORMATION_SCHEMA.table_constraints WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_components' AND constraint_name = 'fk_hosts_components'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.811ms] [34;1m[rows:1][0m SELECT count(*) FROM pg_indexes WHERE tablename = 'host_components' AND indexname = 'idx_host_components_deleted_at' AND schemaname = CURRENT_SCHEMA()
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.699ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_discovery_tasks' AND table_type = 'BASE TABLE'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.337ms] [34;1m[rows:1][0m SELECT CURRENT_DATABASE()
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[3.277ms] [34;1m[rows:-][0m SELECT c.column_name, c.is_nullable = 'YES', c.udt_name, c.character_maximum_length, c.numeric_precision, c.numeric_precision_radix, c.numeric_scale, c.datetime_precision, 8 * typlen, c.column_default, pd.description, c.identity_increment FROM information_schema.columns AS c JOIN pg_type AS pgt ON c.udt_name = pgt.typname LEFT JOIN pg_catalog.pg_description as pd ON pd.objsubid = c.ordinal_position AND pd.objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = c.table_name AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = c.table_schema)) where table_catalog = 'network_monitor' AND table_schema = CURRENT_SCHEMA() AND table_name = 'host_discovery_tasks'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.375ms] [34;1m[rows:-][0m SELECT * FROM "host_discovery_tasks" LIMIT 1
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[4.134ms] [34;1m[rows:-][0m SELECT constraint_name FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'host_discovery_tasks' AND constraint_type = 'UNIQUE'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[2.301ms] [34;1m[rows:-][0m SELECT c.column_name, constraint_name, constraint_type FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'host_discovery_tasks'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.703ms] [34;1m[rows:-][0m SELECT a.attname as column_name, format_type(a.atttypid, a.atttypmod) AS data_type
+		FROM pg_attribute a JOIN pg_class b ON a.attrelid = b.oid AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA())
+		WHERE a.attnum > 0 -- hide internal columns
+		AND NOT a.attisdropped -- hide deleted columns
+		AND b.relname = 'host_discovery_tasks'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.167ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_discovery_tasks' AND column_name = 'id') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_discovery_tasks' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.831ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_discovery_tasks' AND column_name = 'name') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_discovery_tasks' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.050ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_discovery_tasks' AND column_name = 'ip_range') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_discovery_tasks' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.828ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_discovery_tasks' AND column_name = 'ports') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_discovery_tasks' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.874ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_discovery_tasks' AND column_name = 'timeout') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_discovery_tasks' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.968ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_discovery_tasks' AND column_name = 'username') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_discovery_tasks' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.878ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_discovery_tasks' AND column_name = 'password') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_discovery_tasks' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.712ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_discovery_tasks' AND column_name = 'private_key') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_discovery_tasks' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.679ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_discovery_tasks' AND column_name = 'status') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_discovery_tasks' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.191ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_discovery_tasks' AND column_name = 'progress') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_discovery_tasks' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[3.960ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_discovery_tasks' AND column_name = 'total_hosts') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_discovery_tasks' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.252ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_discovery_tasks' AND column_name = 'found_hosts') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_discovery_tasks' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.074ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_discovery_tasks' AND column_name = 'online_hosts') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_discovery_tasks' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.759ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_discovery_tasks' AND column_name = 'started_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_discovery_tasks' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.862ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_discovery_tasks' AND column_name = 'completed_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_discovery_tasks' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.594ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_discovery_tasks' AND column_name = 'created_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_discovery_tasks' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.532ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_discovery_tasks' AND column_name = 'updated_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_discovery_tasks' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.647ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_discovery_tasks' AND column_name = 'deleted_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_discovery_tasks' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.401ms] [34;1m[rows:1][0m SELECT count(*) FROM pg_indexes WHERE tablename = 'host_discovery_tasks' AND indexname = 'idx_host_discovery_tasks_deleted_at' AND schemaname = CURRENT_SCHEMA()
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.328ms] [34;1m[rows:1][0m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_credentials' AND table_type = 'BASE TABLE'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.212ms] [34;1m[rows:1][0m SELECT CURRENT_DATABASE()
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.764ms] [34;1m[rows:-][0m SELECT c.column_name, c.is_nullable = 'YES', c.udt_name, c.character_maximum_length, c.numeric_precision, c.numeric_precision_radix, c.numeric_scale, c.datetime_precision, 8 * typlen, c.column_default, pd.description, c.identity_increment FROM information_schema.columns AS c JOIN pg_type AS pgt ON c.udt_name = pgt.typname LEFT JOIN pg_catalog.pg_description as pd ON pd.objsubid = c.ordinal_position AND pd.objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = c.table_name AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = c.table_schema)) where table_catalog = 'network_monitor' AND table_schema = CURRENT_SCHEMA() AND table_name = 'host_credentials'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.720ms] [34;1m[rows:-][0m SELECT * FROM "host_credentials" LIMIT 1
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[2.836ms] [34;1m[rows:-][0m SELECT constraint_name FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'host_credentials' AND constraint_type = 'UNIQUE'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.743ms] [34;1m[rows:-][0m SELECT c.column_name, constraint_name, constraint_type FROM information_schema.table_constraints tc JOIN information_schema.constraint_column_usage AS ccu USING (constraint_schema, constraint_catalog, table_name, constraint_name) JOIN information_schema.columns AS c ON c.table_schema = tc.constraint_schema AND tc.table_name = c.table_name AND ccu.column_name = c.column_name WHERE constraint_type IN ('PRIMARY KEY', 'UNIQUE') AND c.table_catalog = 'network_monitor' AND c.table_schema = CURRENT_SCHEMA() AND c.table_name = 'host_credentials'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.419ms] [34;1m[rows:-][0m SELECT a.attname as column_name, format_type(a.atttypid, a.atttypmod) AS data_type
+		FROM pg_attribute a JOIN pg_class b ON a.attrelid = b.oid AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA())
+		WHERE a.attnum > 0 -- hide internal columns
+		AND NOT a.attisdropped -- hide deleted columns
+		AND b.relname = 'host_credentials'
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.825ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_credentials' AND column_name = 'id') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_credentials' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.868ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_credentials' AND column_name = 'name') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_credentials' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.704ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_credentials' AND column_name = 'description') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_credentials' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.580ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_credentials' AND column_name = 'username') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_credentials' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[1.100ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_credentials' AND column_name = 'auth_type') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_credentials' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.750ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_credentials' AND column_name = 'password') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_credentials' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.785ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_credentials' AND column_name = 'private_key') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_credentials' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.570ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_credentials' AND column_name = 'passphrase') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_credentials' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.497ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_credentials' AND column_name = 'ip_ranges') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_credentials' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.484ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_credentials' AND column_name = 'tags') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_credentials' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.469ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_credentials' AND column_name = 'created_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_credentials' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.484ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_credentials' AND column_name = 'updated_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_credentials' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.512ms] [34;1m[rows:0][0m SELECT description FROM pg_catalog.pg_description WHERE objsubid = (SELECT ordinal_position FROM information_schema.columns WHERE table_schema = CURRENT_SCHEMA() AND table_name = 'host_credentials' AND column_name = 'deleted_at') AND objoid = (SELECT oid FROM pg_catalog.pg_class WHERE relname = 'host_credentials' AND relnamespace = (SELECT oid FROM pg_catalog.pg_namespace WHERE nspname = CURRENT_SCHEMA()))
+
+2025/06/23 13:11:36 [32m/etc/opt/snmp-mib-ui/backend/database/database.go:23
+[0m[33m[0.363ms] [34;1m[rows:1][0m SELECT count(*) FROM pg_indexes WHERE tablename = 'host_credentials' AND indexname = 'idx_host_credentials_deleted_at' AND schemaname = CURRENT_SCHEMA()
+2025/06/23 13:11:36 Database connected and migrated successfully
+2025/06/23 13:11:36 Redis connected successfully
+2025/06/23 13:11:36 Server starting on port 17880
+127.0.0.1 - [Mon, 23 Jun 2025 13:11:37 CST] "GET /?ide_webview_request_time=1750655497139 HTTP/1.1 404 740ns "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Trae/1.98.2 Chrome/132.0.6834.196 Electron/34.2.0 Safari/537.36" "
+[GIN] 2025/06/23 - 13:11:37 | 404 |      79.715µs |       127.0.0.1 | GET      "/?ide_webview_request_time=1750655497139"
