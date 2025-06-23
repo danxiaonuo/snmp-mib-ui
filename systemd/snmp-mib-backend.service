@@ -11,21 +11,14 @@ User=snmp-mib
 Group=snmp-mib
 WorkingDirectory=/opt/snmp-mib-ui/backend
 Environment=SERVER_PORT=17880
-Environment=DB_HOST=localhost
-Environment=DB_PORT=5432
-Environment=DB_USER=netmon_user
-Environment=DB_PASSWORD=production_db_pass
-Environment=DB_NAME=network_monitor
-Environment=REDIS_ADDR=localhost:6379
-Environment=REDIS_PASSWORD=
-Environment=REDIS_DB=0
+EnvironmentFile=/opt/snmp-mib-ui/backend/.env
 Environment=GIN_MODE=release
 ExecStart=/opt/snmp-mib-ui/backend/mib-platform
 ExecReload=/bin/kill -HUP $MAINPID
 Restart=always
 RestartSec=10
-StandardOutput=syslog
-StandardError=syslog
+StandardOutput=journal
+StandardError=journal
 SyslogIdentifier=snmp-mib-backend
 
 # 健康检查

@@ -61,7 +61,14 @@
       "Bash(--name snmp-redis )",
       "Bash(-p 6379:6379 )",
       "Bash(redis:7-alpine)",
-      "Bash(rg:*)"
+      "Bash(rg:*)",
+      "Bash(go mod:*)",
+      "Bash(timeout 30s go build -v -o snmp-mib-platform .)",
+      "Bash(go:*)",
+      "Bash(./stop-services.sh:*)",
+      "Bash(timeout:*)",
+      "Bash(unset:*)",
+      "Bash(export ENVIRONMENT=production SERVER_PORT=17880 JWT_SECRET=test-secret)"
     ],
     "deny": []
   }

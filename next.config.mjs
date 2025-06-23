@@ -3,9 +3,6 @@ const nextConfig = {
   // Optimized for pure binary deployment
   output: 'standalone',
   
-  // Skip static generation for problematic pages
-  generateStaticParams: false,
-  
   // Production optimizations
   compress: true,
   poweredByHeader: false,

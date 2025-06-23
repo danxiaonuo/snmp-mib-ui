@@ -9,18 +9,17 @@ import (
 	"strings"
 	"time"
 
-	"github.com/go-redis/redis/v8"
+
 	"golang.org/x/crypto/ssh"
 	"gorm.io/gorm"
 )
 
 type ComponentVersionService struct {
 	db          *gorm.DB
-	redis       *redis.Client
 	hostService *HostService
 }
 
-func NewComponentVersionService(db *gorm.DB, redis *redis.Client, hostService *HostService) *ComponentVersionService {
+func NewComponentVersionService(db *gorm.DB, , hostService *HostService) *ComponentVersionService {
 	return &ComponentVersionService{
 		db:          db,
 		redis:       redis,
@@ -354,7 +353,6 @@ func (s *ComponentVersionService) CreateUpgradeTask(hostID uint, componentName, 
 
 	// 保存任务到 Redis
 	taskKey := fmt.Sprintf("upgrade_task:%s", task.ID)
-	if err := s.redis.Set(context.Background(), taskKey, task, 24*time.Hour).Err(); err != nil {
 		return nil, fmt.Errorf("failed to save upgrade task: %v", err)
 	}
 
@@ -877,7 +875,6 @@ func (s *ComponentVersionService) rollbackUpgrade(client *ssh.Client, task *Comp
 // 工具方法
 func (s *ComponentVersionService) getUpgradeTask(taskID string) (*ComponentUpgradeTask, error) {
 	taskKey := fmt.Sprintf("upgrade_task:%s", taskID)
-	result, err := s.redis.Get(context.Background(), taskKey).Result()
 	if err != nil {
 		return nil, fmt.Errorf("task not found: %v", err)
 	}
@@ -892,7 +889,6 @@ func (s *ComponentVersionService) getUpgradeTask(taskID string) (*ComponentUpgra
 
 func (s *ComponentVersionService) saveUpgradeTask(task *ComponentUpgradeTask) error {
 	taskKey := fmt.Sprintf("upgrade_task:%s", task.ID)
-	return s.redis.Set(context.Background(), taskKey, task, 24*time.Hour).Err()
 }
 
 func (s *ComponentVersionService) addUpgradeLog(task *ComponentUpgradeTask, message string) {

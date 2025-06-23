@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/go-redis/redis/v8"
+
 	"github.com/gosnmp/gosnmp"
 	"gorm.io/gorm"
 
@@ -15,14 +15,13 @@ import (
 )
 
 type SNMPService struct {
-	db    *gorm.DB
-	redis *redis.Client
+	db *gorm.DB
 }
 
-func NewSNMPService(db *gorm.DB, redis *redis.Client) *SNMPService {
+func NewSNMPService(db *gorm.DB) *SNMPService {
 	return &SNMPService{
-		db:    db,
-		redis: redis,
+		db: db,
+		
 	}
 }
 
@@ -191,82 +190,6 @@ func (s *SNMPService) TestConnection(req *models.SNMPRequest) (map[string]interf
 }
 
 func (s *SNMPService) StartBulkOperation(operationType string, requests []models.SNMPRequest) (*models.BulkOperation, error) {
-	// 实现批量操作，使用 goroutines 和进度跟踪
-	operationID := fmt.Sprintf("bulk_%d", time.Now().Unix())
-	
-	// 保存操作状态到 Redis
-	status := map[string]interface{}{
-		"id":         operationID,
-		"total":      len(requests),
-		"completed":  0,
-		"failed":     0,
-		"status":     "running",
-		"started_at": time.Now(),
-		"results":    []map[string]interface{}{},
-	}
-	
-	statusKey := fmt.Sprintf("bulk_operation:%s", operationID)
-	s.redis.Set(context.Background(), statusKey, status, 24*time.Hour)
-	
-	// 异步执行批量操作
-	go func() {
-		defer func() {
-			status["status"] = "completed"
-			status["completed_at"] = time.Now()
-			s.redis.Set(context.Background(), statusKey, status, 24*time.Hour)
-		}()
-		
-		// 使用 worker pool 控制并发数
-		const maxWorkers = 10
-		semaphore := make(chan struct{}, maxWorkers)
-		var wg sync.WaitGroup
-		var mu sync.Mutex
-		
-		results := make([]map[string]interface{}, 0, len(requests))
-		
-		for i, op := range requests {
-			wg.Add(1)
-			go func(index int, operation models.SNMPRequest) {
-				defer wg.Done()
-				semaphore <- struct{}{} // 获取信号量
-				defer func() { <-semaphore }() // 释放信号量
-				
-				// 转换为 SNMPOperation 并执行
-				snmpOp := SNMPOperation{
-					Type:      operationType,
-					Target:    operation.Target,
-					Community: operation.Community,
-					Version:   operation.Version,
-					OID:       operation.OID,
-					Value:     "",
-					ValueType: "string",
-				}
-				result := s.executeSingleSNMPOperation(snmpOp)
-				
-				// 更新进度
-				mu.Lock()
-				results = append(results, map[string]interface{}{
-					"index":     index,
-					"operation": operation,
-					"result":    result,
-					"timestamp": time.Now(),
-				})
-				
-				// 更新 Redis 中的状态
-				currentStatus := status
-				currentStatus["completed"] = len(results)
-				if result["error"] != nil {
-					currentStatus["failed"] = currentStatus["failed"].(int) + 1
-				}
-				currentStatus["results"] = results
-				s.redis.Set(context.Background(), statusKey, currentStatus, 24*time.Hour)
-				mu.Unlock()
-				
-			}(i, op)
-		}
-		
-		wg.Wait()
-	}()
 	operation := &models.BulkOperation{
 		ID:        fmt.Sprintf("bulk_%d", time.Now().Unix()),
 		Type:      operationType,
@@ -283,17 +206,6 @@ func (s *SNMPService) StartBulkOperation(operationType string, requests []models
 }
 
 func (s *SNMPService) GetBulkOperation(id string) (*models.BulkOperation, error) {
-	// 从 Redis 获取操作状态
-	statusKey := fmt.Sprintf("bulk_operation:%s", id)
-	statusData, err := s.redis.Get(context.Background(), statusKey).Result()
-	if err != nil {
-		return nil, fmt.Errorf("operation not found: %v", err)
-	}
-	
-	var status map[string]interface{}
-	if err := json.Unmarshal([]byte(statusData), &status); err != nil {
-		return nil, fmt.Errorf("failed to parse operation status: %v", err)
-	}
 	return &models.BulkOperation{
 		ID:       id,
 		Status:   "completed",

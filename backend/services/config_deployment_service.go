@@ -9,7 +9,7 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/go-redis/redis/v8"
+
 	"golang.org/x/crypto/ssh"
 	"gorm.io/gorm"
 )
@@ -17,11 +17,10 @@ import (
 // ConfigDeploymentService 配置部署服务
 type ConfigDeploymentService struct {
 	db          *gorm.DB
-	redis       *redis.Client
 	hostService *HostService
 }
 
-func NewConfigDeploymentService(db *gorm.DB, redis *redis.Client, hostService *HostService) *ConfigDeploymentService {
+func NewConfigDeploymentService(db *gorm.DB, , hostService *HostService) *ConfigDeploymentService {
 	return &ConfigDeploymentService{
 		db:          db,
 		redis:       redis,
@@ -261,7 +260,6 @@ func (s *ConfigDeploymentService) CreateConfigDeploymentTask(hostIDs []uint, con
 
 	// 保存任务到 Redis
 	taskKey := fmt.Sprintf("config_deployment_task:%s", task.ID)
-	if err := s.redis.Set(context.Background(), taskKey, task, 24*time.Hour).Err(); err != nil {
 		return nil, fmt.Errorf("failed to save deployment task: %v", err)
 	}
 
@@ -486,7 +484,6 @@ func (s *ConfigDeploymentService) generateSNMPConfigs(data map[string]interface{
 // 工具方法
 func (s *ConfigDeploymentService) getConfigDeploymentTask(taskID string) (*ConfigDeploymentTask, error) {
 	taskKey := fmt.Sprintf("config_deployment_task:%s", taskID)
-	result, err := s.redis.Get(context.Background(), taskKey).Result()
 	if err != nil {
 		return nil, fmt.Errorf("task not found: %v", err)
 	}
@@ -502,7 +499,6 @@ func (s *ConfigDeploymentService) getConfigDeploymentTask(taskID string) (*Confi
 
 func (s *ConfigDeploymentService) saveConfigDeploymentTask(task *ConfigDeploymentTask) error {
 	taskKey := fmt.Sprintf("config_deployment_task:%s", task.ID)
-	return s.redis.Set(context.Background(), taskKey, task, 24*time.Hour).Err()
 }
 
 // GetConfigDeploymentTask 获取配置部署任务

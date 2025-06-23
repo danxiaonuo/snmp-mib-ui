@@ -8,10 +8,10 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 
 	"mib-platform/config"
 	"mib-platform/controllers"
@@ -23,22 +23,14 @@ import (
 )
 
 func main() {
-	// Load environment variables
-	if err := godotenv.Load(); err != nil {
-		log.Println("No .env file found")
-	}
-
 	// Initialize configuration
 	cfg := config.Load()
 
-	// Initialize database
-	db, err := database.Initialize(cfg.DatabaseURL)
+	// Initialize SQLite database
+	db, err := database.Initialize()
 	if err != nil {
-		log.Fatal("Failed to connect to database:", err)
+		log.Fatal("Failed to initialize database:", err)
 	}
-
-	// Initialize Redis
-	redis := database.InitializeRedis(cfg.RedisURL)
 
 	// Initialize Gin router
 	if cfg.Environment == "production" {
@@ -59,11 +51,22 @@ func main() {
 	router.Use(middleware.Logger())
 	router.Use(middleware.ErrorHandler())
 
-	// Health check endpoint
+	// Health check endpoints
 	router.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"status":  "healthy",
 			"service": "mib-platform-backend",
+		})
+	})
+	
+	// API v1 health check
+	v1 := router.Group("/api/v1")
+	v1.GET("/health", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"status":   "healthy",
+			"service":  "mib-platform-backend",
+			"version":  "1.0.0",
+			"database": "sqlite",
 		})
 	})
 
@@ -71,17 +74,17 @@ func main() {
 	logger := utils.NewLogger()
 
 	// Initialize services
-	deviceService := services.NewDeviceService(db, redis)
+	deviceService := services.NewDeviceService(db)
 	alertRulesService := services.NewAlertRulesService(db, logger)
-	hostService := services.NewHostService(db, redis)
-	deploymentService := services.NewDeploymentService(db, redis, hostService)
-	configDeploymentService := services.NewConfigDeploymentService(db, redis, hostService)
+	hostService := services.NewHostService(db)
+	deploymentService := services.NewDeploymentService(db, hostService)
+	configDeploymentService := services.NewConfigDeploymentService(db, hostService)
 
 	// Initialize controllers
-	mibController := controllers.NewMIBController(db, redis)
-	snmpController := controllers.NewSNMPController(db, redis)
-	configController := controllers.NewConfigController(db, redis)
-	deviceController := controllers.NewDeviceController(db, redis)
+	mibController := controllers.NewMIBController(db)
+	snmpController := controllers.NewSNMPController(db)
+	configController := controllers.NewConfigController(db)
+	deviceController := controllers.NewDeviceController(db)
 	alertRulesController := controllers.NewAlertRulesController(alertRulesService, deviceService)
 	hostController := controllers.NewHostController(hostService)
 	deploymentController := controllers.NewDeploymentController(deploymentService, hostService)
@@ -262,14 +265,12 @@ func main() {
 		api.GET("/health", func(c *gin.Context) {
 			c.JSON(200, gin.H{
 				"status":    "healthy",
-				"timestamp": "2024-01-01T00:00:00Z",
+				"timestamp": time.Now().Format(time.RFC3339),
 				"version":   "1.0.0",
 				"services": gin.H{
 					"database": "connected",
-					"redis":    "connected",
 					"backend":  "running",
 				},
-				"uptime": 3600,
 			})
 		})
 

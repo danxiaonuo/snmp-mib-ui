@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-redis/redis/v8"
+
 	"gorm.io/gorm"
 
 	"mib-platform/models"
@@ -16,11 +16,10 @@ import (
 
 type ConfigController struct {
 	db      *gorm.DB
-	redis   *redis.Client
 	service *services.ConfigService
 }
 
-func NewConfigController(db *gorm.DB, redis *redis.Client) *ConfigController {
+func NewConfigController(db *gorm.DB, ) *ConfigController {
 	return &ConfigController{
 		db:      db,
 		redis:   redis,

@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-redis/redis/v8"
+
 	"gorm.io/gorm"
 
 	"mib-platform/models"
@@ -14,15 +14,13 @@ import (
 
 type DeviceController struct {
 	db      *gorm.DB
-	redis   *redis.Client
 	service *services.DeviceService
 }
 
-func NewDeviceController(db *gorm.DB, redis *redis.Client) *DeviceController {
+func NewDeviceController(db *gorm.DB) *DeviceController {
 	return &DeviceController{
 		db:      db,
-		redis:   redis,
-		service: services.NewDeviceService(db, redis),
+		service: services.NewDeviceService(db),
 	}
 }
 

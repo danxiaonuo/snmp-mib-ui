@@ -5,21 +5,18 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/go-redis/redis/v8"
 	"gorm.io/gorm"
 
 	"mib-platform/models"
 )
 
 type DeviceService struct {
-	db    *gorm.DB
-	redis *redis.Client
+	db *gorm.DB
 }
 
-func NewDeviceService(db *gorm.DB, redis *redis.Client) *DeviceService {
+func NewDeviceService(db *gorm.DB) *DeviceService {
 	return &DeviceService{
-		db:    db,
-		redis: redis,
+		db: db,
 	}
 }
 
@@ -113,7 +110,7 @@ func (s *DeviceService) TestDevice(id uint) (map[string]interface{}, error) {
 	}
 
 	// Create SNMP service for testing
-	snmpService := NewSNMPService(s.db, s.redis)
+	snmpService := NewSNMPService(s.db)
 	result, err := snmpService.TestConnection(snmpReq)
 	if err != nil {
 		return map[string]interface{}{

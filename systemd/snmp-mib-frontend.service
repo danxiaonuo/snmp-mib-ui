@@ -18,8 +18,8 @@ ExecStart=/usr/bin/npm run start
 ExecReload=/bin/kill -HUP $MAINPID
 Restart=always
 RestartSec=10
-StandardOutput=syslog
-StandardError=syslog
+StandardOutput=journal
+StandardError=journal
 SyslogIdentifier=snmp-mib-frontend
 
 # 安全设置
@@ -28,7 +28,6 @@ PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
 ReadWritePaths=/opt/snmp-mib-ui/logs
-ReadWritePaths=/opt/snmp-mib-ui/.next
 
 # 资源限制
 LimitNOFILE=65536

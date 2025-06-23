@@ -10,7 +10,7 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/go-redis/redis/v8"
+
 	"gopkg.in/yaml.v3"
 	"gorm.io/gorm"
 
@@ -19,13 +19,13 @@ import (
 
 type ConfigService struct {
 	db    *gorm.DB
-	redis *redis.Client
+	
 }
 
-func NewConfigService(db *gorm.DB, redis *redis.Client) *ConfigService {
+func NewConfigService(db *gorm.DB, ) *ConfigService {
 	return &ConfigService{
 		db:    db,
-		redis: redis,
+		
 	}
 }
 

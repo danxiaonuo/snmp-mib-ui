@@ -10,7 +10,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-redis/redis/v8"
+
 	"gorm.io/gorm"
 
 	"mib-platform/models"
@@ -19,11 +19,10 @@ import (
 
 type MIBController struct {
 	db      *gorm.DB
-	redis   *redis.Client
 	service *services.MIBService
 }
 
-func NewMIBController(db *gorm.DB, redis *redis.Client) *MIBController {
+func NewMIBController(db *gorm.DB, ) *MIBController {
 	return &MIBController{
 		db:      db,
 		redis:   redis,

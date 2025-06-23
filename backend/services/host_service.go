@@ -14,7 +14,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/go-redis/redis/v8"
+
 	"golang.org/x/crypto/ssh"
 	"gorm.io/gorm"
 
@@ -23,16 +23,15 @@ import (
 
 type HostService struct {
 	db    *gorm.DB
-	redis *redis.Client
+	
 	encryptionKey []byte
 }
 
-func NewHostService(db *gorm.DB, redis *redis.Client) *HostService {
+func NewHostService(db *gorm.DB) *HostService {
 	// 在实际应用中，这个密钥应该从环境变量或配置文件中读取
-	encryptionKey := []byte("your-32-byte-encryption-key-here") // 32 bytes for AES-256
+	encryptionKey := []byte("your-32-byte-encryption-key-here!") // 32 bytes for AES-256
 	return &HostService{
 		db:            db,
-		redis:         redis,
 		encryptionKey: encryptionKey,
 	}
 }

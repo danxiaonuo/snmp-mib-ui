@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/go-redis/redis/v8"
+
 	"gorm.io/gorm"
 
 	"mib-platform/models"
@@ -13,11 +13,10 @@ import (
 
 type SNMPController struct {
 	db      *gorm.DB
-	redis   *redis.Client
 	service *services.SNMPService
 }
 
-func NewSNMPController(db *gorm.DB, redis *redis.Client) *SNMPController {
+func NewSNMPController(db *gorm.DB, ) *SNMPController {
 	return &SNMPController{
 		db:      db,
 		redis:   redis,

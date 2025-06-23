@@ -3,16 +3,17 @@ package database
 import (
 	"log"
 
-	"github.com/go-redis/redis/v8"
-	"gorm.io/driver/postgres"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 
 	"mib-platform/models"
 )
 
-func Initialize(databaseURL string) (*gorm.DB, error) {
-	db, err := gorm.Open(postgres.Open(databaseURL), &gorm.Config{
+func Initialize() (*gorm.DB, error) {
+	log.Println("Initializing SQLite database...")
+	
+	db, err := gorm.Open(sqlite.Open("snmp_platform.db"), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 	})
 	if err != nil {
@@ -39,17 +40,6 @@ func Initialize(databaseURL string) (*gorm.DB, error) {
 		return nil, err
 	}
 
-	log.Println("Database connected and migrated successfully")
+	log.Println("SQLite database connected and migrated successfully")
 	return db, nil
-}
-
-func InitializeRedis(redisURL string) *redis.Client {
-	opt, err := redis.ParseURL(redisURL)
-	if err != nil {
-		log.Fatal("Failed to parse Redis URL:", err)
-	}
-
-	rdb := redis.NewClient(opt)
-	log.Println("Redis connected successfully")
-	return rdb
 }

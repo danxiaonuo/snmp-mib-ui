@@ -15,20 +15,20 @@ import (
 	"strings"
 	"time"
 
-	"github.com/go-redis/redis/v8"
+
 	"gorm.io/gorm"
 	"mib-platform/models"
 )
 
 type MIBService struct {
 	db    *gorm.DB
-	redis *redis.Client
+	
 }
 
-func NewMIBService(db *gorm.DB, redis *redis.Client) *MIBService {
+func NewMIBService(db *gorm.DB, ) *MIBService {
 	return &MIBService{
 		db:    db,
-		redis: redis,
+		
 	}
 }
 
