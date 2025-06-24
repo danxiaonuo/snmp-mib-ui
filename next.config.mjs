@@ -1,12 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-<<<<<<< HEAD
   // Optimized for standalone deployment
   output: 'standalone',
-=======
-  // Optimized for development and production
-  // output: 'standalone', // Disabled for now
->>>>>>> 3c5be285e4b0f6dacc4c1a93e0b46d7333c86be6
   
   // Production optimizations
   compress: true,
