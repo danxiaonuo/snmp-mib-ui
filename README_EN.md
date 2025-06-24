@@ -1,4 +1,4 @@
-# 🌐 SNMP Network Monitoring Platform
+# 🌐 SNMP Network Monitoring Platform (SQLite Edition)
 
 <div align="center">
 
@@ -6,16 +6,25 @@
 [![Next.js](https://img.shields.io/badge/Next.js-15-black.svg)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
 [![Go](https://img.shields.io/badge/Go-1.23-00ADD8.svg)](https://golang.org/)
-[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg)](https://www.docker.com/)
+[![SQLite](https://img.shields.io/badge/SQLite-3-003B57.svg)](https://sqlite.org/)
 [![Production Ready](https://img.shields.io/badge/Production-Ready-success.svg)](#)
 
 **[🇨🇳 中文](README.md) | [🇺🇸 English](README_EN.md)**
 
 </div>
 
-> 🚀 **Enterprise-grade SNMP network device monitoring and management platform** - Production-ready solution that actually captures real device data, built with modern technology stack
+> 🚀 **Enterprise-grade SNMP network device monitoring and management platform** - Lightweight network device monitoring and management solution using SQLite database and in-memory caching, supporting zero-configuration quick deployment without Docker and external database dependencies.
 
 ## ✨ Key Features
+
+- 🗃️ **SQLite Database** - No external database required, file-based storage
+- 💾 **In-Memory Caching** - High-performance caching system, no Redis needed
+- 🚀 **Zero-Configuration Deployment** - One-click startup, no Docker required
+- 📱 **Responsive Design** - Support for desktop and mobile devices
+- 🌐 **Multi-language Support** - Chinese/English interface
+- 🔒 **Security Authentication** - JWT authentication and permission management
+- 📊 **Real-time Monitoring** - SNMP device monitoring and alerting
+- 🔧 **Configuration Management** - Device templates and batch configuration
 
 ### 🎯 **Complete Monitoring Functions**
 - 📊 **Device Discovery & Management** - Auto-discover and manage network devices, supporting Cisco, Huawei, H3C and other major vendors
@@ -29,46 +38,48 @@
 - 🌐 **Multi-language Interface** - Support for Chinese and English
 - 📱 **Responsive Design** - Perfect support for desktop and mobile devices
 - 🎨 **Modern UI** - User interface based on latest design standards
-- 🚀 **High Performance** - Optimized database queries and Redis caching strategy
+- 🚀 **High Performance** - Optimized database queries and in-memory caching strategy
 
 ### 🛠️ **DevOps Integration**
-- 🐳 **Containerized Deployment** - Complete Docker Compose one-click deployment
 - 🔄 **Automated Operations** - SSH remote configuration deployment and component management
 - 📊 **Monitoring Components** - Integrated Node Exporter, SNMP Exporter, Categraf, etc.
 - 🔧 **Batch Operations** - Support for batch device management and configuration deployment
+- ⚙️ **systemd Management** - Complete systemd service configuration and management
 
 ### 🔧 **Technology Stack**
 - **Frontend**: Next.js 15 + React 19 + TypeScript + Tailwind CSS + shadcn/ui
-- **Backend**: Go 1.23 + Gin + GORM + PostgreSQL + Redis
+- **Backend**: Go 1.23 + Gin + GORM + SQLite
 - **Monitoring Integration**: Prometheus + VictoriaMetrics + VMAlert + Alertmanager + Grafana
 - **Collectors**: SNMP Exporter + Node Exporter + Categraf (Nightingale Monitoring)
-- **Deployment**: Docker + Docker Compose + SSH Automation
-- **Database**: PostgreSQL 15 + Redis 7 + Data caching optimization
+- **Deployment**: Binary + systemd + SSH Automation
+- **Database**: SQLite 3 + In-memory caching optimization
 
 ## 🚀 Quick Start
 
 ### 📋 System Requirements
 
 - **Operating System**: Linux / macOS / Windows
-- **Memory**: 4GB+ (Recommended 8GB)
-- **Storage**: 20GB+ available space
-- **Software**: Docker 20.10+ and Docker Compose 2.0+
+- **Node.js**: 18+ 
+- **Go**: 1.21+
+- **Memory**: Minimum 512MB, Recommended 1GB+
+- **Storage**: Minimum 1GB available space
 
 ### ⚡ One-Click Deployment
 
 ```bash
 # 1. Clone the project
-git clone https://github.com/your-username/snmp-mib-ui.git
+git clone https://github.com/evan7434/snmp-mib-ui.git
 cd snmp-mib-ui
 
-# 2. One-click deployment (Recommended)
-./deploy.sh
+# 2. Choose deployment method
+# Method 1: Simple deployment (Recommended)
+./deploy-simple.sh
 
-# 3. Or use Docker Compose
-docker compose up -d --build
+# Method 2: No-Docker deployment
+./deploy-local-no-docker.sh
 
-# 4. Wait for services to be ready (about 2-3 minutes)
-docker compose logs -f
+# Method 3: systemd service deployment
+sudo ./install-systemd-services.sh
 ```
 
 ### 📱 Access URLs
@@ -81,22 +92,52 @@ After deployment, you can access the system through the following URLs:
 | 🔌 **API Interface** | http://localhost:17880/api/v1 | RESTful API |
 | 🏥 **Health Check** | http://localhost:12300/api/health | System status check |
 
-### 🔧 Manual Configuration
+### 🔧 Service Management
+
+#### Script-based Management
 
 ```bash
-# 1. Copy environment configuration
-cp .env.example .env
+# Start all services
+./start-services.sh
 
-# 2. Edit configuration file
-vim .env
+# Stop all services
+./stop-services.sh
 
-# 3. Modify key configurations
-FRONTEND_PORT=12300
-BACKEND_PORT=17880
-NEXT_PUBLIC_API_URL=http://localhost:17880/api/v1
-POSTGRES_PASSWORD=your-secure-password
-REDIS_PASSWORD=your-redis-password
-JWT_SECRET=your-super-secret-jwt-key
+# View frontend logs
+tail -f frontend.log
+
+# View backend logs
+tail -f backend.log
+
+# Restart services
+./stop-services.sh && ./start-services.sh
+```
+
+#### systemd Service Management
+
+```bash
+# Install systemd services
+sudo ./install-systemd-services.sh
+
+# Start platform services
+sudo systemctl start snmp-mib-platform.target
+
+# Stop platform services
+sudo systemctl stop snmp-mib-platform.target
+
+# Check service status
+sudo systemctl status snmp-mib-platform.target
+
+# Check individual component status
+sudo systemctl status snmp-mib-backend.service
+sudo systemctl status snmp-mib-frontend.service
+
+# Enable auto-start on boot
+sudo systemctl enable snmp-mib-platform.target
+
+# View service logs
+sudo journalctl -u snmp-mib-backend.service -f
+sudo journalctl -u snmp-mib-frontend.service -f
 ```
 
 ## 📖 Features Overview
@@ -157,11 +198,13 @@ JWT_SECRET=your-super-secret-jwt-key
 snmp-mib-ui/
 ├── app/                    # Next.js app directory
 │   ├── api/               # API routes
-│   ├── components/        # React components
 │   ├── devices/           # Device management pages
 │   ├── mibs/              # MIB management pages
 │   ├── config-gen/        # Configuration generation pages
-│   └── ...
+│   ├── alert-rules/       # Alert rules pages
+│   ├── monitoring-installer/ # Monitoring installer pages
+│   ├── tools/             # Tool pages
+│   └── monitoring/        # Real-time monitoring pages
 ├── backend/               # Go backend service
 │   ├── controllers/       # Controllers
 │   ├── models/           # Data models
@@ -169,10 +212,13 @@ snmp-mib-ui/
 │   └── utils/            # Utility functions
 ├── components/            # Shared components
 ├── lib/                  # Utility library
-├── types/                # TypeScript type definitions
-├── docker-compose.yml    # Docker orchestration file
-├── deploy.sh            # One-click deployment script
-└── README.md            # Project documentation
+├── systemd/              # systemd service configuration
+├── data/                 # SQLite database files
+├── logs/                 # Application logs
+├── deploy-simple.sh      # Simple deployment script
+├── start-services.sh     # Start script
+├── stop-services.sh      # Stop script
+└── install-systemd-services.sh # systemd installation script
 ```
 
 ### 🌐 Technical Architecture
@@ -181,14 +227,12 @@ snmp-mib-ui/
 graph TB
     A[Web Browser :12300] --> B[Next.js Frontend]
     B --> C[Go Backend API :17880]
-    C --> D[PostgreSQL Database :5432]
-    C --> E[Redis Cache :6379]
+    C --> D[SQLite Database]
+    C --> E[In-Memory Cache]
     C --> F[SNMP Devices]
     
-    G[Docker Compose] --> B
+    G[systemd Services] --> B
     G --> C
-    G --> D
-    G --> E
     
     H[Monitoring Stack] --> I[Prometheus]
     H --> J[Grafana]
@@ -231,27 +275,25 @@ GET    /api/v1/monitoring/status        # Get component status
 GET    /api/v1/health           # System health check
 ```
 
-## 🔧 Configuration Guide
+## 🔧 Configuration
 
-### 🌍 Environment Variables
+### 📄 Environment Variables
+
+The system uses SQLite database and in-memory caching, requiring minimal configuration:
 
 ```bash
-# Application Port Configuration
-FRONTEND_PORT=12300          # Frontend web interface port
-BACKEND_PORT=17880           # Backend API port
+# Frontend Configuration
+FRONTEND_PORT=12300
+NEXT_PUBLIC_API_URL=http://localhost:17880/api/v1
 
-# Database Configuration
-DATABASE_URL=postgresql://snmp_user:your_password@localhost:5432/snmp_platform
-POSTGRES_DB=snmp_platform
-POSTGRES_USER=snmp_user
-POSTGRES_PASSWORD=your_secure_password
+# Backend Configuration
+BACKEND_PORT=17880
+GIN_MODE=release
 
-# Redis Configuration
-REDIS_URL=redis://localhost:6379
-REDIS_PASSWORD=your_redis_password
+# Database Configuration (SQLite)
+DB_PATH=./data/snmp_platform.db
 
 # API Configuration
-NEXT_PUBLIC_API_URL=http://localhost:17880/api/v1
 JWT_SECRET=your-super-secret-jwt-key
 
 # CORS Configuration
@@ -263,45 +305,36 @@ SNMP_DEFAULT_VERSION=2c
 SNMP_TIMEOUT=5s
 ```
 
-### 🐳 Docker Service Configuration
+### ⚙️ systemd Service Configuration
 
-```yaml
-services:
-  # Frontend Service - Next.js Web Interface
-  frontend:
-    build: 
-      context: .
-      dockerfile: Dockerfile.dev
-    ports: 
-      - "12300:3000"     # External:Internal port mapping
-    environment:
-      - NODE_ENV=development
-      - NEXT_PUBLIC_API_URL=http://localhost:17880/api/v1
+The platform includes complete systemd service configurations:
 
-  # Backend Service - Go API
-  backend:
-    build: ./backend
-    ports: 
-      - "17880:8080"     # External:Internal port mapping
-    environment:
-      - DATABASE_URL=postgresql://snmp_user:password@postgres:5432/snmp_platform
-      - REDIS_URL=redis://redis:6379
+```ini
+# /etc/systemd/system/snmp-mib-platform.target
+[Unit]
+Description=SNMP MIB Platform Services
+After=network.target
+AllowIsolate=yes
 
-  # Database Service
-  postgres:
-    image: postgres:15-alpine
-    ports: 
-      - "5432:5432"
-    environment:
-      - POSTGRES_DB=snmp_platform
-      - POSTGRES_USER=snmp_user
-      - POSTGRES_PASSWORD=your_password
+[Install]
+WantedBy=multi-user.target
 
-  # Cache Service
-  redis:
-    image: redis:7-alpine
-    ports: 
-      - "6379:6379"
+# /etc/systemd/system/snmp-mib-backend.service
+[Unit]
+Description=SNMP MIB Platform Backend API Service
+After=network.target
+PartOf=snmp-mib-platform.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/snmp-mib-ui
+ExecStart=/opt/snmp-mib-ui/backend/mib-platform
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=snmp-mib-platform.target
 ```
 
 ## 📊 Monitoring Integration
@@ -604,15 +637,14 @@ Thanks to the following open source projects for their support:
 
 - [Next.js](https://nextjs.org/) - React full-stack framework
 - [Go](https://golang.org/) - High-performance backend language
-- [PostgreSQL](https://postgresql.org/) - Relational database
-- [Redis](https://redis.io/) - In-memory database
+- [SQLite](https://sqlite.org/) - Lightweight database engine
 - [Tailwind CSS](https://tailwindcss.com/) - CSS framework
 - [shadcn/ui](https://ui.shadcn.com/) - React UI components
 - [Prometheus](https://prometheus.io/) - Monitoring and alerting system
 
 ## 📞 Contact
 
-- **Project Homepage**: [GitHub Repository](https://github.com/your-username/snmp-mib-ui)
+- **Project Homepage**: [GitHub Repository](https://github.com/evan7434/snmp-mib-ui)
 - **Technical Support**: Get help through GitHub Issues
 - **Documentation**: See detailed documentation in the docs directory
 - **Discussions**: GitHub Discussions

@@ -28,11 +28,16 @@ PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
 <<<<<<< HEAD
+<<<<<<< HEAD
 ReadWritePaths=/opt/snmp-mib-ui/logs
 =======
 ReadWritePaths=/etc/opt/snmp-mib-ui/logs
 ReadWritePaths=/etc/opt/snmp-mib-ui/.next
 >>>>>>> 15e95b75bc9966f74fe921db8b4c82b9ae529082
+=======
+ReadWritePaths=/etc/opt/snmp-mib-ui/logs
+ReadWritePaths=/etc/opt/snmp-mib-ui/.next
+>>>>>>> 3c5be285e4b0f6dacc4c1a93e0b46d7333c86be6
 
 # 资源限制
 LimitNOFILE=65536
