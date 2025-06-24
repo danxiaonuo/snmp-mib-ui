@@ -1,24 +1,31 @@
 // 测试数据库连接的API端点
 import { NextResponse } from "next/server"
-import { sql } from "@/lib/database-neon"
+import { DatabaseUtils } from "@/lib/database"
 
 export async function GET() {
   try {
-    // 运行时检查数据库URL
-    if (!process.env.DATABASE_URL || process.env.DATABASE_URL.includes('dummy')) {
+    // 测试SQLite数据库连接
+    const isConnected = DatabaseUtils.checkConnection()
+    
+    if (!isConnected) {
       return NextResponse.json({
         success: false,
-        error: 'DATABASE_URL not configured',
+        error: 'SQLite database connection failed',
         timestamp: new Date().toISOString(),
       }, { status: 503 })
     }
 
-    // 测试简单查询
-    const result = await sql`SELECT NOW() as current_time, 'Hello from Neon!' as message`
+    // 测试数据库初始化状态
+    const isInitialized = DatabaseUtils.initializeDatabase()
 
     return NextResponse.json({
       success: true,
-      data: result[0],
+      data: {
+        connected: isConnected,
+        initialized: isInitialized,
+        database_type: 'SQLite',
+        message: 'Hello from SQLite!'
+      },
       timestamp: new Date().toISOString(),
     })
   } catch (error) {
@@ -27,7 +34,7 @@ export async function GET() {
     return NextResponse.json(
       {
         success: false,
-        error: error.message,
+        error: error.message || 'Database test failed',
         timestamp: new Date().toISOString(),
       },
       { status: 500 },

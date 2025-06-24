@@ -4,27 +4,19 @@
 
 module mib-platform
 
-<<<<<<< HEAD
-go 1.22.2
-=======
 go 1.23.0
 
 toolchain go1.23.1
->>>>>>> 15e95b75bc9966f74fe921db8b4c82b9ae529082
 
 require (
 	github.com/gin-contrib/cors v1.7.5
 	github.com/gin-gonic/gin v1.10.0
 	github.com/google/uuid v1.3.0
 	github.com/gosnmp/gosnmp v1.41.0
-<<<<<<< HEAD
-	gorm.io/driver/sqlite v1.5.4
-=======
 	github.com/joho/godotenv v1.4.0
 	golang.org/x/crypto v0.36.0
 	gopkg.in/yaml.v3 v3.0.1
-	gorm.io/driver/postgres v1.5.4
->>>>>>> 15e95b75bc9966f74fe921db8b4c82b9ae529082
+	gorm.io/driver/sqlite v1.5.4
 	gorm.io/gorm v1.25.5
 )
 

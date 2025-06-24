@@ -1,276 +1,267 @@
-# SNMP MIB 监控平台
+# SNMP MIB 监控平台 (SQLite版本)
 
-SNMP MIB监控平台是一个用于网络设备监控和管理的综合解决方案。
+SNMP MIB监控平台是一个轻量级网络设备监控和管理解决方案，采用SQLite数据库和内存缓存，支持零配置快速部署。
 
-## 系统要求
+## ✨ 特性
 
-- 操作系统: Linux (推荐CentOS 7+/Ubuntu 18.04+)
-- Node.js 16+
-- Go 1.22+
-- systemd (用于服务管理)
+- 🗃️ **SQLite数据库** - 无需外部数据库，文件存储
+- 💾 **内存缓存** - 高性能缓存系统，无需Redis
+- 🚀 **零配置部署** - 一键启动，无需Docker
+- 📱 **响应式设计** - 支持桌面和移动设备
+- 🌐 **多语言支持** - 中文/英文界面
+- 🔒 **安全认证** - JWT认证和权限管理
+- 📊 **实时监控** - SNMP设备监控和告警
+- 🔧 **配置管理** - 设备模板和批量配置
 
-## 快速开始
+## 🎯 系统要求
 
-### 🚀 一键启动（最简单）
+- **操作系统**: Linux/macOS/Windows
+- **Node.js**: 18+ 
+- **Go**: 1.21+
+- **内存**: 最低512MB，推荐1GB+
+- **磁盘**: 最低1GB可用空间
 
-**新用户推荐使用优化启动脚本：**
+## 🚀 快速开始
 
-```bash
-# 克隆代码库
-git clone https://github.com/your-username/snmp-mib-ui.git
-cd snmp-mib-ui
-
-# 一键启动（自动检查依赖、构建、启动）
-./start-optimized.sh
-
-# 停止服务
-./stop-services.sh
-```
-
-### 使用systemd部署（生产环境推荐）
-
-使用systemd部署可以确保服务在异常退出时自动重启，提高系统稳定性。
+### 1. 克隆项目
 
 ```bash
-# 克隆代码库
-git clone https://github.com/your-username/snmp-mib-ui.git
+git clone https://github.com/evan7434/snmp-mib-ui.git
 cd snmp-mib-ui
-
-# 使用systemd方式部署
-sudo ./deploy.sh --systemd
 ```
 
-部署完成后，可以使用以下命令管理服务：
+### 2. 一键部署
+
+```bash
+# 运行部署脚本
+./deploy-simple.sh
+
+# 启动服务
+./start.sh
+
+# 查看服务状态
+./status.sh
+```
+
+### 3. 访问应用
+
+- **前端界面**: http://localhost:12300
+- **后端API**: http://localhost:17880
+- **健康检查**: http://localhost:12300/api/health
+
+## 📁 目录结构
+
+```
+snmp-mib-ui/
+├── app/              # Next.js 前端应用
+├── backend/          # Go 后端服务
+├── components/       # React 组件
+├── lib/              # 共享库和工具
+├── data/             # SQLite 数据库文件
+├── logs/             # 应用日志
+├── start.sh          # 启动脚本
+├── stop.sh           # 停止脚本
+└── status.sh         # 状态检查脚本
+```
+
+## 🔧 管理命令
 
 ```bash
 # 启动所有服务
-sudo systemctl start snmp-mib-platform.target
+./start.sh
 
 # 停止所有服务
-sudo systemctl stop snmp-mib-platform.target
+./stop.sh
 
-# 重启所有服务
-sudo systemctl restart snmp-mib-platform.target
-
-# 查看服务状态
-sudo systemctl status snmp-mib-platform.target
-
-# 查看后端日志
-sudo journalctl -u snmp-mib-backend -f
+# 检查服务状态
+./status.sh
 
 # 查看前端日志
-sudo journalctl -u snmp-mib-frontend -f
+tail -f logs/frontend.log
+
+# 查看后端日志
+tail -f logs/backend.log
+
+# 重启服务
+./stop.sh && ./start.sh
 ```
 
-### 使用传统方式部署
+## 📊 性能优化
 
-如果您不想使用systemd，也可以使用传统方式部署：
+### 数据库优化
+- SQLite WAL模式，提高并发性能
+- 自动索引优化
+- 定期数据清理
+
+### 缓存策略
+- 内存LRU缓存
+- 智能过期策略
+- 缓存预热机制
+
+### 前端优化
+- 代码分割和懒加载
+- 静态资源压缩
+- Service Worker缓存
+
+## 🐛 故障排除
+
+### 常见问题
+
+1. **服务启动失败**
+   ```bash
+   # 检查端口占用
+   netstat -tulpn | grep :12300
+   netstat -tulpn | grep :17880
+   
+   # 检查日志
+   tail -f logs/frontend.log
+   tail -f logs/backend.log
+   ```
+
+2. **数据库连接错误**
+   ```bash
+   # 检查数据库文件权限
+   ls -la data/snmp_platform.db
+   
+   # 重新初始化数据库
+   rm -f data/snmp_platform.db
+   ./start.sh
+   ```
+
+3. **内存不足**
+   ```bash
+   # 检查内存使用
+   free -h
+   
+   # 清理缓存
+   curl -X POST http://localhost:17880/api/cache/clear
+   ```
+
+### 日志级别
+
+- **DEBUG**: 详细调试信息
+- **INFO**: 一般运行信息
+- **WARN**: 警告信息
+- **ERROR**: 错误信息
+
+## 🔒 安全配置
+
+### 生产环境建议
+
+1. **修改默认端口**
+   ```bash
+   export FRONTEND_PORT=8080
+   export SERVER_PORT=8081
+   ```
+
+2. **启用HTTPS**
+   - 配置反向代理 (Nginx/Apache)
+   - 使用SSL证书
+
+3. **防火墙配置**
+   ```bash
+   # 只允许必要端口
+   ufw allow 12300
+   ufw allow 17880
+   ```
+
+4. **数据备份**
+   ```bash
+   # 定期备份数据库
+   cp data/snmp_platform.db backup/snmp_platform_$(date +%Y%m%d).db
+   ```
+
+## 📈 监控和维护
+
+### 系统监控
 
 ```bash
-# 克隆代码库
-git clone https://github.com/your-username/snmp-mib-ui.git
-cd snmp-mib-ui
+# 检查系统资源
+curl http://localhost:17880/api/system/health
 
-# 使用传统方式部署
-./deploy.sh --traditional
+# 查看缓存统计
+curl http://localhost:17880/api/cache/stats
+
+# 数据库统计
+curl http://localhost:17880/api/database/stats
 ```
 
-## 访问平台
+### 定期维护
 
-部署完成后，可以通过以下地址访问平台：
+1. **清理日志文件**
+   ```bash
+   # 清理7天前的日志
+   find logs/ -name "*.log" -mtime +7 -delete
+   ```
 
-- Web界面: http://localhost:12300
-- API接口: http://localhost:17880/api/v1
-- 健康检查: http://localhost:12300/api/health
+2. **数据库优化**
+   ```bash
+   # SQLite优化
+   sqlite3 data/snmp_platform.db "VACUUM;"
+   sqlite3 data/snmp_platform.db "ANALYZE;"
+   ```
 
-## 系统架构
+3. **更新检查**
+   ```bash
+   git pull origin main
+   ./deploy-simple.sh
+   ```
 
-该平台由以下组件组成：
+## 🎨 自定义配置
 
-1. 前端：基于Next.js构建的Web界面（使用systemd管理）
-2. 后端：基于Go语言的API服务（使用systemd管理）
-3. 数据库：SQLite用于存储配置和监控数据（轻量级本地文件数据库）
+### 环境变量
 
-部署架构特点：
-- 前后端服务使用systemd管理，确保服务异常退出时自动重启
-- 使用SQLite作为数据库，简化部署，无需额外的数据库服务
-- 所有组件配置统一，确保环境一致性
-- 单机部署友好，降低了系统复杂度
-
-## 功能特性
-
-- SNMP设备发现和监控
-- MIB文件管理和导入
-- 设备配置管理
-- 告警规则配置和通知
-- 实时监控和历史数据查询
-- 用户权限管理
-
-## 架构迁移说明
-
-### 🔄 为什么要进行这次技术迁移？
-
-本次迭代我们将数据库架构从 **PostgreSQL + Redis** 迁移到 **SQLite**，这是一个重要的架构优化决策。
-
-### 📊 迁移前 vs 迁移后对比
-
-| 方面 | 迁移前 (PostgreSQL + Redis) | 迁移后 (SQLite) |
-|------|---------------------------|------------------|
-| **部署复杂度** | 需要Docker容器管理数据库服务 | 单文件数据库，零配置 |
-| **资源消耗** | ~200MB (PG) + ~50MB (Redis) | ~10MB |
-| **启动时间** | 30-60秒（等待容器启动） | 5-10秒 |
-| **备份方式** | 数据库导出 + Redis持久化 | 复制单个文件 |
-| **运维复杂度** | 需要监控多个服务 | 只需监控应用本身 |
-| **扩展性** | 支持大规模集群 | 适合中小型部署 |
-
-### 🎯 迁移的核心原因
-
-#### 1. **部署简化** - 降低入门门槛
-**迁移前的痛点：**
 ```bash
-# 需要启动多个Docker容器
-docker run -d postgres:15-alpine
-docker run -d redis:7-alpine
-# 需要等待数据库就绪
-# 需要配置数据库连接
-# 需要处理容器网络问题
+# 数据库配置
+export SQLITE_DB_PATH=./data/snmp_platform.db
+
+# 服务端口
+export FRONTEND_PORT=12300
+export SERVER_PORT=17880
+
+# 缓存配置
+export CACHE_MAX_MEMORY=256  # MB
+export CACHE_TTL=3600        # 秒
+
+# 日志配置
+export LOG_LEVEL=INFO
+export LOG_FILE=./logs/app.log
 ```
 
-**迁移后的优势：**
-```bash
-# 一键启动，零配置
-./start-optimized.sh
-# 数据库自动创建和初始化
-```
+### 主题自定义
 
-#### 2. **资源优化** - 适配单机部署场景
-SNMP监控平台的典型使用场景：
-- 中小型网络环境（100-1000台设备）
-- 单台服务器部署
-- 资源有限的边缘计算环境
+编辑 `app/globals.css` 文件来自定义主题颜色和样式。
 
-**PostgreSQL + Redis** 对于这种场景是"大材小用"：
-- PostgreSQL 设计用于大规模、高并发场景
-- Redis 主要用于高频缓存和会话管理
-- 但实际监控数据读写频率并不高
+## 🤝 贡献指南
 
-#### 3. **运维简化** - 减少故障点
-**迁移前需要管理的服务：**
-- PostgreSQL 数据库服务
-- Redis 缓存服务  
-- 前端应用服务
-- 后端API服务
-- Docker容器管理
+1. Fork 项目
+2. 创建功能分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 创建 Pull Request
 
-**迁移后只需管理：**
-- 前端应用服务
-- 后端API服务（内置SQLite）
+## 📝 更新日志
 
-#### 4. **成本降低** - 资源利用率优化
-- **内存使用**：从 ~250MB 降低到 ~50MB
-- **磁盘空间**：无需Docker镜像存储
-- **CPU开销**：减少数据库守护进程
-- **网络开销**：无需容器间通信
+### v2.0.0 (2024-12-25)
+- ✅ 移除PostgreSQL依赖，改用SQLite
+- ✅ 移除Redis依赖，改用内存缓存
+- ✅ 简化部署流程，支持一键启动
+- ✅ 优化性能和资源使用
+- ✅ 完善错误处理和日志记录
 
-### 🔧 技术决策详解
+### v1.x.x
+- 基于PostgreSQL + Redis的版本
 
-#### 为什么选择 SQLite？
+## 📄 许可证
 
-1. **性能优势**：
-   - 对于读多写少的监控场景，SQLite 性能优于网络数据库
-   - 无网络延迟，本地文件访问速度更快
-   - 支持并发读取，满足监控查询需求
+本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
 
-2. **ACID 保证**：
-   - 完整的事务支持
-   - 数据一致性保证
-   - 支持 WAL 模式，提升并发性能
+## 📞 支持
 
-3. **生态完善**：
-   - Go 官方 GORM 完美支持
-   - 成熟的 SQL 标准
-   - 丰富的管理工具
+- 🐛 **Bug报告**: [GitHub Issues](https://github.com/evan7434/snmp-mib-ui/issues)
+- 💡 **功能请求**: [GitHub Discussions](https://github.com/evan7434/snmp-mib-ui/discussions)
+- 📧 **邮件支持**: evan@example.com
 
-#### 为什么移除 Redis？
+---
 
-1. **使用场景分析**：
-   - 原本用于缓存监控数据和会话管理
-   - 但监控数据本身更新频率不高
-   - 会话管理可以使用 JWT 无状态方案
-
-2. **简化架构**：
-   - 减少缓存一致性问题
-   - 降低数据同步复杂度
-   - 简化错误处理逻辑
-
-3. **成本效益**：
-   - 监控场景下缓存命中率提升有限
-   - Redis 内存占用相对固定成本较高
-
-### 📈 性能基准测试
-
-| 测试场景 | PostgreSQL + Redis | SQLite | 性能提升 |
-|---------|-------------------|---------|----------|
-| 启动时间 | 45秒 | 8秒 | **5.6x** |
-| 内存占用 | 250MB | 45MB | **5.5x** |
-| 查询延迟 | 15ms | 3ms | **5x** |
-| 并发读取 | 1000 QPS | 1200 QPS | **1.2x** |
-| 备份时间 | 30秒 | 2秒 | **15x** |
-
-### 🎯 适用场景
-
-**SQLite 方案适合：**
-- ✅ 中小型网络监控（<1000台设备）
-- ✅ 单机部署需求
-- ✅ 边缘计算环境
-- ✅ 快速部署和测试
-- ✅ 资源受限环境
-
-**仍建议 PostgreSQL 的场景：**
-- ❌ 大规模监控（>5000台设备）
-- ❌ 多实例集群部署
-- ❌ 高并发写入需求
-- ❌ 复杂数据分析需求
-
-### 🚀 迁移带来的直接好处
-
-1. **部署体验提升**：从复杂的多容器编排到一键启动
-2. **维护成本降低**：无需数据库运维知识
-3. **资源利用优化**：可在更小规格的服务器上运行
-4. **备份恢复简化**：文件级别的备份和恢复
-5. **开发效率提升**：本地开发环境快速搭建
-
-### 数据文件位置
-
-- 数据库文件：`backend/snmp_platform.db`
-- 上传文件：`backend/uploads/`
-- 日志文件：`backend.log`, `frontend.log`
-
-## 故障排除
-
-如果您在部署或使用过程中遇到问题，请参考以下步骤：
-
-1. 检查服务状态：
-   ```bash
-   sudo systemctl status snmp-mib-platform.target
-   ```
-
-2. 查看日志：
-   ```bash
-   sudo journalctl -u snmp-mib-backend -f
-   sudo journalctl -u snmp-mib-frontend -f
-   ```
-
-3. 检查数据库文件：
-   ```bash
-   ls -la backend/snmp_platform.db
-   ```
-
-4. 重启服务：
-   ```bash
-   sudo systemctl restart snmp-mib-platform.target
-   ```
-
-## 许可证
-
-MIT
+⭐ 如果这个项目对你有帮助，请给它一个星标！

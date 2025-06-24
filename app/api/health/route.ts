@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { DatabaseUtils } from '@/lib/database'
+import { cache } from '@/lib/memory-cache'
 
 // Health check response interface
 interface HealthCheckResponse {
@@ -9,7 +11,7 @@ interface HealthCheckResponse {
   environment: string
   checks: {
     database: HealthCheck
-    redis: HealthCheck
+    cache: HealthCheck
     memory: HealthCheck
     disk: HealthCheck
     external: HealthCheck
@@ -38,16 +40,21 @@ async function checkDatabase(): Promise<HealthCheck> {
   const start = Date.now()
   
   try {
-    // In production, implement actual database health check
-    // Example: await db.raw('SELECT 1')
+    const isConnected = DatabaseUtils.checkConnection()
     
-    // Simulate database check
-    await new Promise(resolve => setTimeout(resolve, 10))
+    if (!isConnected) {
+      return {
+        status: 'fail',
+        responseTime: Date.now() - start,
+        message: 'SQLite database connection failed',
+        lastChecked: new Date().toISOString(),
+      }
+    }
     
     return {
       status: 'pass',
       responseTime: Date.now() - start,
-      message: 'Database connection successful',
+      message: 'SQLite database connection successful',
       lastChecked: new Date().toISOString(),
     }
   } catch (error) {
@@ -60,28 +67,33 @@ async function checkDatabase(): Promise<HealthCheck> {
   }
 }
 
-// Check Redis connectivity
-async function checkRedis(): Promise<HealthCheck> {
+// Check cache connectivity
+async function checkCache(): Promise<HealthCheck> {
   const start = Date.now()
   
   try {
-    // In production, implement actual Redis health check
-    // Example: await redis.ping()
+    const pingResult = await cache.ping()
     
-    // Simulate Redis check
-    await new Promise(resolve => setTimeout(resolve, 5))
-    
-    return {
-      status: 'pass',
-      responseTime: Date.now() - start,
-      message: 'Redis connection successful',
-      lastChecked: new Date().toISOString(),
+    if (pingResult === 'PONG') {
+      return {
+        status: 'pass',
+        responseTime: Date.now() - start,
+        message: 'Memory cache is working',
+        lastChecked: new Date().toISOString(),
+      }
+    } else {
+      return {
+        status: 'fail',
+        responseTime: Date.now() - start,
+        message: 'Memory cache ping failed',
+        lastChecked: new Date().toISOString(),
+      }
     }
   } catch (error) {
     return {
       status: 'fail',
       responseTime: Date.now() - start,
-      message: `Redis connection failed: ${error}`,
+      message: `Cache check failed: ${error}`,
       lastChecked: new Date().toISOString(),
     }
   }
@@ -196,7 +208,7 @@ export async function GET(request: NextRequest) {
     // Perform health checks
     const checks = {
       database: await checkDatabase(),
-      redis: await checkRedis(),
+      cache: await checkCache(),
       memory: checkMemory(),
       disk: checkDisk(),
       external: await checkExternal(),
