@@ -1,0 +1,47 @@
+{
+  "title": "System Settings",
+  "description": "Configure system-wide settings and preferences",
+  "tabs": {
+    "general": "General",
+    "monitoring": "Monitoring",
+    "notifications": "Notifications",
+    "security": "Security",
+    "integrations": "Integrations",
+    "backup": "Backup & Recovery"
+  },
+  "general": {
+    "systemName": "System Name",
+    "systemDescription": "System Description",
+    "timezone": "Timezone",
+    "language": "Default Language",
+    "theme": "Theme",
+    "dateFormat": "Date Format",
+    "timeFormat": "Time Format"
+  },
+  "monitoring": {
+    "pollingInterval": "Polling Interval",
+    "retentionPeriod": "Data Retention Period",
+    "alertThresholds": "Alert Thresholds",
+    "snmpSettings": "SNMP Settings",
+    "discoverySettings": "Discovery Settings"
+  },
+  "notifications": {
+    "emailSettings": "Email Settings",
+    "smsSettings": "SMS Settings",
+    "webhookSettings": "Webhook Settings",
+    "alertChannels": "Alert Channels"
+  },
+  "security": {
+    "passwordPolicy": "Password Policy",
+    "sessionTimeout": "Session Timeout",
+    "twoFactorAuth": "Two-Factor Authentication",
+    "apiSecurity": "API Security",
+    "auditLogging": "Audit Logging"
+  },
+  "messages": {
+    "settingsSaved": "Settings saved successfully",
+    "settingsError": "Failed to save settings",
+    "invalidInput": "Please check your input",
+    "confirmReset": "Are you sure you want to reset to default settings?"
+  }
+}
