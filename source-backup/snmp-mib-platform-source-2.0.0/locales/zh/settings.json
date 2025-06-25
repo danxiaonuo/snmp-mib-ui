@@ -1,0 +1,47 @@
+{
+  "title": "系统设置",
+  "description": "配置系统级设置和首选项",
+  "tabs": {
+    "general": "常规设置",
+    "monitoring": "监控设置",
+    "notifications": "通知设置",
+    "security": "安全设置",
+    "integrations": "集成设置",
+    "backup": "备份恢复"
+  },
+  "general": {
+    "systemName": "系统名称",
+    "systemDescription": "系统描述",
+    "timezone": "时区",
+    "language": "默认语言",
+    "theme": "主题",
+    "dateFormat": "日期格式",
+    "timeFormat": "时间格式"
+  },
+  "monitoring": {
+    "pollingInterval": "轮询间隔",
+    "retentionPeriod": "数据保留期",
+    "alertThresholds": "告警阈值",
+    "snmpSettings": "SNMP设置",
+    "discoverySettings": "发现设置"
+  },
+  "notifications": {
+    "emailSettings": "邮件设置",
+    "smsSettings": "短信设置",
+    "webhookSettings": "Webhook设置",
+    "alertChannels": "告警通道"
+  },
+  "security": {
+    "passwordPolicy": "密码策略",
+    "sessionTimeout": "会话超时",
+    "twoFactorAuth": "双因素认证",
+    "apiSecurity": "API安全",
+    "auditLogging": "审计日志"
+  },
+  "messages": {
+    "settingsSaved": "设置保存成功",
+    "settingsError": "设置保存失败",
+    "invalidInput": "请检查您的输入",
+    "confirmReset": "确定要重置为默认设置吗？"
+  }
+}

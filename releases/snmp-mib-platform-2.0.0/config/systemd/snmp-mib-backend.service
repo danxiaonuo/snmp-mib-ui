@@ -1,0 +1,41 @@
+[Unit]
+Description=SNMP MIB Platform Backend API Service  
+Documentation=https://github.com/your-username/snmp-mib-ui
+After=network.target
+PartOf=snmp-mib-platform.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/etc/opt/snmp-mib-ui
+Environment=SERVER_PORT=17880
+EnvironmentFile=/opt/snmp-mib-ui/backend/.env
+Environment=GIN_MODE=release
+ExecStart=/etc/opt/snmp-mib-ui/backend/mib-platform
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=snmp-mib-backend
+
+# 健康检查
+ExecStartPost=/bin/bash -c 'sleep 5 && curl -f http://localhost:17880/api/v1/health || exit 1'
+
+# 安全设置
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/etc/opt/snmp-mib-ui/backend/logs
+ReadWritePaths=/etc/opt/snmp-mib-ui/backend/uploads
+
+# 资源限制
+LimitNOFILE=65536
+MemoryMax=1G
+CPUQuota=100%
+
+[Install]
+WantedBy=snmp-mib-platform.target
+WantedBy=multi-user.target

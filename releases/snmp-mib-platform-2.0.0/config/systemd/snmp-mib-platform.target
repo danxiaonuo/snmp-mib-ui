@@ -1,0 +1,8 @@
+[Unit]
+Description=SNMP MIB Platform Services
+Documentation=https://github.com/your-username/snmp-mib-ui
+After=network.target
+AllowIsolate=yes
+
+[Install]
+WantedBy=multi-user.target
